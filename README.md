@@ -16,3 +16,7 @@ npm install --save @juliushaertl/vue-richtext
 - Arguments: 
   - file: `'MyDocument'`
   - username: `{ component: User, props: { username: 'Jane Doe' }`
+
+## Documentation
+
+A full example is shown in the [documentation](https://juliushaertl-vue-richtext.netlify.com/)
