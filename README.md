@@ -1,6 +1,6 @@
 # Vue component for rich content strings 
 
-[![npm last version](https://img.shields.io/npm/v/vue-richtext.svg?style=flat-square)](https://www.npmjs.com/package/vue-richtext) [![Dependabot status](https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&style=flat-square&logo=dependabot)](https://dependabot.com)
+[![npm last version](https://img.shields.io/npm/v/@juliushaertl/vue-richtext.svg?style=flat-square)](https://www.npmjs.com/package/@juliushaertl/vue-richtext) [![Dependabot status](https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&style=flat-square&logo=dependabot)](https://dependabot.com)
 
 This library provides a simple vue component to render text with rich placeholder replacements. The parameters that are replaced can either be a string or an object that allows rendering any Vue component into the text. Placeholders are wrapped in brackets, like `{placeholder}`.
 
