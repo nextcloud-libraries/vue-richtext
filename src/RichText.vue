@@ -38,7 +38,7 @@ export default {
 	render(createElement) {
 		// extract text nodes and placeholders and put them into an array that
 		// contains a string for text and an object for each placeholder
-		const placeholders = this.text.split(/(?=(\{[a-z\-_0-9]+\}))/i).map((entry, index, list) => {
+		const placeholders = (' ' + this.text).split(/(?=(\{[a-z\-_0-9]+\}))/i).map((entry, index, list) => {
 			const matches = entry.match(/^\{([a-z\-_0-9]+)\}$/i)
 
 			// just return plain string nodes as text
@@ -60,6 +60,12 @@ export default {
 			// fallback if argument is a string or not set
 			return createElement('strong', { class: 'rich-text--fallback' }, argument || argumentId)
 		})
+
+		// We currently need a space at the beginning of the string when splitting,
+		// as otherwise the split with the positive lookahead fails to keep the first match in the list
+		if (placeholders[0] === ' ') {
+			placeholders.shift()
+		}
 
 		return createElement('div', { class: 'rich-text--wrapper' }, [
 			...placeholders
