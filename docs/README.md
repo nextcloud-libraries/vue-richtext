@@ -1,6 +1,5 @@
 # Vue component for rich content strings 
 
-[![npm last version](https://img.shields.io/npm/v/vue-richtext.svg?style=flat-square)](https://www.npmjs.com/package/vue-richtext) [![Dependabot status](https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&style=flat-square&logo=dependabot)](https://dependabot.com)
 
 This library provides a simple vue component to render text with rich placeholder replacements. The parameters that are replaced can either be a string or an object that allows rendering any Vue component into the text. Placeholders are wrapped in brackets, like `{placeholder}`.
 
@@ -10,9 +9,21 @@ This library provides a simple vue component to render text with rich placeholde
 npm install --save @juliushaertl/vue-richtext
 ```
 
+
 ## Usage
 
 - Input string: `The file {file} was added by {username}`
 - Arguments: 
   - file: `'MyDocument'`
   - username: `{ component: User, props: { username: 'Jane Doe' }`
+
+
+### Example output
+
+<br />
+<RichTextDemo />
+<br />
+
+### Example source
+<<< @/docs/.vuepress/components/RichTextDemo.vue
+
