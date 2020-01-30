@@ -27,3 +27,5 @@ npm install --save @juliushaertl/vue-richtext
 ### Example source
 <<< @/docs/.vuepress/components/RichTextDemo.vue
 
+#### User.vue
+<<< @/docs/.vuepress/components/User.vue
