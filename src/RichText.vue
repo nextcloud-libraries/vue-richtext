@@ -30,8 +30,15 @@ const parseUrl = (text) => {
     let list = []
     let start = 0
     while (match !== null) {
-        list.push(text.substring(start, match.index))
-        list.push({ component: Link, props: { href: match[0] } })
+		let href = match[0]
+		let textBefore = text.substring(start, match.index)
+		if (href[0] === ' ' || href[0] === '(') {
+			textBefore += href[0]
+			href = href.substring(1)
+		}
+
+        list.push(textBefore)
+        list.push({ component: Link, props: { href: href.trim() } })
         start = match.index + match[0].length
         match = urlRegex.exec(text);
     }

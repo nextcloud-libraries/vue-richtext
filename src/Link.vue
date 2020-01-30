@@ -1,5 +1,5 @@
 <template functional>
-    <a :href="props.href" target="_blank">{{ props.href }}</a>
+    <a :href="props.href.trim()" target="_blank">{{ props.href.trim() }}</a>
 </template>
 <script>
 export default {

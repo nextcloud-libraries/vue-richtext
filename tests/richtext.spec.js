@@ -2,6 +2,7 @@ require('regenerator-runtime/runtime');
 
 import { mount, shallowMount } from '@vue/test-utils'
 import RichText from '@/RichText.vue'
+import Link from '@/Link.vue'
 
 describe('Foo', () => {
 	it('renders a message and responds correctly to props changes', async () => {
@@ -88,6 +89,30 @@ describe('Foo', () => {
 		expect(wrapper.text()).toEqual(result)
 	});
 
+
+	it('properly inserts a link component', async () => {
+		const wrapper = mount(RichText, {
+			propsData: {
+				text: 'Testwith a link to https://example.com - go visit it',
+				autolink: true
+			}
+		})
+		expect(wrapper.text()).toEqual('Testwith a link to https://example.com - go visit it')
+		expect(wrapper.find(Link).exists()).toBe(true)
+		expect(wrapper.find(Link).attributes('href')).toBe('https://example.com')
+	})
+
+	it('properly inserts a link component with brackets', async () => {
+		const wrapper = mount(RichText, {
+			propsData: {
+				text: 'Testwith a link to (https://example.com) - go visit it',
+				autolink: true
+			}
+		})
+		expect(wrapper.text()).toEqual('Testwith a link to (https://example.com) - go visit it')
+		expect(wrapper.find(Link).exists()).toBe(true)
+		expect(wrapper.find(Link).attributes('href')).toBe('https://example.com')
+	})
 
 
 })
