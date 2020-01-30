@@ -1,10 +1,9 @@
 {
 	"name": "vue-richtext",
-	"version": "0.7.0",
+	"version": "0.1.0",
 	"description": "Vue component for rich content strings ",
 	"keywords": [
 		"vuejs",
-		"nextcloud",
 		"components"
 	],
 	"repository": "https://github.com/juliushaertl/vue-richtext",
