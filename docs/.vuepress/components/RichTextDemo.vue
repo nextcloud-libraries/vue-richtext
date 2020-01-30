@@ -1,5 +1,5 @@
 <template>
-	<RichText :text="text" :arguments="args" />
+	<RichText :text="text" :arguments="args" :autolink="true" />
 </template>
 
 <script>
@@ -10,7 +10,7 @@ export default {
     name: 'RichTextDemo',
     data: () => {
         return {
-            text: 'The file {file} was added by {username}',
+            text: 'The file {file} was https://nextcloud.com added by {username}',
             args: {
                 file: 'MyDocument.odt',
                 username: {

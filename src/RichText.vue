@@ -21,6 +21,30 @@
   -->
 
 <script>
+import Link from './Link'
+
+const urlRegex = /(\s|\(|^)(https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*)(?=\s|\)|$)/ig
+
+const parseUrl = (text) => {
+    let match = urlRegex.exec(text);
+    let list = []
+    let start = 0
+    while (match !== null) {
+        list.push(text.substring(start, match.index))
+        list.push({ component: Link, props: { href: match[0] } })
+        start = match.index + match[0].length
+        match = urlRegex.exec(text);
+    }
+    list.push(text.substring(start))
+
+    const joinedText = list.map((item) => typeof item === 'string' ? item : item.props.href).join('')
+    if (text === joinedText) {
+        return list
+	}
+	console.error('Failed to reassemble the chunked text: ' + text)
+	return text
+}
+
 export default {
 	name: 'RichText',
 	props: {
@@ -33,6 +57,30 @@ export default {
 			default: () => {
 				return {}
 			}
+		},
+		autolink: {
+			type: Boolean,
+			default: false
+		}
+	},
+	methods: {
+		prepareTextNode(createElement, text) {
+			if (this.autolink) {
+				text = parseUrl(text)
+			}
+			if (Array.isArray(text)) {
+				return text.map((entry) => {
+					if (typeof entry === 'string') {
+						return entry
+					}
+					const { component, props } = entry
+					return createElement(component, {
+						props,
+						class: 'rich-text--component'
+					})
+				})
+			}
+			return text
 		}
 	},
 	render(createElement) {
@@ -43,7 +91,8 @@ export default {
 
 			// just return plain string nodes as text
 			if (!matches || list[index] === list[index - 1]) {
-				return entry.replace(/^\{[a-z\-_0-9]+\}/i, '')
+				const text = entry.replace(/^\{[a-z\-_0-9]+\}/i, '')
+				return this.prepareTextNode(createElement, text)
 			}
 
 			// return component instance if argument is an object
@@ -68,7 +117,7 @@ export default {
 		}
 
 		return createElement('div', { class: 'rich-text--wrapper' }, [
-			...placeholders
+			...placeholders.flat()
 		])
 	}
 }
