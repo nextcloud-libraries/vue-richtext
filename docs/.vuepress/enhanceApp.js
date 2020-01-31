@@ -1,3 +1,6 @@
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
+
 export default ({
     Vue, // the version of Vue being used in the VuePress app
     options, // the options for the root Vue instance
