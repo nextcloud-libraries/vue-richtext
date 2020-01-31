@@ -14,7 +14,7 @@ export default {
     name: 'RichTextDemo',
     data: () => {
         return {
-            text: '{username} added a bookmark for https://nextcloud.com/',
+            text: '{username} added a bookmark for https://example.com/',
             args: {
                 username: {
                     component: User,
