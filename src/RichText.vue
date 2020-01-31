@@ -26,10 +26,10 @@ import Link from './Link'
 const urlRegex = /(\s|\(|^)(https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*)(?=\s|\)|$)/ig
 
 const parseUrl = (text) => {
-    let match = urlRegex.exec(text);
-    let list = []
-    let start = 0
-    while (match !== null) {
+	let match = urlRegex.exec(text)
+	const list = []
+	let start = 0
+	while (match !== null) {
 		let href = match[0]
 		let textBefore = text.substring(start, match.index)
 		if (href[0] === ' ' || href[0] === '(') {
@@ -37,16 +37,16 @@ const parseUrl = (text) => {
 			href = href.substring(1)
 		}
 
-        list.push(textBefore)
-        list.push({ component: Link, props: { href: href.trim() } })
-        start = match.index + match[0].length
-        match = urlRegex.exec(text);
-    }
-    list.push(text.substring(start))
+		list.push(textBefore)
+		list.push({ component: Link, props: { href: href.trim() } })
+		start = match.index + match[0].length
+		match = urlRegex.exec(text)
+	}
+	list.push(text.substring(start))
 
-    const joinedText = list.map((item) => typeof item === 'string' ? item : item.props.href).join('')
-    if (text === joinedText) {
-        return list
+	const joinedText = list.map((item) => typeof item === 'string' ? item : item.props.href).join('')
+	if (text === joinedText) {
+		return list
 	}
 	console.error('Failed to reassemble the chunked text: ' + text)
 	return text

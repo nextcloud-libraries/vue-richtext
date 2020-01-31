@@ -35,6 +35,7 @@
 		"vue": "^2.6.11"
 	},
 	"dependencies": {
+		"core-js": "^3.6.4",
 		"vue": "^2.6.11"
 	},
 	"engines": {
@@ -97,5 +98,8 @@
 		"snapshotSerializers": [
 			"<rootDir>/node_modules/jest-serializer-vue"
 		]
-	}
+	},
+	"browserslist": [
+		"extends @nextcloud/browserslist-config"
+	]
 }

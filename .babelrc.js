@@ -3,11 +3,9 @@ module.exports = {
 		[
 			'@babel/preset-env',
 			{
-				targets: {
-					browsers: "extends @nextcloud/browserslist-config"
-				},
-				include: ['transform-arrow-functions']
-			},
+				useBuiltIns: 'usage',
+				corejs: 3
+			}
 		]
 	]
-}
+};
