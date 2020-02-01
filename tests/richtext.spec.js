@@ -14,10 +14,6 @@ describe('Foo', () => {
 
 		expect(wrapper.text()).toEqual('Test placeholder')
 		expect(wrapper.find('.rich-text--fallback').text()).toEqual('placeholder')
-
-		wrapper.setProps({ text: 'Abc' })
-		await wrapper.vm.$nextTick()
-		expect(wrapper.text()).toEqual('Abc')
 	})
 
 	it('properly inserts a child component', async () => {
