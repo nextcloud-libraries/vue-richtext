@@ -52,8 +52,28 @@ const parseUrl = (text) => {
 	return text
 }
 
+const prepareTextNode = ({ h, context }, text) => {
+	if (context.props.autolink) {
+		text = parseUrl(text)
+	}
+	if (Array.isArray(text)) {
+		return text.map((entry) => {
+			if (typeof entry === 'string') {
+				return entry
+			}
+			const { component, props } = entry
+			return h(component, {
+				props,
+				class: 'rich-text--component'
+			})
+		})
+	}
+	return text
+}
+
 export default {
 	name: 'RichText',
+	functional: true,
 	props: {
 		text: {
 			type: String,
@@ -70,51 +90,31 @@ export default {
 			default: false
 		}
 	},
-	methods: {
-		prepareTextNode(createElement, text) {
-			if (this.autolink) {
-				text = parseUrl(text)
-			}
-			if (Array.isArray(text)) {
-				return text.map((entry) => {
-					if (typeof entry === 'string') {
-						return entry
-					}
-					const { component, props } = entry
-					return createElement(component, {
-						props,
-						class: 'rich-text--component'
-					})
-				})
-			}
-			return text
-		}
-	},
-	render(createElement) {
+	render: function(h, context) {
 		// extract text nodes and placeholders and put them into an array that
 		// contains a string for text and an object for each placeholder
-		const placeholders = (' ' + this.text).split(/(?=(\{[a-z\-_0-9]+\}))/i).map((entry, index, list) => {
+		const placeholders = (' ' + context.props.text).split(/(?=(\{[a-z\-_0-9]+\}))/i).map((entry, index, list) => {
 			const matches = entry.match(/^\{([a-z\-_0-9]+)\}$/i)
 
 			// just return plain string nodes as text
 			if (!matches || list[index] === list[index - 1]) {
 				const text = entry.replace(/^\{[a-z\-_0-9]+\}/i, '')
-				return this.prepareTextNode(createElement, text)
+				return prepareTextNode({ h, context }, text)
 			}
 
 			// return component instance if argument is an object
 			const argumentId = matches[1]
-			const argument = this.arguments[argumentId]
+			const argument = context.props.arguments[argumentId]
 			if (typeof argument === 'object') {
 				const { component, props } = argument
-				return createElement(component, {
+				return h(component, {
 					props,
 					class: 'rich-text--component'
 				})
 			}
 
 			// fallback if argument is a string or not set
-			return createElement('strong', { class: 'rich-text--fallback' }, argument || argumentId)
+			return h('strong', { class: 'rich-text--fallback' }, argument || argumentId)
 		})
 
 		// We currently need a space at the beginning of the string when splitting,
@@ -123,9 +123,7 @@ export default {
 			placeholders.shift()
 		}
 
-		return createElement('div', { class: 'rich-text--wrapper' }, [
-			...placeholders.flat()
-		])
+		return h('div', { class: 'rich-text--wrapper' }, placeholders.flat())
 	}
 }
 </script>
