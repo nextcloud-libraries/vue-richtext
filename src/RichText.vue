@@ -132,4 +132,8 @@ export default {
 	.rich-text--fallback, .rich-text-component {
 		display: inline;
 	}
+
+	a.external:after {
+		content: " ↗";
+	}
 </style>
