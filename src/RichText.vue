@@ -25,7 +25,7 @@ import Link from './Link'
 
 const urlRegex = /(\s|\(|^)(https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*)(?=\s|\)|$)/ig
 
-const parseUrl = (text) => {
+const parseUrl = (text, linkComponent) => {
 	let match = urlRegex.exec(text)
 	const list = []
 	let start = 0
@@ -38,7 +38,7 @@ const parseUrl = (text) => {
 		}
 
 		list.push(textBefore)
-		list.push({ component: Link, props: { href: href.trim() } })
+		list.push({ component: linkComponent, props: { href: href.trim() } })
 		start = match.index + match[0].length
 		match = urlRegex.exec(text)
 	}
@@ -54,7 +54,7 @@ const parseUrl = (text) => {
 
 const prepareTextNode = ({ h, context }, text) => {
 	if (context.props.autolink) {
-		text = parseUrl(text)
+		text = parseUrl(text, context.props.linkComponent)
 	}
 	if (Array.isArray(text)) {
 		return text.map((entry) => {
@@ -83,6 +83,12 @@ export default {
 			type: Object,
 			default: () => {
 				return {}
+			}
+		},
+		linkComponent: {
+			type: Object,
+			default: () => {
+				return Link
 			}
 		},
 		autolink: {
