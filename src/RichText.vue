@@ -31,14 +31,22 @@ const parseUrl = (text, linkComponent) => {
 	let start = 0
 	while (match !== null) {
 		let href = match[0]
+		let textAfter
 		let textBefore = text.substring(start, match.index)
 		if (href[0] === ' ' || href[0] === '(') {
 			textBefore += href[0]
-			href = href.substring(1)
+			href = href.substring(1).trim()
+		}
+		if (href[(href.length - 1)] === '.') {
+			href = href.substring(0, href.length - 1)
+			textAfter = '.'
 		}
 
 		list.push(textBefore)
-		list.push({ component: linkComponent, props: { href: href.trim() } })
+		list.push({ component: linkComponent, props: { href } })
+		if (textAfter) {
+			list.push(textAfter)
+		}
 		start = match.index + match[0].length
 		match = urlRegex.exec(text)
 	}
