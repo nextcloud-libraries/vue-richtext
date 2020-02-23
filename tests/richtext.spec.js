@@ -12,8 +12,7 @@ describe('Foo', () => {
 			}
 		})
 
-		expect(wrapper.text()).toEqual('Test placeholder')
-		expect(wrapper.find('.rich-text--fallback').text()).toEqual('placeholder')
+		expect(wrapper.text()).toEqual('Test {placeholder}')
 	})
 
 	it('properly inserts a child component', async () => {
@@ -65,14 +64,15 @@ describe('Foo', () => {
 		expect(wrapper.find(MyComponent).vm.username).toBe('Jane')
 	})
 	test.each([
-		['Fallback {placeholder}', {}, 'Fallback placeholder'],
-		['{placeholder} fallback', {}, 'placeholder fallback'],
-		['Test {placeholder} {placeholder}', {}, 'Test placeholder placeholder'],
-		// FIXME: known issue
-		// ['Test {placeholder}{placeholder}', {}, 'Test placeholder placeholder'],
-		['Test {placeholder} between {placeholder}', {}, 'Test placeholder between placeholder'],
-		['Test {placeholderA} {placeholderB}', {}, 'Test placeholderA placeholderB'],
-		['Test {placeholderA}{placeholderB}', {}, 'Test placeholderAplaceholderB'],
+		['Fallback {placeholder}', {}, 'Fallback {placeholder}'],
+		['{placeholder} fallback', {}, '{placeholder} fallback'],
+		['Test {placeholder} {placeholder}', {}, 'Test {placeholder} {placeholder}'],
+		['Test {placeholder}{placeholder}', {}, 'Test {placeholder}{placeholder}'],
+		['Test {placeholder} between {placeholder}', {}, 'Test {placeholder} between {placeholder}'],
+		['Test {placeholderA} {placeholderB}', {}, 'Test {placeholderA} {placeholderB}'],
+		['Test {placeholderA}{placeholderB}', {}, 'Test {placeholderA}{placeholderB}'],
+		['{placeholderA}', { placeholderA: 'A', placeholderB: 'B' }, 'A'],
+		['{placeholderA} {placeholderB}', { placeholderA: 'A', placeholderB: 'B' }, 'A B'],
 		['Test {placeholderA} {placeholderB}', { placeholderA: 'A', placeholderB: 'B' }, 'Test A B'],
 		['Test {placeholderA} {placeholderA} {placeholderB}', { placeholderA: 'A', placeholderB: 'B' }, 'Test A A B'],
 	])('text: %s', (text, attrs, result) => {

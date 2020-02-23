@@ -108,13 +108,12 @@ export default {
 	render: function(h, context) {
 		// extract text nodes and placeholders and put them into an array that
 		// contains a string for text and an object for each placeholder
-		const placeholders = (' ' + context.props.text).split(/(?=(\{[a-z\-_0-9]+\}))/i).map((entry, index, list) => {
-			const matches = entry.match(/^\{([a-z\-_0-9]+)\}$/i)
+		const placeholders = context.props.text.split(/(\{[a-z\-_.0-9]+\})/ig).map((entry, index, list) => {
+			const matches = entry.match(/^\{([a-z\-_.0-9]+)\}$/i)
 
 			// just return plain string nodes as text
-			if (!matches || list[index] === list[index - 1]) {
-				const text = entry.replace(/^\{[a-z\-_0-9]+\}/i, '')
-				return prepareTextNode({ h, context }, text)
+			if (!matches) {
+				return prepareTextNode({ h, context }, entry)
 			}
 
 			// return component instance if argument is an object
@@ -128,15 +127,12 @@ export default {
 				})
 			}
 
-			// fallback if argument is a string or not set
-			return h('strong', { class: 'rich-text--fallback' }, argument || argumentId)
-		})
+			if (argument) {
+				return h('span', { class: 'rich-text--fallback' }, argument)
+			}
 
-		// We currently need a space at the beginning of the string when splitting,
-		// as otherwise the split with the positive lookahead fails to keep the first match in the list
-		if (placeholders[0] === ' ') {
-			placeholders.shift()
-		}
+			return entry
+		})
 
 		return h('div', { class: 'rich-text--wrapper' }, placeholders.flat())
 	}
