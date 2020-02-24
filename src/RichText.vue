@@ -37,9 +37,10 @@ const parseUrl = (text, linkComponent) => {
 			textBefore += href[0]
 			href = href.substring(1).trim()
 		}
-		if (href[(href.length - 1)] === '.') {
+		const lastChar = href[(href.length - 1)]
+		if (lastChar === '.' || lastChar === ',' || lastChar === ';') {
 			href = href.substring(0, href.length - 1)
-			textAfter = '.'
+			textAfter = lastChar
 		}
 
 		list.push(textBefore)
