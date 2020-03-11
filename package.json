@@ -64,7 +64,7 @@
 		"node-sass": "^4.13.1",
 		"prettier-eslint": "^9.0.1",
 		"resolve-url-loader": "^3.1.1",
-		"rollup": "^1.30.1",
+		"rollup": "^2.0.3",
 		"rollup-plugin-alias": "^2.2.0",
 		"rollup-plugin-babel": "^4.3.2",
 		"rollup-plugin-buble": "^0.19.6",
