@@ -109,6 +109,18 @@ describe('Foo', () => {
 		expect(wrapper.find(Link).exists()).toBe(true)
 		expect(wrapper.find(Link).attributes('href')).toBe('https://example.com')
 	})
+	
+	it('properly recognizes an url with a custom port and inserts a link component', async () => {
+		const wrapper = mount(RichText, {
+			propsData: {
+				text: 'Testwith a link to https://example.com:444 - go visit it',
+				autolink: true
+			}
+		})
+		expect(wrapper.text()).toEqual('Testwith a link to https://example.com:444 - go visit it')
+		expect(wrapper.find(Link).exists()).toBe(true)
+		expect(wrapper.find(Link).attributes('href')).toBe('https://example.com:444')
+	})
 
 
 })
