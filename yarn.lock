@@ -1244,8 +1244,8 @@
     stylus "^0.54.5"
 
 "@vue/test-utils@^1.0.0-beta.31":
-  version "1.0.0-beta.32"
-  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.0.0-beta.32.tgz#38c3947886236201a3f24b583c73598eb95ccc69"
+  version "1.0.0-beta.33"
+  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.0.0-beta.33.tgz#627511afbd4307e7557634f860a1b985bd25d9cd"
   dependencies:
     dom-event-types "^1.0.0"
     lodash "^4.17.15"
