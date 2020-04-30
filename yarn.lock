@@ -8898,8 +8898,8 @@ rollup-pluginutils@2, rollup-pluginutils@^2.3.3, rollup-pluginutils@^2.4.1, roll
     estree-walker "^0.6.1"
 
 rollup@^2.0.3:
-  version "2.7.3"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.7.3.tgz#24ebb08533b9ca6bc5a7aef8100e155e50035c31"
+  version "2.7.5"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.7.5.tgz#dd4e4518b58348a841aefa47bea544f3be27a76f"
   optionalDependencies:
     fsevents "~2.1.2"
 
