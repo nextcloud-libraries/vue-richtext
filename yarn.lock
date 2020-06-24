@@ -1284,8 +1284,8 @@
     svg-tags "^1.0.0"
 
 "@vue/babel-preset-app@^4.1.2":
-  version "4.4.5"
-  resolved "https://registry.yarnpkg.com/@vue/babel-preset-app/-/babel-preset-app-4.4.5.tgz#f769fe270702bfaf39020592d1d7ed18eaa6e2d1"
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@vue/babel-preset-app/-/babel-preset-app-4.4.6.tgz#92aef916e83f1abe0a2ed1e9e2cef5b332f958c4"
   dependencies:
     "@babel/core" "^7.9.6"
     "@babel/helper-compilation-targets" "^7.9.6"
