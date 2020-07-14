@@ -23,22 +23,22 @@
 <script>
 import Link from './Link'
 
-const urlRegex = /(\s|\(|^)(https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*)(?=\s|\)|$)/ig
+const urlRegex = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig
 
 const parseUrl = (text, linkComponent) => {
 	let match = urlRegex.exec(text)
 	const list = []
 	let start = 0
 	while (match !== null) {
-		let href = match[0]
+		let href = match[2]
 		let textAfter
-		let textBefore = text.substring(start, match.index)
-		if (href[0] === ' ' || href[0] === '(') {
+		let textBefore = text.substring(start, match.index + match[1].length)
+		if (href[0] === ' ') {
 			textBefore += href[0]
 			href = href.substring(1).trim()
 		}
 		const lastChar = href[(href.length - 1)]
-		if (lastChar === '.' || lastChar === ',' || lastChar === ';') {
+		if (lastChar === '.' || lastChar === ',' || lastChar === ';' || (match[0][0] === '(' && lastChar === ')')) {
 			href = href.substring(0, href.length - 1)
 			textAfter = lastChar
 		}
