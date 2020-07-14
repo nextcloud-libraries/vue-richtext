@@ -122,6 +122,18 @@ describe('Foo', () => {
 		expect(wrapper.find(Link).attributes('href')).toBe('https://example.com/')
 	})
 
+	it('properly inserts a link component ending with a bracket', async () => {
+		const wrapper = mount(RichText, {
+			propsData: {
+				text: 'Test with a link to https://example.com/) - go visit it',
+				autolink: true
+			}
+		})
+		expect(wrapper.text()).toEqual('Test with a link to https://example.com/) - go visit it')
+		expect(wrapper.find(Link).exists()).toBe(true)
+		expect(wrapper.find(Link).attributes('href')).toBe('https://example.com/)')
+	})
+
 	it('properly recognizes an url with a custom port and inserts a link component', async () => {
 		const wrapper = mount(RichText, {
 			propsData: {

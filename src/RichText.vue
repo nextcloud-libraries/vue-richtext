@@ -38,7 +38,7 @@ const parseUrl = (text, linkComponent) => {
 			href = href.substring(1).trim()
 		}
 		const lastChar = href[(href.length - 1)]
-		if (lastChar === '.' || lastChar === ',' || lastChar === ';' || lastChar === ')') {
+		if (lastChar === '.' || lastChar === ',' || lastChar === ';' || (match[0][0] === '(' && lastChar === ')')) {
 			href = href.substring(0, href.length - 1)
 			textAfter = lastChar
 		}
