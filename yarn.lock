@@ -1309,8 +1309,8 @@
     svg-tags "^1.0.0"
 
 "@vue/babel-preset-app@^4.1.2":
-  version "4.5.3"
-  resolved "https://registry.yarnpkg.com/@vue/babel-preset-app/-/babel-preset-app-4.5.3.tgz#2d8fdef342621f663311df2db6944b4fb8c1d57a"
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/@vue/babel-preset-app/-/babel-preset-app-4.5.4.tgz#bb164e8ab55673c561e6e83511631eda19efd7e4"
   dependencies:
     "@ant-design-vue/babel-plugin-jsx" "^1.0.0-0"
     "@babel/core" "^7.11.0"
