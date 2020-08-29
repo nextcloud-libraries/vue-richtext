@@ -33,7 +33,7 @@
     invariant "^2.2.4"
     semver "^5.5.0"
 
-"@babel/core@>=7.9.0", "@babel/core@^7.1.0", "@babel/core@^7.11.0", "@babel/core@^7.7.5", "@babel/core@^7.8.3", "@babel/core@^7.8.4":
+"@babel/core@>=7.9.0", "@babel/core@^7.1.0", "@babel/core@^7.11.0", "@babel/core@^7.11.1", "@babel/core@^7.7.5", "@babel/core@^7.8.4":
   version "7.11.4"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.11.4.tgz#4301dfdfafa01eeb97f1896c5501a3f0655d4229"
   dependencies:
@@ -735,7 +735,7 @@
     "@babel/helper-create-regexp-features-plugin" "^7.10.4"
     "@babel/helper-plugin-utils" "^7.10.4"
 
-"@babel/preset-env@^7.11.0", "@babel/preset-env@^7.8.3":
+"@babel/preset-env@^7.11.0":
   version "7.11.0"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.11.0.tgz#860ee38f2ce17ad60480c2021ba9689393efb796"
   dependencies:
@@ -1304,7 +1304,7 @@
     lodash.kebabcase "^4.1.1"
     svg-tags "^1.0.0"
 
-"@vue/babel-preset-app@^4.1.2":
+"@vue/babel-preset-app@^4.1.2", "@vue/babel-preset-app@^4.5.4":
   version "4.5.4"
   resolved "https://registry.yarnpkg.com/@vue/babel-preset-app/-/babel-preset-app-4.5.4.tgz#bb164e8ab55673c561e6e83511631eda19efd7e4"
   dependencies:
@@ -1397,7 +1397,7 @@
     sass "^1.18.0"
     stylus "^0.54.5"
 
-"@vue/test-utils@^1.0.0-beta.31":
+"@vue/test-utils@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.0.4.tgz#6341caccdf72da5914a5168e680ea12550fba98a"
   dependencies:
@@ -2062,7 +2062,7 @@ babel-eslint@^10.0.0:
     eslint-visitor-keys "^1.0.0"
     resolve "^1.12.0"
 
-babel-jest@^26.0.1, babel-jest@^26.3.0:
+babel-jest@^26.3.0:
   version "26.3.0"
   resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-26.3.0.tgz#10d0ca4b529ca3e7d1417855ef7d7bd6fc0c3463"
   dependencies:
@@ -6053,7 +6053,7 @@ jest-worker@^26.3.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-jest@^26.0.1:
+jest@^26.4.1:
   version "26.4.2"
   resolved "https://registry.yarnpkg.com/jest/-/jest-26.4.2.tgz#7e8bfb348ec33f5459adeaffc1a25d5752d9d312"
   dependencies:
@@ -8932,7 +8932,7 @@ rollup-plugin-replace@^2.1.0:
     magic-string "^0.25.2"
     rollup-pluginutils "^2.6.0"
 
-rollup-plugin-scss@^2.1.0:
+rollup-plugin-scss@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-scss/-/rollup-plugin-scss-2.6.0.tgz#2845be27e01aa1bfc1847cfaabb8255c1c83cf6d"
   dependencies:
@@ -8968,9 +8968,9 @@ rollup-pluginutils@2, rollup-pluginutils@^2.3.3, rollup-pluginutils@^2.5.0, roll
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@^2.0.3:
-  version "2.26.6"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.26.6.tgz#0b460c1da224c6af12a1e948a28c513aa11f2b93"
+rollup@^2.26.4:
+  version "2.26.8"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.26.8.tgz#7b02353835a73c4797f42177a5fa3fc074012713"
   optionalDependencies:
     fsevents "~2.1.2"
 
@@ -10579,9 +10579,16 @@ vue-style-loader@^4.1.0:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-template-compiler@^2.6.10, vue-template-compiler@^2.6.11:
+vue-template-compiler@^2.6.10:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.6.11.tgz#c04704ef8f498b153130018993e56309d4698080"
+  dependencies:
+    de-indent "^1.0.2"
+    he "^1.1.0"
+
+vue-template-compiler@^2.6.12:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.6.12.tgz#947ed7196744c8a5285ebe1233fe960437fcc57e"
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"
@@ -10590,9 +10597,13 @@ vue-template-es2015-compiler@^1.6.0, vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
 
-vue@^2.6.10, vue@^2.6.11:
+vue@^2.6.10:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
+
+vue@^2.6.12:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
 
 vuepress-html-webpack-plugin@^3.2.0:
   version "3.2.0"
@@ -10618,7 +10629,7 @@ vuepress-plugin-smooth-scroll@^0.0.3:
   dependencies:
     smoothscroll-polyfill "^0.4.3"
 
-vuepress@^1.2.0:
+vuepress@^1.5.3:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/vuepress/-/vuepress-1.5.4.tgz#282d2412c1c7269d8bd93b83d421ef53b77b45f6"
   dependencies:
