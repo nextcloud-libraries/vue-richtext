@@ -1,10 +1,11 @@
 {
 	"name": "@juliushaertl/vue-richtext",
 	"version": "0.3.3",
-	"description": "Vue component for rich content strings ",
+	"description": "Vue component for rich content strings including markdown support.",
 	"keywords": [
 		"vuejs",
-		"components"
+		"components",
+		"markdown"
 	],
 	"repository": "https://github.com/juliushaertl/vue-richtext",
 	"homepage": "https://github.com/juliushaertl/vue-richtext",
@@ -35,7 +36,14 @@
 	},
 	"dependencies": {
 		"core-js": "^3.6.4",
-		"vue": "^2.6.12"
+		"vue": "^2.6.12",
+		"rehype-react": "^3.0.2",
+		"remark-disable-tokenizers": "^1.0.24",
+		"remark-parse": "^5.0.0",
+		"remark-rehype": "^3.0.0",
+		"unified": "^7.0.0",
+		"rehype-add-classes": "^1.0.0",
+		"remark-external-links": "^7.0.0"
 	},
 	"engines": {
 		"node": ">=10.0.0"
@@ -71,6 +79,7 @@
 		"rollup-plugin-eslint": "^7.0.0",
 		"rollup-plugin-json": "^4.0.0",
 		"rollup-plugin-local-resolve": "^1.0.7",
+		"rollup-plugin-node-polyfills": "^0.2.1",
 		"rollup-plugin-node-resolve": "^5.0.1",
 		"rollup-plugin-replace": "^2.1.0",
 		"rollup-plugin-scss": "^2.6.0",
