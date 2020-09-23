@@ -105,17 +105,6 @@ describe('Foo', () => {
 		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com')
 	})
 
-	it('properly inserts a link with brackets around text', async() => {
-		const wrapper = mount(RichText, {
-			propsData: {
-				text: 'Test with a link to (https://example.com/) - go visit it',
-				autolink: true
-			}
-		})
-		expect(wrapper.text()).toEqual('Test with a link to (https://example.com/) - go visit it')
-		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com/')
-	})
-
 	it('properly inserts a link ending with a bracket', async() => {
 		const wrapper = mount(RichText, {
 			propsData: {
