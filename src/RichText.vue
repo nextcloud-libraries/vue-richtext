@@ -1,8 +1,8 @@
 <!--
   - @copyright Copyright (c) 2020 Julius Härtl <jus@bitgrid.net>
-  - @copyright Copyright (c) 2020 Guido Krömer <mail@cacodaemon.de>
   -
   - @author Julius Härtl <jus@bitgrid.net>
+  - @author Guido Krömer <mail@cacodaemon.de>
   -
   - @license GNU AGPL version 3 or any later version
   -
@@ -29,6 +29,7 @@ import rehype2react from 'rehype-react'
 import remarkDisableBlocks from 'remark-disable-tokenizers'
 import remarkExternalLinks from 'remark-external-links'
 import rehypeAddClasses from 'rehype-add-classes'
+import sanitize from 'rehype-sanitize'
 
 /*
 * Code inspired by https://github.com/cool-cousin/vue-remark
@@ -78,7 +79,9 @@ export default {
 			default: () => {
 				return {
 					a: 'rich-text--external-link',
-					li: 'rich-text--list-element',
+					ol: 'rich-text--ordered-list',
+					ul: 'rich-text--un-ordered-list',
+					li: 'rich-text--list-item',
 					strong: 'rich-text--strong',
 					em: 'rich-text--italic',
 					h1: 'rich-text--heading rich-text--heading-1',
@@ -135,6 +138,7 @@ export default {
 					}
 				}
 			})
+			.use(sanitize)
 			.use(rehypeAddClasses, this.markdownCssClasses)
 			.use(pluginComponent)
 			.use(rehype2react, {
@@ -173,124 +177,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rich-text--wrapper {
-	word-break: break-word;
-	line-height: 1.5;
-}
-
-.rich-text--fallback, .rich-text-component {
-	display: inline;
-}
-
-.rich-text--external-link:after {
-	content: ' ↗';
-}
-
-.rich-text--list-element {
-	list-style: initial;
-	white-space: initial;
-	color: var(--color-text-light);
-	padding: initial;
-	margin-left: 20px;
-
-	li {
-		padding: initial;
-	}
-
-	&.task-list-item {
-		list-style: none;
-		white-space: initial;
-		color: var(--color-text-light);
-
-		input {
-			min-height: initial;
-		}
-	}
-}
-
-.rich-text--strong {
-	white-space: initial;
-	font-weight: bold;
-	color: var(--color-text-light);
-}
-
-.rich-text--italic {
-	white-space: initial;
-	font-style: italic;
-	color: var(--color-text-light);
-}
-
-.rich-text--heading {
-	white-space: initial;
-	font-size: initial;
-	color: var(--color-text-light);
-	margin-bottom: 5px;
-	margin-top: 5px;
-	font-weight: bold;
-
-	&.rich-text--heading-1 {
-		font-size: 20px;
-	}
-
-	&.rich-text--heading-2 {
-		font-size: 19px;
-	}
-
-	&.rich-text--heading-3 {
-		font-size: 18px;
-	}
-
-	&.rich-text--heading-4 {
-		font-size: 17px;
-	}
-
-	&.rich-text--heading-5 {
-		font-size: 16px;
-	}
-
-	&.rich-text--heading-6 {
-		font-size: 15px;
-	}
-}
-
-.rich-text--hr {
-	border-top: 1px solid var(--color-border-dark);
-	border-bottom: 0;
-}
-
-.rich-text--pre {
-	border: 1px solid var(--color-border-dark);
-	background-color: var(--color-background-dark);
-	padding: 5px;
-}
-
-.rich-text--code {
-	background-color: var(--color-background-dark);
-}
-
-.rich-text--blockquote {
-	border-left: 3px solid var(--color-border-dark);
-	padding-left: 5px;
-}
-
-.rich-text--table {
-	border-collapse: collapse;
-
-	thead tr th {
-		border: 1px solid var(--color-border-dark);
-		font-weight: bold;
-		padding: 6px 13px;
-	}
-
-	tbody tr {
-		td {
-			border: 1px solid var(--color-border-dark);
-			padding: 6px 13px;
-		}
-
-		&:nth-child(even) {
-			background-color: var(--color-background-dark);
-		}
-	}
-}
+@import "vue-richtext";
 </style>
