@@ -39,10 +39,3 @@ npm install --save @juliushaertl/vue-richtext
 ## Documentation
 
 A full example is shown in the [documentation](https://juliushaertl-vue-richtext.netlify.com/)
-
-## TODO
-
-* Fix `rollup.config.js`
-  * [ ] Handle dependencies e.g. rehype, remark…
-  * [ ] Extract styles to separate files (.css, .scss, .less)
-  * [ ] eslint is currently disabled
