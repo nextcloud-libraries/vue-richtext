@@ -1,53 +1,60 @@
-import vue from 'rollup-plugin-vue' // Handle .vue SFC files
+import vue from 'rollup-plugin-vue'
 import babel from 'rollup-plugin-babel'
-import localResolve from 'rollup-plugin-node-resolve'
 import scss from 'rollup-plugin-scss'
 import commonjs from 'rollup-plugin-commonjs'
-import json from 'rollup-plugin-json'
+import css from 'rollup-plugin-css-only'
+import copy from 'rollup-plugin-copy'
+import del from 'rollup-plugin-delete'
 import { eslint } from 'rollup-plugin-eslint'
-import alias from 'rollup-plugin-alias'
 import terser from 'rollup-plugin-terser'
-const path = require('path')
-const cwd = process.cwd()
 
 const isProduction = process.env.NODE_ENV === 'production'
 
 export default {
-	input: 'src/index.js',
-	external: id => {
-		const externals = [
-			'vue',
-		]
-		if (externals.includes(id)) {
-			return true
-		}
-		return false
-	},
+	input: 'src/RichText.vue',
 	output: {
-		file: 'dist/vue-richtext.js',
-		format: 'esm'
+		format: 'esm',
+		file: 'dist/vue-richtext.js'
 	},
+	external: [
+		'unified',
+		'remark-parse',
+		'remark-disable-tokenizers',
+		'remark-external-links',
+		'remark-external-links',
+		'remark-rehype',
+		'rehype-add-classes',
+		'rehype-react',
+		'rehype-sanitize'
+	],
 	plugins: [
-		eslint(),
-		scss(),
-		vue({
-			css: true, // Dynamically inject css as a <style> tag
-			compileTemplate: true, // Explicitly convert template to render function
-			scss: {
-				indentedSyntax: true
-			}
+		del({
+			targets: 'dist/*'
 		}),
-		babel({
-			exclude: 'node_modules/**'
-		}),
-		localResolve({
-			extensions: ['.js', '.vue']
-		}),
-		json(),
-		alias({
-			resolve: ['.js', '/index.js']
+		eslint({
+			include: ['src/**/*.vue']
 		}),
 		commonjs(),
+		vue({
+			css: false
+		}),
+		babel({
+			exclude: 'node_modules/**',
+			sourceType: 'unambiguous'
+		}),
+		scss({
+			output: 'dist/vue-richtext.min.css',
+			outputStyle: 'compressed'
+		}),
+		css(),
+		copy({
+			targets: [
+				{
+					src: 'src/vue-richtext.scss',
+					dest: 'dist/'
+				}
+			]
+		}),
 		isProduction && terser.terser()
 	]
 }
