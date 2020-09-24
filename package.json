@@ -36,14 +36,16 @@
 	},
 	"dependencies": {
 		"core-js": "^3.6.4",
-		"vue": "^2.6.12",
+		"rehype-add-classes": "^1.0.0",
 		"rehype-react": "^3.0.2",
+		"rehype-sanitize": "^4.0.0",
 		"remark-disable-tokenizers": "^1.0.24",
+		"remark-external-links": "^7.0.0",
 		"remark-parse": "^5.0.0",
 		"remark-rehype": "^3.0.0",
+		"rollup-plugin-css-only": "^2.1.0",
 		"unified": "^7.0.0",
-		"rehype-add-classes": "^1.0.0",
-		"remark-external-links": "^7.0.0"
+		"vue": "^2.6.12"
 	},
 	"engines": {
 		"node": ">=10.0.0"
@@ -75,7 +77,10 @@
 		"rollup-plugin-alias": "^2.2.0",
 		"rollup-plugin-babel": "^4.3.2",
 		"rollup-plugin-buble": "^0.19.6",
+		"rollup-plugin-clean": "^1.0.0",
 		"rollup-plugin-commonjs": "^10.0.0",
+		"rollup-plugin-copy": "^3.3.0",
+		"rollup-plugin-delete": "^2.0.0",
 		"rollup-plugin-eslint": "^7.0.0",
 		"rollup-plugin-json": "^4.0.0",
 		"rollup-plugin-local-resolve": "^1.0.7",
