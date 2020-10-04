@@ -131,7 +131,8 @@ describe('Foo', () => {
 		const wrapper = mount(RichText, {
 			propsData: {
 				text: '**Testwith** a ~~link~~ *to* [Link](https://example:1337) - go visit it',
-				autolink: true
+				autolink: true,
+				useMarkdown: true
 			}
 		})
 		expect(wrapper.text()).toEqual('Testwith a link to Link - go visit it')
@@ -139,5 +140,16 @@ describe('Foo', () => {
 		expect(wrapper.find('strong').text()).toEqual('Testwith')
 		expect(wrapper.find('em').text()).toEqual('to')
 		expect(wrapper.find('del').text()).toEqual('link')
+	})
+
+	it('formats markdown is disabled', async() => {
+		const wrapper = mount(RichText, {
+			propsData: {
+				text: '**Testwith** a ~~link~~ *to* [Link](https://example:1337) - go visit it',
+				autolink: true,
+				useMarkdown: false
+			}
+		})
+		expect(wrapper.text()).toEqual('**Testwith** a ~~link~~ *to* [Link](https://example:1337) - go visit it')
 	})
 })

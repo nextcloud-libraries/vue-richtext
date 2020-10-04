@@ -29,7 +29,6 @@ import rehype2react from 'rehype-react'
 import remarkDisableBlocks from 'remark-disable-tokenizers'
 import remarkExternalLinks from 'remark-external-links'
 import rehypeAddClasses from 'rehype-add-classes'
-import sanitize from 'rehype-sanitize'
 
 /*
 * Code inspired by https://github.com/cool-cousin/vue-remark
@@ -98,6 +97,10 @@ export default {
 				}
 			}
 		},
+		useMarkdown: {
+			type: Boolean,
+			default: false
+		},
 		disableMarkdownInlineFeatures: {
 			type: Array,
 			default: () => {
@@ -117,9 +120,45 @@ export default {
 	},
 	computed: {
 		remarkDisableOptions() {
+			if (this.useMarkdown) {
+				return {
+					inline: [...(this.autolink ? [] : ['url']), ...this.disableMarkdownInlineFeatures],
+					block: this.disableMarkdownBlockFeatures
+				}
+			}
+
 			return {
-				inline: [...(this.autolink ? [] : ['url']), ...this.disableMarkdownInlineFeatures],
-				block: this.disableMarkdownBlockFeatures
+				inline: [
+					...(this.autolink ? [] : ['url']),
+					...[
+						'escape',
+						'autoLink',
+						'email',
+						'html',
+						'link',
+						'reference',
+						'strong',
+						'emphasis',
+						'deletion',
+						'code',
+						'break'
+						// 'text' // do not enable or pluginComponent's register will have no point to insert itself
+					]
+				],
+				block: [
+					'blankLine',
+					'indentedCode',
+					'fencedCode',
+					'blockquote',
+					'atxHeading',
+					'thematicBreak',
+					'list',
+					'setextHeading',
+					'html',
+					'definition',
+					'table'
+					// 'paragraph' // do not disable we need at least one block quote rule to be enabled
+				]
 			}
 		}
 	},
@@ -138,7 +177,6 @@ export default {
 					}
 				}
 			})
-			.use(sanitize)
 			.use(rehypeAddClasses, this.markdownCssClasses)
 			.use(pluginComponent)
 			.use(rehype2react, {
