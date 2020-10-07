@@ -11,7 +11,10 @@
 	}
 
 	.rich-text--external-link:after {
-		content: ' ↗';
+		text-decoration: underline;
+		&:after {
+			content: ' ↗';
+		}
 	}
 
 	.rich-text--ordered-list {
