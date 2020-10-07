@@ -10,7 +10,7 @@
 		display: inline;
 	}
 
-	.rich-text--external-link:after {
+	.rich-text--external-link {
 		text-decoration: underline;
 		&:after {
 			content: ' ↗';
