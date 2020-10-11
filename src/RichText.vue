@@ -182,7 +182,7 @@ export default {
 			.use(rehype2react, {
 				createElement: (tag, attrs, children) => {
 					if (!tag.startsWith('#')) {
-						return h(tag, { attrs }, children)
+						return h(tag, attrs, children)
 					}
 
 					const placeholder = this.arguments[tag.slice(1)]
@@ -191,7 +191,7 @@ export default {
 					}
 
 					if (!placeholder.component) {
-						return h('span', { ...{ attrs } }, [placeholder])
+						return h('span', attrs, [placeholder])
 					}
 
 					return h(
@@ -207,7 +207,7 @@ export default {
 				prefix: false
 			})
 			.processSync(this.text)
-			.contents
+			.result
 
 		return h('div', { class: 'rich-text--wrapper' }, [renderedMarkdown])
 	}
