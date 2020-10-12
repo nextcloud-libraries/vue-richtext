@@ -36,6 +36,7 @@
 	},
 	"dependencies": {
 		"core-js": "^3.6.4",
+		"property-information": "^5.5.0",
 		"rehype-add-classes": "^1.0.0",
 		"rehype-react": "^6.1.0",
 		"remark-disable-tokenizers": "^1.0.0",
