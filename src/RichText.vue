@@ -113,6 +113,10 @@ export default {
 				return []
 			}
 		},
+		disableHTML: {
+			type: Boolean,
+			default: true
+		},
 		autolink: {
 			type: Boolean,
 			default: false
@@ -122,8 +126,8 @@ export default {
 		remarkDisableOptions() {
 			if (this.useMarkdown) {
 				return {
-					inline: [...(this.autolink ? [] : ['url']), ...this.disableMarkdownInlineFeatures],
-					block: this.disableMarkdownBlockFeatures
+					inline: [...(this.autolink ? [] : ['url']), ...(this.disableHTML ? ['html'] : []), ...this.disableMarkdownInlineFeatures],
+					block: [ ...(this.disableHTML ? ['html'] : []), this.disableMarkdownBlockFeatures]
 				}
 			}
 
