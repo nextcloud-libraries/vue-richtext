@@ -127,7 +127,7 @@ export default {
 			if (this.useMarkdown) {
 				return {
 					inline: [...(this.autolink ? [] : ['url']), ...(this.disableHTML ? ['html'] : []), ...this.disableMarkdownInlineFeatures],
-					block: [ ...(this.disableHTML ? ['html'] : []), this.disableMarkdownBlockFeatures]
+					block: [...(this.disableHTML ? ['html'] : []), this.disableMarkdownBlockFeatures]
 				}
 			}
 
