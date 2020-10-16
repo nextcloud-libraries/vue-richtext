@@ -21,11 +21,9 @@ export default {
 		'remark-parse',
 		'remark-disable-tokenizers',
 		'remark-external-links',
-		'remark-external-links',
 		'remark-rehype',
 		'rehype-add-classes',
-		'rehype-react',
-		'rehype-sanitize'
+		'rehype-react'
 	],
 	plugins: [
 		del({
