@@ -124,16 +124,19 @@ export default {
 	},
 	computed: {
 		remarkDisableOptions() {
+			const disableAutoLink = this.autolink ? [] : ['url']
+			const disableHTML = this.disableHTML ? ['html'] : []
+
 			if (this.useMarkdown) {
 				return {
-					inline: [...(this.autolink ? [] : ['url']), ...(this.disableHTML ? ['html'] : []), ...this.disableMarkdownInlineFeatures],
-					block: [...(this.disableHTML ? ['html'] : []), this.disableMarkdownBlockFeatures]
+					inline: [...disableAutoLink, ...disableHTML, ...this.disableMarkdownInlineFeatures],
+					block: [...disableHTML, ...this.disableMarkdownBlockFeatures]
 				}
 			}
 
 			return {
 				inline: [
-					...(this.autolink ? [] : ['url']),
+					...disableAutoLink,
 					...[
 						'escape',
 						'autoLink',
@@ -146,7 +149,7 @@ export default {
 						'deletion',
 						'code',
 						'break'
-						// 'text' // do not enable or pluginComponent's register will have no point to insert itself
+						// 'text' // do not uncomment or pluginComponent's register will have no point to insert itself
 					]
 				],
 				block: [
@@ -161,7 +164,7 @@ export default {
 					'html',
 					'definition',
 					'table'
-					// 'paragraph' // do not disable we need at least one block quote rule to be enabled
+					// 'paragraph' // do not uncomment we need at least one block quote rule to be enabled
 				]
 			}
 		}
