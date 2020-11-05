@@ -2,6 +2,7 @@
   - @copyright Copyright (c) 2020 Julius Härtl <jus@bitgrid.net>
   -
   - @author Julius Härtl <jus@bitgrid.net>
+  - @author Guido Krömer <mail@cacodaemon.de>
   -
   - @license GNU AGPL version 3 or any later version
   -
@@ -21,68 +22,46 @@
   -->
 
 <script>
-import Link from './Link'
+import unified from 'unified'
+import markdown from 'remark-parse'
+import remark2rehype from 'remark-rehype'
+import rehype2react from 'rehype-react'
+import remarkDisableBlocks from 'remark-disable-tokenizers'
+import remarkExternalLinks from 'remark-external-links'
+import rehypeAddClasses from 'rehype-add-classes'
 
-const urlRegex = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig
+/*
+* Code inspired by https://github.com/cool-cousin/vue-remark
+* */
+function pluginComponent() {
+	const { inlineTokenizers, inlineMethods } = this.Parser.prototype
+	inlineTokenizers.component = (eat, value, silent) => {
+		const match = /^\{([-\w]+)\}/.exec(value)
 
-const parseUrl = (text, linkComponent) => {
-	let match = urlRegex.exec(text)
-	const list = []
-	let start = 0
-	while (match !== null) {
-		let href = match[2]
-		let textAfter
-		let textBefore = text.substring(start, match.index + match[1].length)
-		if (href[0] === ' ') {
-			textBefore += href[0]
-			href = href.substring(1).trim()
-		}
-		const lastChar = href[(href.length - 1)]
-		if (lastChar === '.' || lastChar === ',' || lastChar === ';' || (match[0][0] === '(' && lastChar === ')')) {
-			href = href.substring(0, href.length - 1)
-			textAfter = lastChar
+		if (!match) {
+			return
 		}
 
-		list.push(textBefore)
-		list.push({ component: linkComponent, props: { href } })
-		if (textAfter) {
-			list.push(textAfter)
+		if (silent) {
+			return true
 		}
-		start = match.index + match[0].length
-		match = urlRegex.exec(text)
-	}
-	list.push(text.substring(start))
 
-	const joinedText = list.map((item) => typeof item === 'string' ? item : item.props.href).join('')
-	if (text === joinedText) {
-		return list
-	}
-	console.error('Failed to reassemble the chunked text: ' + text)
-	return text
-}
+		const [all, component] = match
 
-const prepareTextNode = ({ h, context }, text) => {
-	if (context.props.autolink) {
-		text = parseUrl(text, context.props.linkComponent)
-	}
-	if (Array.isArray(text)) {
-		return text.map((entry) => {
-			if (typeof entry === 'string') {
-				return entry
-			}
-			const { component, props } = entry
-			return h(component, {
-				props,
-				class: 'rich-text--component'
-			})
+		return eat(all)({
+			type: 'component',
+			component: `#${component}`,
+			value: ''
 		})
 	}
-	return text
+	inlineTokenizers.component.locator = (value, fromIndex) => {
+		return value.indexOf('{', fromIndex)
+	}
+	inlineMethods.splice(inlineMethods.indexOf('text'), 0, 'component')
 }
 
 export default {
 	name: 'RichText',
-	functional: true,
 	props: {
 		text: {
 			type: String,
@@ -94,57 +73,154 @@ export default {
 				return {}
 			}
 		},
-		linkComponent: {
+		markdownCssClasses: {
 			type: Object,
 			default: () => {
-				return Link
+				return {
+					a: 'rich-text--external-link',
+					ol: 'rich-text--ordered-list',
+					ul: 'rich-text--un-ordered-list',
+					li: 'rich-text--list-item',
+					strong: 'rich-text--strong',
+					em: 'rich-text--italic',
+					h1: 'rich-text--heading rich-text--heading-1',
+					h2: 'rich-text--heading rich-text--heading-2',
+					h3: 'rich-text--heading rich-text--heading-3',
+					h4: 'rich-text--heading rich-text--heading-4',
+					h5: 'rich-text--heading rich-text--heading-5',
+					h6: 'rich-text--heading rich-text--heading-6',
+					hr: 'rich-text--hr',
+					table: 'rich-text--table',
+					pre: 'rich-text--pre',
+					code: 'rich-text--code',
+					blockquote: 'rich-text--blockquote'
+				}
 			}
+		},
+		useMarkdown: {
+			type: Boolean,
+			default: false
+		},
+		disableMarkdownInlineFeatures: {
+			type: Array,
+			default: () => {
+				return []
+			}
+		},
+		disableMarkdownBlockFeatures: {
+			type: Array,
+			default: () => {
+				return []
+			}
+		},
+		disableHTML: {
+			type: Boolean,
+			default: true
 		},
 		autolink: {
 			type: Boolean,
 			default: false
 		}
 	},
-	render: function(h, context) {
-		// extract text nodes and placeholders and put them into an array that
-		// contains a string for text and an object for each placeholder
-		const placeholders = context.props.text.split(/(\{[a-z\-_.0-9]+\})/ig).map((entry, index, list) => {
-			const matches = entry.match(/^\{([a-z\-_.0-9]+)\}$/i)
+	computed: {
+		remarkDisableOptions() {
+			const disableAutoLink = this.autolink ? [] : ['url']
+			const disableHTML = this.disableHTML ? ['html'] : []
 
-			// just return plain string nodes as text
-			if (!matches) {
-				return prepareTextNode({ h, context }, entry)
+			if (this.useMarkdown) {
+				return {
+					inline: [...disableAutoLink, ...disableHTML, ...this.disableMarkdownInlineFeatures],
+					block: [...disableHTML, ...this.disableMarkdownBlockFeatures]
+				}
 			}
 
-			// return component instance if argument is an object
-			const argumentId = matches[1]
-			const argument = context.props.arguments[argumentId]
-			if (typeof argument === 'object') {
-				const { component, props } = argument
-				return h(component, {
-					props,
-					class: 'rich-text--component'
-				})
+			return {
+				inline: [
+					...disableAutoLink,
+					...[
+						'escape',
+						'autoLink',
+						'email',
+						'html',
+						'link',
+						'reference',
+						'strong',
+						'emphasis',
+						'deletion',
+						'code',
+						'break'
+						// 'text' // do not uncomment or pluginComponent's register will have no point to insert itself
+					]
+				],
+				block: [
+					'blankLine',
+					'indentedCode',
+					'fencedCode',
+					'blockquote',
+					'atxHeading',
+					'thematicBreak',
+					'list',
+					'setextHeading',
+					'html',
+					'definition',
+					'table'
+					// 'paragraph' // do not uncomment we need at least one block quote rule to be enabled
+				]
 			}
+		}
+	},
+	render(h) {
+		const renderedMarkdown = unified()
+			.use(markdown)
+			.use(remarkExternalLinks, {
+				target: '_blank',
+				rel: ['noopener noreferrer']
+			})
+			.use(remarkDisableBlocks, this.remarkDisableOptions)
+			.use(remark2rehype, {
+				handlers: {
+					component(toHast, node) {
+						return toHast(node, node.component, { value: node.value })
+					}
+				}
+			})
+			.use(rehypeAddClasses, this.markdownCssClasses)
+			.use(pluginComponent)
+			.use(rehype2react, {
+				createElement: (tag, attrs, children) => {
+					if (!tag.startsWith('#')) {
+						return h(tag, attrs, children)
+					}
 
-			if (argument) {
-				return h('span', { class: 'rich-text--fallback' }, argument)
-			}
+					const placeholder = this.arguments[tag.slice(1)]
+					if (!placeholder) {
+						return h('span', { ...{ attrs }, ...{ class: 'rich-text--fallback' } }, [`{${tag.slice(1)}}`])
+					}
 
-			return entry
-		})
+					if (!placeholder.component) {
+						return h('span', attrs, [placeholder])
+					}
 
-		return h('div', { class: 'rich-text--wrapper' }, placeholders.flat())
+					return h(
+						placeholder.component,
+						{
+							attrs,
+							props: placeholder.props,
+							class: 'rich-text--component'
+						},
+						children
+					)
+				},
+				prefix: false
+			})
+			.processSync(this.text)
+			.result
+
+		return h('div', { class: 'rich-text--wrapper' }, [renderedMarkdown])
 	}
 }
 </script>
 
-<style scoped>
-	.rich-text--fallback, .rich-text-component {
-		display: inline;
-	}
-
-	a.external:after {
-		content: " ↗";
-	}
+<style lang="scss" scoped>
+@import "vue-richtext";
 </style>
