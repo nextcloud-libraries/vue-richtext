@@ -5,7 +5,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import css from 'rollup-plugin-css-only'
 import copy from 'rollup-plugin-copy'
 import del from 'rollup-plugin-delete'
-import { eslint } from 'rollup-plugin-eslint'
+import eslint from '@rollup/plugin-eslint';
 import terser from 'rollup-plugin-terser'
 
 const isProduction = process.env.NODE_ENV === 'production'
