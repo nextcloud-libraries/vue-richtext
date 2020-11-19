@@ -153,7 +153,7 @@ export default {
 					]
 				],
 				block: [
-					'blankLine',
+					// 'blankLine', // We allow newlines in plain strings
 					'indentedCode',
 					'fencedCode',
 					'blockquote',
