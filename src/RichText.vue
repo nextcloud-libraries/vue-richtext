@@ -24,6 +24,7 @@
 <script>
 import unified from 'unified'
 import markdown from 'remark-parse'
+import breaks from 'remark-breaks'
 import remark2rehype from 'remark-rehype'
 import rehype2react from 'rehype-react'
 import remarkDisableBlocks from 'remark-disable-tokenizers'
@@ -147,13 +148,13 @@ export default {
 						'strong',
 						'emphasis',
 						'deletion',
-						'code',
-						'break'
+						'code'
+						// 'break'
 						// 'text' // do not uncomment or pluginComponent's register will have no point to insert itself
 					]
 				],
 				block: [
-					// 'blankLine', // We allow newlines in plain strings
+					// 'blankLine',
 					'indentedCode',
 					'fencedCode',
 					'blockquote',
@@ -176,6 +177,7 @@ export default {
 				target: '_blank',
 				rel: ['noopener noreferrer']
 			})
+			.use(breaks)
 			.use(remarkDisableBlocks, this.remarkDisableOptions)
 			.use(remark2rehype, {
 				handlers: {
