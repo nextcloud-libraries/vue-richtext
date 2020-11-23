@@ -94,6 +94,25 @@ describe('Foo', () => {
 		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com')
 	})
 
+	it('properly inserts a newline', async() => {
+		const wrapper = mount(RichText, {
+			propsData: {
+				text: 'Testwith a link to https://example.com \n go visit it',
+				autolink: true
+			}
+		})
+
+		expect(wrapper.text()).toEqual('Testwith a link to https://example.com\ngo visit it')
+		expect(wrapper.html()).toEqual(`<div class="rich-text--wrapper">
+  <div>
+    <p>Testwith a link to <a href="https://example.com" target="_blank" rel="noopener noreferrer" class="rich-text--external-link">https://example.com</a><br>
+      go visit it</p>
+  </div>
+</div>`)
+
+		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com')
+	})
+
 	it('properly inserts a link with brackets', async() => {
 		const wrapper = mount(RichText, {
 			propsData: {

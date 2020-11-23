@@ -35,10 +35,12 @@
 		"vue": "^2.6.11"
 	},
 	"dependencies": {
+		"clone": "^2.1.2",
 		"core-js": "^3.6.4",
 		"property-information": "^5.5.0",
 		"rehype-add-classes": "^1.0.0",
 		"rehype-react": "^6.1.0",
+		"remark-breaks": "2.0.0",
 		"remark-disable-tokenizers": "^1.0.0",
 		"remark-external-links": "^8.0.0",
 		"remark-parse": "^8.0.3",
