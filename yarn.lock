@@ -8946,9 +8946,9 @@ relateurl@0.2.x:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
 
-remark-breaks@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/remark-breaks/-/remark-breaks-2.0.0.tgz#96aa5078f5d582c328e7a9aff50b3167813aca58"
+remark-breaks@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/remark-breaks/-/remark-breaks-2.0.1.tgz#5dfe54e5b9ab65cfa1e25d6810fb556dda1c8ec1"
 
 remark-disable-tokenizers@^1.0.0:
   version "1.0.24"
