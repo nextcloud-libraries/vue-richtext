@@ -1068,8 +1068,8 @@
     fastq "^1.6.0"
 
 "@rollup/plugin-eslint@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-eslint/-/plugin-eslint-8.0.0.tgz#a30ca62273f3c4d47a75f71ddd6e0818fcbd33c1"
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-eslint/-/plugin-eslint-8.0.1.tgz#bf7462f96027613729b8a805caaa951dc23c333e"
   dependencies:
     "@rollup/pluginutils" "^4.0.0"
     eslint "^7.12.0"
