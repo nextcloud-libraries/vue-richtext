@@ -1077,7 +1077,7 @@
     "@rollup/pluginutils" "^4.0.0"
     eslint "^7.12.0"
 
-"@rollup/pluginutils@3 || 4", "@rollup/pluginutils@^4.0.0":
+"@rollup/pluginutils@4", "@rollup/pluginutils@^4.0.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.1.0.tgz#0dcc61c780e39257554feb7f77207dceca13c838"
   dependencies:
@@ -9276,10 +9276,10 @@ rollup-plugin-copy@^3.3.0:
     is-plain-object "^3.0.0"
 
 rollup-plugin-css-only@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-css-only/-/rollup-plugin-css-only-3.0.0.tgz#16b78a569aed50637a0e15ddc6ea3581c3810db9"
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-css-only/-/rollup-plugin-css-only-3.1.0.tgz#6a701cc5b051c6b3f0961e69b108a9a118e1b1df"
   dependencies:
-    "@rollup/pluginutils" "3 || 4"
+    "@rollup/pluginutils" "4"
 
 rollup-plugin-delete@^2.0.0:
   version "2.0.0"
