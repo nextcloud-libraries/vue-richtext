@@ -18,6 +18,11 @@ module.exports = {
 			new webpack.ProvidePlugin({
 				process: 'process/browser',
 			}),
-		]
+		],
+		resolve: {
+			alias: {
+				'@juliushaertl/vue-richtext/dist/vue-richtext.scss': '../../../src/vue-richtext.scss'
+			}
+		}
 	}
 }

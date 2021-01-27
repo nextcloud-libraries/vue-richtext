@@ -13,6 +13,7 @@
 
 <script>
 import User from './User'
+import '@juliushaertl/vue-richtext/dist/vue-richtext.scss'
 
 export default {
     name: 'RichTextDemoMarkdown',
