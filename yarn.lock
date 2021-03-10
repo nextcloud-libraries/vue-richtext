@@ -9015,8 +9015,8 @@ remark-breaks@2.0.1:
   resolved "https://registry.yarnpkg.com/remark-breaks/-/remark-breaks-2.0.1.tgz#5dfe54e5b9ab65cfa1e25d6810fb556dda1c8ec1"
 
 remark-disable-tokenizers@^1.0.0:
-  version "1.0.24"
-  resolved "https://registry.yarnpkg.com/remark-disable-tokenizers/-/remark-disable-tokenizers-1.0.24.tgz#98efd5ade2da46e8e6167cc3318c7cd93d15449d"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/remark-disable-tokenizers/-/remark-disable-tokenizers-1.1.0.tgz#607dc77e7208eed85cef06aebd2e5a924c21b39f"
   dependencies:
     clone "^2.1.2"
 
