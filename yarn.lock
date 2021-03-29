@@ -9010,9 +9010,11 @@ relateurl@0.2.x:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
 
-remark-breaks@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/remark-breaks/-/remark-breaks-2.0.1.tgz#5dfe54e5b9ab65cfa1e25d6810fb556dda1c8ec1"
+remark-breaks@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/remark-breaks/-/remark-breaks-2.0.2.tgz#55fdec6c7da84f659aa7fdb1aa95b632870cee8d"
+  dependencies:
+    unist-util-visit "^2.0.0"
 
 remark-disable-tokenizers@^1.0.0:
   version "1.1.0"
