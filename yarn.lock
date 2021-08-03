@@ -3318,8 +3318,8 @@ core-js@^2.4.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
 
 core-js@^3.6.4, core-js@^3.6.5:
-  version "3.15.2"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.15.2.tgz#740660d2ff55ef34ce664d7e2455119c5bdd3d61"
+  version "3.16.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.16.0.tgz#1d46fb33720bc1fa7f90d20431f36a5540858986"
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -10243,8 +10243,8 @@ stylelint-config-recommended@^5.0.0:
   resolved "https://registry.yarnpkg.com/stylelint-config-recommended/-/stylelint-config-recommended-5.0.0.tgz#fb5653f495a60b4938f2ad3e77712d9e1039ae78"
 
 stylelint-scss@^3.14.2:
-  version "3.19.0"
-  resolved "https://registry.yarnpkg.com/stylelint-scss/-/stylelint-scss-3.19.0.tgz#528006d5a4c5a0f1f4d709b02fd3f626ed66d742"
+  version "3.20.1"
+  resolved "https://registry.yarnpkg.com/stylelint-scss/-/stylelint-scss-3.20.1.tgz#88f175d9cfe1c81a72858bd0d3550cf61530e212"
   dependencies:
     lodash "^4.17.15"
     postcss-media-query-parser "^0.2.3"
