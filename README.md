@@ -38,4 +38,4 @@ npm install --save @juliushaertl/vue-richtext
 
 ## Documentation
 
-A full example is shown in the [documentation](https://juliushaertl-vue-richtext.netlify.com/)
+A full example is shown in the [documentation](https://juliushaertl.github.io/vue-richtext/)
