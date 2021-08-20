@@ -1,6 +1,7 @@
 var webpack = require('webpack')
 
 module.exports = {
+	base: process.env.VUEPRESS_BASE || '/'
     title: 'vue-richtext',
     themeConfig: {
         nav: [
