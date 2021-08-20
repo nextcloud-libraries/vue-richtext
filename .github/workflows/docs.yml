@@ -1,8 +1,5 @@
 name: Build and Deploy
-on:
-  push:
-    branches:
-      - master
+on: [push]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -23,6 +20,7 @@ jobs:
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
+        if: github.ref == 'refs/heads/master'
         with:
           branch: gh-pages
           folder: docs/.vuepress/dist
