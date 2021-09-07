@@ -3356,8 +3356,8 @@ core-js@^2.4.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
 
 core-js@^3.6.4, core-js@^3.6.5:
-  version "3.16.4"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.16.4.tgz#0fb1029a554fc2688c0963d7c900e188188a78e0"
+  version "3.17.2"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.17.2.tgz#f960eae710dc62c29cca93d5332e3660e289db10"
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
