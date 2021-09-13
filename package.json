@@ -39,7 +39,7 @@
 		"core-js": "^3.6.4",
 		"property-information": "^5.5.0",
 		"rehype-add-classes": "^1.0.0",
-		"rehype-react": "^6.1.0",
+		"rehype-react": "^7.0.2",
 		"remark-breaks": "2.0.2",
 		"remark-disable-tokenizers": "^1.0.0",
 		"remark-external-links": "^8.0.0",
