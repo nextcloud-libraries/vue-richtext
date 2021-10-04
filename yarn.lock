@@ -1220,8 +1220,8 @@
     glob-to-regexp "^0.3.0"
 
 "@nextcloud/browserslist-config@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@nextcloud/browserslist-config/-/browserslist-config-2.1.0.tgz#83a56660006b3113f9afa9bf99965251384cdb52"
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@nextcloud/browserslist-config/-/browserslist-config-2.2.0.tgz#85c2b9363b4aa98ea534576b9f9094cc0afa8f78"
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
