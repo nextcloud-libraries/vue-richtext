@@ -8466,11 +8466,15 @@ property-information@^3.1.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/property-information/-/property-information-3.2.0.tgz#fd1483c8fbac61808f5fe359e7693a1f48a58331"
 
-property-information@^5.3.0, property-information@^5.5.0:
+property-information@^5.3.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/property-information/-/property-information-5.6.0.tgz#61675545fb23002f245c6540ec46077d4da3ed69"
   dependencies:
     xtend "^4.0.0"
+
+property-information@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/property-information/-/property-information-6.1.0.tgz#a95d849f024a3173041e46589da2a07fcb2458ab"
 
 proto-list@~1.2.1:
   version "1.2.4"
