@@ -1629,11 +1629,17 @@
   dependencies:
     nprogress "^0.2.0"
 
-"@vuepress/plugin-register-components@1.8.2", "@vuepress/plugin-register-components@^1.6.0":
+"@vuepress/plugin-register-components@1.8.2":
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/@vuepress/plugin-register-components/-/plugin-register-components-1.8.2.tgz#2fb45a68b0a1efb8822670d95c3b231a2d0eb74d"
   dependencies:
     "@vuepress/shared-utils" "1.8.2"
+
+"@vuepress/plugin-register-components@^1.6.0":
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/@vuepress/plugin-register-components/-/plugin-register-components-1.8.3.tgz#d728ae1ce90e0b209ebe04da2d9876f11b2a42ac"
+  dependencies:
+    "@vuepress/shared-utils" "1.8.3"
 
 "@vuepress/plugin-search@1.8.2":
   version "1.8.2"
@@ -1642,6 +1648,20 @@
 "@vuepress/shared-utils@1.8.2":
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/@vuepress/shared-utils/-/shared-utils-1.8.2.tgz#5ec1601f2196aca34ad82eed7c9be2d7948f705b"
+  dependencies:
+    chalk "^2.3.2"
+    escape-html "^1.0.3"
+    fs-extra "^7.0.1"
+    globby "^9.2.0"
+    gray-matter "^4.0.1"
+    hash-sum "^1.0.2"
+    semver "^6.0.0"
+    toml "^3.0.0"
+    upath "^1.1.0"
+
+"@vuepress/shared-utils@1.8.3":
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/@vuepress/shared-utils/-/shared-utils-1.8.3.tgz#14c7ca05c63990c88e2bb6b310e210552ef94efa"
   dependencies:
     chalk "^2.3.2"
     escape-html "^1.0.3"
