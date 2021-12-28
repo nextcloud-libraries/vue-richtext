@@ -1779,38 +1779,18 @@
     "@vuepress/types" "1.9.5"
     nprogress "^0.2.0"
 
-"@vuepress/plugin-register-components@1.9.5":
+"@vuepress/plugin-register-components@1.9.5", "@vuepress/plugin-register-components@^1.6.0":
   version "1.9.5"
   resolved "https://registry.yarnpkg.com/@vuepress/plugin-register-components/-/plugin-register-components-1.9.5.tgz#7d0628a7bf4937ea32573f884479be8b47090678"
   dependencies:
     "@vuepress/shared-utils" "1.9.5"
     "@vuepress/types" "1.9.5"
 
-"@vuepress/plugin-register-components@^1.6.0":
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/@vuepress/plugin-register-components/-/plugin-register-components-1.8.3.tgz#d728ae1ce90e0b209ebe04da2d9876f11b2a42ac"
-  dependencies:
-    "@vuepress/shared-utils" "1.8.3"
-
 "@vuepress/plugin-search@1.9.5":
   version "1.9.5"
   resolved "https://registry.yarnpkg.com/@vuepress/plugin-search/-/plugin-search-1.9.5.tgz#2b854dc641de3fd2bc6976c44063df03d4eb07e3"
   dependencies:
     "@vuepress/types" "1.9.5"
-
-"@vuepress/shared-utils@1.8.3":
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/@vuepress/shared-utils/-/shared-utils-1.8.3.tgz#14c7ca05c63990c88e2bb6b310e210552ef94efa"
-  dependencies:
-    chalk "^2.3.2"
-    escape-html "^1.0.3"
-    fs-extra "^7.0.1"
-    globby "^9.2.0"
-    gray-matter "^4.0.1"
-    hash-sum "^1.0.2"
-    semver "^6.0.0"
-    toml "^3.0.0"
-    upath "^1.1.0"
 
 "@vuepress/shared-utils@1.9.5":
   version "1.9.5"
@@ -3850,7 +3830,7 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.3:
+debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.3:
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
   dependencies:
@@ -3861,12 +3841,6 @@ debug@^3.1.1, debug@^3.2.5, debug@^3.2.7:
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.7.tgz#72580b7e9145fb39b6676f9c5e5fb100b934179a"
   dependencies:
     ms "^2.1.1"
-
-debug@^4.3.1:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
-  dependencies:
-    ms "2.1.2"
 
 debug@~3.1.0:
   version "3.1.0"
