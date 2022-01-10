@@ -7,7 +7,7 @@
 <br />
 
 ### Example source
-<<< @/docs/.vuepress/components/RichTextDemoLink.vue
+@[code vue](.vuepress/components/RichTextDemoLink.vue)
 
 #### User.vue
-<<< @/docs/.vuepress/components/User.vue
+@[code vue](.vuepress/components/User.vue)

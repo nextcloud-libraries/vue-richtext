@@ -3,8 +3,9 @@ var webpack = require('webpack')
 module.exports = {
     base: process.env.VUEPRESS_BASE || '/',
     title: 'vue-richtext',
+    sidebar: false,
     themeConfig: {
-        nav: [
+        navbar: [
             { text: 'Home', link: '/' },
             { text: 'Autolink', link: '/link' },
 			{ text: 'Markdown', link: '/markdown' },
