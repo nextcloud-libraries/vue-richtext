@@ -101,7 +101,7 @@
 		"vue-jest": "^3.0.5",
 		"vue-server-renderer": "^2.6.12",
 		"vue-template-compiler": "^2.6.12",
-		"vuepress": "^1.6.0"
+		"vuepress": "^1.9.5"
 	},
 	"jest": {
 		"testEnvironment": "jsdom",
