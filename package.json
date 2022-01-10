@@ -43,7 +43,7 @@
 		"remark-breaks": "2.0.2",
 		"remark-disable-tokenizers": "^1.1.0",
 		"remark-external-links": "^8.0.0",
-		"remark-parse": "^8.0.3",
+		"remark-parse": "^10.0.1",
 		"remark-rehype": "^8.1.0",
 		"unified": "^9.2.2",
 		"vue": "^2.6.14"
