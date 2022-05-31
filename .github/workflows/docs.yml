@@ -13,10 +13,10 @@ jobs:
 
       - name: Build docs
         run: |
-          npm ci
-          npm run build
-          npm run test
-          VUEPRESS_BASE="/vue-richtext/" npm run docs:build
+          yarn
+          yarn build
+          yarn test
+          yarn docs:build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
