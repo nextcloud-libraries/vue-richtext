@@ -22,44 +22,44 @@
   -->
 
 <script>
-import unified from 'unified'
+import { unified } from 'unified'
 import markdown from 'remark-parse'
 import breaks from 'remark-breaks'
 import remark2rehype from 'remark-rehype'
 import rehype2react from 'rehype-react'
-// import remarkDisableBlocks from 'remark-disable-tokenizers'
+//import remarkDisableBlocks from 'remark-disable-tokenizers'
 import remarkDisableBlocks from './remarkDisableBlocks'
 import remarkExternalLinks from 'remark-external-links'
 import rehypeAddClasses from 'rehype-add-classes'
+import { visit } from 'unist-util-visit'
+import { u } from 'unist-builder'
 
-/*
-* Code inspired by https://github.com/cool-cousin/vue-remark
-* */
+function transformer(ast) {
+	visit(ast, (node) => node.type === 'text', visitor)
+
+	function visitor(node, index, parent) {
+		const placeholders = node.value.split(/(\{[a-z\-_.0-9]+\})/ig)
+			.map((entry, index, list) => {
+				const matches = entry.match(/^\{([a-z\-_.0-9]+)\}$/i)
+				// just return plain string nodes as text
+				if (!matches) {
+					return u('text', entry)
+				}
+				const [, component] = matches
+				return u('element', {
+					tagName: `#${component}`,
+				})
+			})
+
+		node = u('element', { tagName: 'div' }, [
+			...placeholders
+		])
+		parent.children[index] = node
+	}
+}
+
 function pluginComponent() {
-	const { inlineTokenizers, inlineMethods } = this.Parser.prototype
-	inlineTokenizers.component = (eat, value, silent) => {
-		const match = /^\{([-\w]+)\}/.exec(value)
-
-		if (!match) {
-			return
-		}
-
-		if (silent) {
-			return true
-		}
-
-		const [all, component] = match
-
-		return eat(all)({
-			type: 'component',
-			component: `#${component}`,
-			value: ''
-		})
-	}
-	inlineTokenizers.component.locator = (value, fromIndex) => {
-		return value.indexOf('{', fromIndex)
-	}
-	inlineMethods.splice(inlineMethods.indexOf('text'), 0, 'component')
+	return transformer
 }
 
 export default {
