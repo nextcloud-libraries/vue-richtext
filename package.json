@@ -7,62 +7,55 @@
 		"components",
 		"markdown"
 	],
-	"repository": "https://github.com/juliushaertl/vue-richtext",
 	"homepage": "https://github.com/juliushaertl/vue-richtext",
 	"bugs": "https://github.com/juliushaertl/vue-richtext/issues",
-	"author": "Julius Härtl <jus@bitgrid.net>",
+	"repository": "https://github.com/juliushaertl/vue-richtext",
 	"license": "AGPL-3.0",
+	"author": "Julius Härtl <jus@bitgrid.net>",
+	"main": "dist/vue-richtext.js",
+	"files": [
+		"LICENSE",
+		"README.md",
+		"dist"
+	],
 	"scripts": {
-		"build": "NODE_ENV=production rollup -c",
-		"watch": "NODE_ENV=development rollup -c --watch",
+		"build": "NODE_ENV=production vite build",
+		"docs:build": "vitepress build docs",
+		"docs:dev": "vitepress dev docs",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
 		"stylelint": "stylelint src",
 		"stylelint:fix": "stylelint src --fix",
 		"test": "jest",
 		"test:coverage": "jest --coverage",
-		"docs:dev": "vuepress dev docs",
-		"docs:build": "vuepress build docs"
+		"watch": "NODE_ENV=development vite"
 	},
-	"main": "dist/vue-richtext.js",
-	"library": "dist/vue-richtext.js",
-	"files": [
-		"LICENSE",
-		"README.md",
-		"dist"
+	"browserslist": [
+		"extends @nextcloud/browserslist-config"
 	],
-	"peerDependencies": {
-		"vue": "^2.6.14"
+	"jest": {
+		"moduleFileExtensions": [
+			"js",
+			"vue"
+		],
+		"moduleNameMapper": {
+			"^@/(.*)$": "<rootDir>/src/$1"
+		},
+		"snapshotSerializers": [
+			"<rootDir>/node_modules/jest-serializer-vue"
+		],
+		"testEnvironment": "jsdom",
+		"transform": {
+			"^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+			".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+		}
 	},
 	"dependencies": {
-		"clone": "^2.1.2",
-		"core-js": "^3.20.2",
-		"property-information": "^5.6.0",
-		"rehype-add-classes": "^1.0.0",
-		"rehype-react": "^6.2.1",
-		"remark-breaks": "2.0.2",
-		"remark-disable-tokenizers": "^1.1.0",
-		"remark-external-links": "^8.0.0",
-		"remark-parse": "^8.0.3",
-		"remark-rehype": "^8.1.0",
-		"unified": "^9.2.2",
 		"vue": "^2.6.14"
 	},
-	"engines": {
-		"node": ">=10.0.0"
-	},
 	"devDependencies": {
-		"@babel/core": "^7.16.7",
-		"@babel/plugin-transform-arrow-functions": "^7.16.7",
-		"@babel/preset-env": "^7.16.7",
-		"@nextcloud/browserslist-config": "^2.2.0",
-		"@rollup/plugin-eslint": "^8.0.1",
-		"@vue/babel-preset-app": "^4.5.15",
 		"@vue/test-utils": "^1.3.0",
-		"@vuepress/plugin-register-components": "^1.9.5",
-		"babel-core": "^7.0.0-bridge.0",
-		"babel-eslint": "^10.0.0",
-		"babel-jest": "^27.4.6",
+		"clone": "^2.1.2",
 		"eslint": "^7.32.0",
 		"eslint-config-standard": "^16.0.3",
 		"eslint-plugin-import": "^2.25.4",
@@ -73,53 +66,31 @@
 		"eslint-plugin-vue": "^7.20.0",
 		"jest": "^27.4.7",
 		"jest-serializer-vue": "^2.0.2",
-		"node-sass": "^7.0.1",
 		"prettier-eslint": "^13.0.0",
-		"process": "^0.11.10",
-		"resolve-url-loader": "^4.0.0",
-		"rollup": "^2.63.0",
-		"rollup-plugin-alias": "^2.2.0",
-		"rollup-plugin-babel": "^4.3.2",
-		"rollup-plugin-buble": "^0.19.6",
-		"rollup-plugin-clean": "^1.0.0",
-		"rollup-plugin-commonjs": "^10.0.0",
-		"rollup-plugin-copy": "^3.4.0",
-		"rollup-plugin-css-only": "^3.1.0",
-		"rollup-plugin-delete": "^2.0.0",
-		"rollup-plugin-json": "^4.0.0",
-		"rollup-plugin-local-resolve": "^1.0.7",
-		"rollup-plugin-node-polyfills": "^0.2.1",
-		"rollup-plugin-node-resolve": "^5.0.1",
-		"rollup-plugin-replace": "^2.1.0",
-		"rollup-plugin-scss": "^3.0.0",
-		"rollup-plugin-terser": "^7.0.2",
-		"rollup-plugin-vue": "^5.1.9",
+		"rehype-add-classes": "^1.0.0",
+		"rehype-react": "^6.2.1",
+		"remark-breaks": "2.0.2",
+		"remark-disable-tokenizers": "^1.1.0",
+		"remark-external-links": "^8.0.0",
+		"remark-parse": "^8.0.3",
+		"remark-rehype": "^8.1.0",
+		"sass": "^1.52.1",
 		"stylelint": "^14.2.0",
 		"stylelint-config-recommended-scss": "^5.0.2",
 		"stylelint-scss": "^4.1.0",
+		"unified": "^9.2.2",
+		"vite": "^2.9.9",
+		"vite-plugin-vue2": "^2.0.1",
+		"vitepress": "^0.22.4",
 		"vue-jest": "^3.0.7",
 		"vue-server-renderer": "^2.6.14",
-		"vue-template-compiler": "^2.6.14",
-		"vuepress": "^2.0.0-beta.32"
+		"vue-template-compiler": "^2.6.14"
 	},
-	"jest": {
-		"testEnvironment": "jsdom",
-		"moduleFileExtensions": [
-			"js",
-			"vue"
-		],
-		"moduleNameMapper": {
-			"^@/(.*)$": "<rootDir>/src/$1"
-		},
-		"transform": {
-			"^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-			".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
-		},
-		"snapshotSerializers": [
-			"<rootDir>/node_modules/jest-serializer-vue"
-		]
+	"peerDependencies": {
+		"vue": "^2.6.14"
 	},
-	"browserslist": [
-		"extends @nextcloud/browserslist-config"
-	]
+	"engines": {
+		"node": ">=10.0.0"
+	},
+	"library": "dist/vue-richtext.js"
 }

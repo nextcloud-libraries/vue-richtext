@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+ <html lang="en">
+   <head>
+     <meta charset="UTF-8" />
+     <link rel="icon" href="/favicon.ico" />
+     <link rel="stylesheet" href="/dist/style.css" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>Test the package</title>
+   </head>
+   <body>
+     <div id="app"></div>
+     <script type="module">
+ 	    import RichText from './src/package.js'
+ 		import Vue from 'vue'
+
+		const User = {
+			props: {
+				user: {
+					type: String,
+					default: '',
+				}
+			},
+			render(h) {
+				return h('span', {
+					style: {
+						backgroundColor: 'red',
+					}
+				}, [this.user])
+			}
+		}
+ 		const app = new Vue({
+ 			data() {
+ 				return {
+					text: 'The file {file} was added by {username}.',
+					args: {
+						file: 'MyDocument.odt',
+						username: {
+							component: User,
+							props: {
+								user: 'Jane Doe'
+							}
+						}
+					}
+ 				}
+ 			},
+ 			render: (h) => h('div', [
+ 				h(RichText, {
+ 					props: { text: app.text, arguments: app.args }
+ 				}),
+				h('hr'),
+ 				h(RichText, {
+ 					props: { text: 'test link to https://example.com', autolink: true, }
+ 				}),
+				h('hr'),
+ 				h(RichText, {
+ 					props: { text: `
+# h1
+
+test
+
+- 1234
+- 234
+					`, useMarkdown: true }
+ 				}),
+ 			]),
+ 		})
+ 	    app.$mount('#app')
+     </script>
+   </body>
+ 
+ </html>
