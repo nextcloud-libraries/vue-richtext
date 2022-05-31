@@ -1,11 +1,5 @@
 module.exports = {
 	root: true,
-	env: {
-		browser: true,
-		es6: true,
-		node: true,
-		jest: true
-	},
 	globals: {
 		t: true,
 		n: true,
@@ -16,8 +10,8 @@ module.exports = {
 		SCOPE_VERSION: true
 	},
 	parserOptions: {
-		parser: 'babel-eslint',
-		ecmaVersion: 6
+		parser: '@babel/eslint-parser',
+		ecmaVersion: 8
 	},
 	extends: [
 		'eslint:recommended',
@@ -78,10 +72,7 @@ module.exports = {
 			'error',
 			{
 				singleline: 3,
-				multiline: {
-					max: 3,
-					allowFirstLine: true
-				}
+				multiline: 3
 			}
 		]
 	}
