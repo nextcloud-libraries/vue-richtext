@@ -103,7 +103,7 @@ describe('Foo', () => {
 		})
 
 		expect(wrapper.text()).toEqual('Testwith a link to https://example.com \n go visit it')
-		expect(wrapper.html()).toEqual(`<div class="rich-text--wrapper">Testwith a link to <a href="https://example.com" rel="noopener noreferrer" target="_blank" class="external">https://example.com</a>
+		expect(wrapper.html()).toEqual(`<div class="rich-text--wrapper">Testwith a link to <a href="https://example.com" rel="noopener noreferrer" target="_blank" class="rich-text--external-link">https://example.com</a>
   go visit it</div>`)
 
 		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com')
@@ -118,6 +118,29 @@ describe('Foo', () => {
 		})
 		expect(wrapper.text()).toEqual('Test with a link to (https://example.com) - go visit it')
 		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com')
+	})
+
+	it('properly inserts a link containing brackets', async() => {
+		const wrapper = mount(RichText, {
+			propsData: {
+				text: 'Test with a link to (https://example.com/Link%20(Sub)) - go visit it',
+				autolink: true,
+			}
+		})
+		expect(wrapper.text()).toEqual('Test with a link to (https://example.com/Link%20(Sub)) - go visit it')
+		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com/Link%20(Sub)')
+	})
+
+	it('properly inserts a link containing brackets with markdown', async() => {
+		const wrapper = mount(RichText, {
+			propsData: {
+				text: 'Test with a link to (https://example.com/Link%20(Sub)) - go visit it',
+				autolink: true,
+				useMarkdown: true,
+			}
+		})
+		expect(wrapper.text()).toEqual('Test with a link to (https://example.com/Link%20(Sub)) - go visit it')
+		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com/Link%20(Sub)')
 	})
 
 	it('properly recognizes an url with a custom port and inserts a link', async() => {

@@ -22,7 +22,6 @@
   -->
 
 <script>
-import Link from './Link.vue'
 import { unified } from 'unified'
 import markdown from 'remark-parse'
 import breaks from 'remark-breaks'
@@ -30,101 +29,8 @@ import remark2rehype from 'remark-rehype'
 import rehype2react from 'rehype-react'
 import remarkExternalLinks from 'remark-external-links'
 import rehypeAddClasses from 'rehype-add-classes'
-import { visit } from 'unist-util-visit'
-import { u } from 'unist-builder'
-import {toString} from 'mdast-util-to-string'
-
-import {fromMarkdown} from 'mdast-util-from-markdown'
-
-import {
-  gfmAutolinkLiteral
-} from 'micromark-extension-gfm-autolink-literal'
-import {
-  gfmAutolinkLiteralFromMarkdown
-} from 'mdast-util-gfm-autolink-literal'
-
-
-const urlRegex = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig
-const parseUrl = (text, linkComponent) => {
-	let match = urlRegex.exec(text)
-	const list = []
-	let start = 0
-	while (match !== null) {
-		let href = match[2]
-		let textAfter
-		let textBefore = text.substring(start, match.index + match[1].length)
-		if (href[0] === ' ') {
-			textBefore += href[0]
-			href = href.substring(1).trim()
-		}
-		const lastChar = href[(href.length - 1)]
-		if (lastChar === '.' || lastChar === ',' || lastChar === ';' || (match[0][0] === '(' && lastChar === ')')) {
-			href = href.substring(0, href.length - 1)
-			textAfter = lastChar
-		}
-		list.push(textBefore)
-		list.push({ component: linkComponent, props: { href } })
-		if (textAfter) {
-			list.push(textAfter)
-		}
-		start = match.index + match[0].length
-		match = urlRegex.exec(text)
-	}
-	list.push(text.substring(start))
-	const joinedText = list.map((item) => typeof item === 'string' ? item : item.props.href).join('')
-	if (text === joinedText) {
-		return list
-	}
-	console.error('Failed to reassemble the chunked text: ' + text)
-	return text
-}
-const prepareTextNode = ({ h, context }, text) => {
-	if (context.autolink) {
-		text = parseUrl(text, Link)
-	}
-	if (Array.isArray(text)) {
-		return text.map((entry) => {
-			if (typeof entry === 'string') {
-				return entry
-			}
-			const { component, props } = entry
-			return h(component, {
-				props,
-				class: 'rich-text--component'
-			})
-		})
-	}
-	return text
-}
-
-
-function transformer(ast) {
-	visit(ast, (node) => node.type === 'text', visitor)
-
-	function visitor(node, index, parent) {
-		const placeholders = node.value.split(/(\{[a-z\-_.0-9]+\})/ig)
-			.map((entry, index, list) => {
-				const matches = entry.match(/^\{([a-z\-_.0-9]+)\}$/i)
-				// just return plain string nodes as text
-				if (!matches) {
-					return u('text', entry)
-				}
-				const [, component] = matches
-				return u('element', {
-					tagName: `#${component}`,
-				})
-			})
-
-		node = u('element', { tagName: 'span' }, [
-			...placeholders
-		])
-		parent.children[index] = node
-	}
-}
-
-function pluginComponent() {
-	return transformer
-}
+import { remarkAutolink } from './autolink.js'
+import { remarkPlaceholder, prepareTextNode } from './placeholder.js'
 
 export default {
 	name: 'RichText',
@@ -185,15 +91,12 @@ export default {
 		},
 		autolink: {
 			type: Boolean,
-			default: false
+			default: true
 		}
 	},
-	render(h) {
-		const useMarkdown = this.useMarkdown
-		const autolink = this.autolink
-		const context = this
-
-		if (!useMarkdown) {
+	methods: {
+		renderPlaintext(h) {
+			const context = this
 			const placeholders = this.text.split(/(\{[a-z\-_.0-9]+\})/ig).map(function(entry, index, list) {
 				const matches = entry.match(/^\{([a-z\-_.0-9]+)\}$/i)
 				// just return plain string nodes as text
@@ -216,75 +119,67 @@ export default {
 				return entry
 			})
 			return h('div', { class: 'rich-text--wrapper' }, placeholders.flat())
+		},
+		renderMarkdown(h) {
+			const renderedMarkdown = unified()
+				.use(markdown)
+				.use(remarkAutolink, {
+					autolink: this.autolink,
+					useMarkdown: this.useMarkdown
+				})
+				.use(remarkExternalLinks, {
+					target: '_blank',
+					rel: ['noopener noreferrer']
+				})
+				.use(breaks)
+				.use(remark2rehype, {
+					handlers: {
+						component(toHast, node) {
+							return toHast(node, node.component, { value: node.value })
+						}
+					}
+				})
+				.use(rehypeAddClasses, this.markdownCssClasses)
+				.use(remarkPlaceholder)
+				.use(rehype2react, {
+					createElement: (tag, attrs, children) => {
+						if (!tag.startsWith('#')) {
+							return h(tag, attrs, children)
+						}
+
+						const placeholder = this.arguments[tag.slice(1)]
+						if (!placeholder) {
+							return h('span', { ...{ attrs }, ...{ class: 'rich-text--fallback' } }, [`{${tag.slice(1)}}`])
+						}
+
+						if (!placeholder.component) {
+							return h('span', attrs, [placeholder])
+						}
+
+						return h(
+							placeholder.component,
+							{
+								attrs,
+								props: placeholder.props,
+								class: 'rich-text--component'
+							},
+							children
+						)
+					},
+					prefix: false
+				})
+				.processSync(this.text)
+				.result
+
+			return h('div', { class: 'rich-text--wrapper' }, [renderedMarkdown])
+		}
+	},
+	render(h) {
+		if (!this.useMarkdown) {
+			return this.renderPlaintext(h)
 		}
 
-		const renderedMarkdown = unified()
-			.use(markdown)
-			.use(function() {
-				return function(tree) {
-					if (!useMarkdown || !autolink) {
-						return
-					}
-
-					visit(tree, (node) => node.type === 'text', (node, index, parent) => {
-						const subtree = fromMarkdown(node.value, {
-							extensions: [gfmAutolinkLiteral],
-							mdastExtensions: [gfmAutolinkLiteralFromMarkdown]
-						})
-						console.log(node.value, newChilds)
-						parent.children = [
-							...parent.children.slice(0, index),
-							...subtree.children,
-							...parent.children.slice(index + 1),
-						]
-					})
-				}
-			})
-			.use(remarkExternalLinks, {
-				target: '_blank',
-				rel: ['noopener noreferrer']
-			})
-			.use(breaks)
-			.use(remark2rehype, {
-				handlers: {
-					component(toHast, node) {
-						return toHast(node, node.component, { value: node.value })
-					}
-				}
-			})
-			.use(rehypeAddClasses, this.markdownCssClasses)
-			.use(pluginComponent)
-			.use(rehype2react, {
-				createElement: (tag, attrs, children) => {
-					if (!tag.startsWith('#')) {
-						return h(tag, attrs, children)
-					}
-
-					const placeholder = this.arguments[tag.slice(1)]
-					if (!placeholder) {
-						return h('span', { ...{ attrs }, ...{ class: 'rich-text--fallback' } }, [`{${tag.slice(1)}}`])
-					}
-
-					if (!placeholder.component) {
-						return h('span', attrs, [placeholder])
-					}
-
-					return h(
-						placeholder.component,
-						{
-							attrs,
-							props: placeholder.props,
-							class: 'rich-text--component'
-						},
-						children
-					)
-				},
-				prefix: false
-			})
-			.processSync(this.text)
-			.result
-
-		return h('div', { class: 'rich-text--wrapper' }, [renderedMarkdown])
+		return this.renderMarkdown(h)
 	}
 }
 </script>
