@@ -31,7 +31,7 @@
  		const app = new Vue({
  			data() {
  				return {
-					text: 'The file {file} was added by {username}. {unknown}',
+					text: 'The file {file} was added by {username}. {unknown} https://example.com foo',
 					args: {
 						file: 'MyDocument.odt',
 						username: {
@@ -49,18 +49,45 @@
  				}),
 				h('hr'),
  				h(RichText, {
- 					props: { text: 'test link to https://example.com', autolink: true, }
+ 					props: { text: 'test link to https://example.com/ foo', autolink: true, }
  				}),
 				h('hr'),
  				h(RichText, {
- 					props: { text: `
+ 					props: { 
+						 text: `
+**Testwith** a ~~link~~ *to* [Link](https://example:1337) - go visit it
+
 # h1
 
-test
+**terst** sdfsdf dsf sdftest __test__
+
+**Testwith** a link *to* [Link](https://example:1337) - go visit it
+
+https://example.com/
+
+## H2
+ 
+This is a simple block
+
+1. test
+2. test
+
+{username}
 
 - 1234
 - 234
-					`, useMarkdown: true }
+					`, 
+					useMarkdown: true,
+					autolink: true,
+					arguments: {
+						username: {
+							component: User,
+							props: {
+								user: 'Jane Doe'
+							}
+						}
+					}
+				}
  				}),
  			]),
  		})

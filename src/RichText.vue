@@ -22,17 +22,81 @@
   -->
 
 <script>
+import Link from './Link.vue'
 import { unified } from 'unified'
 import markdown from 'remark-parse'
 import breaks from 'remark-breaks'
 import remark2rehype from 'remark-rehype'
 import rehype2react from 'rehype-react'
-//import remarkDisableBlocks from 'remark-disable-tokenizers'
-import remarkDisableBlocks from './remarkDisableBlocks'
 import remarkExternalLinks from 'remark-external-links'
 import rehypeAddClasses from 'rehype-add-classes'
 import { visit } from 'unist-util-visit'
 import { u } from 'unist-builder'
+import {toString} from 'mdast-util-to-string'
+
+import {fromMarkdown} from 'mdast-util-from-markdown'
+
+import {
+  gfmAutolinkLiteral
+} from 'micromark-extension-gfm-autolink-literal'
+import {
+  gfmAutolinkLiteralFromMarkdown
+} from 'mdast-util-gfm-autolink-literal'
+
+
+const urlRegex = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig
+const parseUrl = (text, linkComponent) => {
+	let match = urlRegex.exec(text)
+	const list = []
+	let start = 0
+	while (match !== null) {
+		let href = match[2]
+		let textAfter
+		let textBefore = text.substring(start, match.index + match[1].length)
+		if (href[0] === ' ') {
+			textBefore += href[0]
+			href = href.substring(1).trim()
+		}
+		const lastChar = href[(href.length - 1)]
+		if (lastChar === '.' || lastChar === ',' || lastChar === ';' || (match[0][0] === '(' && lastChar === ')')) {
+			href = href.substring(0, href.length - 1)
+			textAfter = lastChar
+		}
+		list.push(textBefore)
+		list.push({ component: linkComponent, props: { href } })
+		if (textAfter) {
+			list.push(textAfter)
+		}
+		start = match.index + match[0].length
+		match = urlRegex.exec(text)
+	}
+	list.push(text.substring(start))
+	const joinedText = list.map((item) => typeof item === 'string' ? item : item.props.href).join('')
+	if (text === joinedText) {
+		return list
+	}
+	console.error('Failed to reassemble the chunked text: ' + text)
+	return text
+}
+const prepareTextNode = ({ h, context }, text) => {
+	if (context.autolink) {
+		text = parseUrl(text, Link)
+	}
+	if (Array.isArray(text)) {
+		return text.map((entry) => {
+			if (typeof entry === 'string') {
+				return entry
+			}
+			const { component, props } = entry
+			return h(component, {
+				props,
+				class: 'rich-text--component'
+			})
+		})
+	}
+	return text
+}
+
 
 function transformer(ast) {
 	visit(ast, (node) => node.type === 'text', visitor)
@@ -51,7 +115,7 @@ function transformer(ast) {
 				})
 			})
 
-		node = u('element', { tagName: 'div' }, [
+		node = u('element', { tagName: 'span' }, [
 			...placeholders
 		])
 		parent.children[index] = node
@@ -124,62 +188,63 @@ export default {
 			default: false
 		}
 	},
-	computed: {
-		remarkDisableOptions() {
-			const disableAutoLink = this.autolink ? [] : ['url']
-			const disableHTML = this.disableHTML ? ['html'] : []
-
-			if (this.useMarkdown) {
-				return {
-					inline: [...disableAutoLink, ...disableHTML, ...this.disableMarkdownInlineFeatures],
-					block: [...disableHTML, ...this.disableMarkdownBlockFeatures]
-				}
-			}
-
-			return {
-				inline: [
-					...disableAutoLink,
-					...[
-						'escape',
-						'autoLink',
-						'email',
-						'html',
-						'link',
-						'reference',
-						'strong',
-						'emphasis',
-						'deletion',
-						'code'
-						// 'break'
-						// 'text' // do not uncomment or pluginComponent's register will have no point to insert itself
-					]
-				],
-				block: [
-					// 'blankLine',
-					'indentedCode',
-					'fencedCode',
-					'blockquote',
-					'atxHeading',
-					'thematicBreak',
-					'list',
-					'setextHeading',
-					'html',
-					'definition',
-					'table'
-					// 'paragraph' // do not uncomment we need at least one block quote rule to be enabled
-				]
-			}
-		}
-	},
 	render(h) {
+		const useMarkdown = this.useMarkdown
+		const autolink = this.autolink
+		const context = this
+
+		if (!useMarkdown) {
+			const placeholders = this.text.split(/(\{[a-z\-_.0-9]+\})/ig).map(function(entry, index, list) {
+				const matches = entry.match(/^\{([a-z\-_.0-9]+)\}$/i)
+				// just return plain string nodes as text
+				if (!matches) {
+					return prepareTextNode({ h, context }, entry)
+				}
+				// return component instance if argument is an object
+				const argumentId = matches[1]
+				const argument = context.arguments[argumentId]
+				if (typeof argument === 'object') {
+					const { component, props } = argument
+					return h(component, {
+						props,
+						class: 'rich-text--component'
+					})
+				}
+				if (argument) {
+					return h('span', { class: 'rich-text--fallback' }, argument)
+				}
+				return entry
+			})
+			return h('div', { class: 'rich-text--wrapper' }, placeholders.flat())
+		}
+
 		const renderedMarkdown = unified()
 			.use(markdown)
+			.use(function() {
+				return function(tree) {
+					if (!useMarkdown || !autolink) {
+						return
+					}
+
+					visit(tree, (node) => node.type === 'text', (node, index, parent) => {
+						const subtree = fromMarkdown(node.value, {
+							extensions: [gfmAutolinkLiteral],
+							mdastExtensions: [gfmAutolinkLiteralFromMarkdown]
+						})
+						console.log(node.value, newChilds)
+						parent.children = [
+							...parent.children.slice(0, index),
+							...subtree.children,
+							...parent.children.slice(index + 1),
+						]
+					})
+				}
+			})
 			.use(remarkExternalLinks, {
 				target: '_blank',
 				rel: ['noopener noreferrer']
 			})
 			.use(breaks)
-			.use(remarkDisableBlocks, this.remarkDisableOptions)
 			.use(remark2rehype, {
 				handlers: {
 					component(toHast, node) {

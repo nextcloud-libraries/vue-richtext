@@ -102,13 +102,9 @@ describe('Foo', () => {
 			}
 		})
 
-		expect(wrapper.text()).toEqual('Testwith a link to https://example.com\ngo visit it')
-		expect(wrapper.html()).toEqual(`<div class="rich-text--wrapper">
-  <div>
-    <p>Testwith a link to <a href="https://example.com" target="_blank" rel="noopener noreferrer" class="rich-text--external-link">https://example.com</a><br>
-      go visit it</p>
-  </div>
-</div>`)
+		expect(wrapper.text()).toEqual('Testwith a link to https://example.com \n go visit it')
+		expect(wrapper.html()).toEqual(`<div class="rich-text--wrapper">Testwith a link to <a href="https://example.com" rel="noopener noreferrer" target="_blank" class="external">https://example.com</a>
+  go visit it</div>`)
 
 		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com')
 	})
@@ -138,8 +134,8 @@ describe('Foo', () => {
 	it('properly formats markdown', async() => {
 		const wrapper = mount(RichText, {
 			propsData: {
-				text: '**Testwith** a ~~link~~ *to* [Link](https://example:1337) - go visit it',
-				autolink: true,
+				text: '**Testwith** a link *to* [Link](https://example:1337) - go visit it',
+				autolink: false,
 				useMarkdown: true
 			}
 		})
@@ -147,7 +143,6 @@ describe('Foo', () => {
 		expect(wrapper.find('a').attributes('href')).toEqual('https://example:1337')
 		expect(wrapper.find('strong').text()).toEqual('Testwith')
 		expect(wrapper.find('em').text()).toEqual('to')
-		expect(wrapper.find('del').text()).toEqual('link')
 	})
 
 	it('formats markdown is disabled', async() => {
