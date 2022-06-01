@@ -73,22 +73,6 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		disableMarkdownInlineFeatures: {
-			type: Array,
-			default: () => {
-				return []
-			}
-		},
-		disableMarkdownBlockFeatures: {
-			type: Array,
-			default: () => {
-				return []
-			}
-		},
-		disableHTML: {
-			type: Boolean,
-			default: true
-		},
 		autolink: {
 			type: Boolean,
 			default: true
