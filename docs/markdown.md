@@ -3,11 +3,13 @@
 ### Example output
 
 <br />
-<RichTextDemoMarkdown />
+<ClientOnly>
+    <RichTextDemoMarkdown />
+</ClientOnly>
 <br />
 
 ### Example source
-@[code vue](.vuepress/components/RichTextDemoMarkdown.vue)
+<<< @/docs/.vuepress/components/RichTextDemoMarkdown.vue
 
 #### User.vue
-@[code vue](.vuepress/components/User.vue)
+<<< @/docs/.vuepress/components/User.vue

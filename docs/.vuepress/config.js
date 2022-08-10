@@ -1,11 +1,12 @@
-var webpack = require('webpack')
+const webpack = require('webpack')
+const path = require('path');
 
 module.exports = {
     base: process.env.VUEPRESS_BASE || '/',
     title: 'vue-richtext',
     sidebar: false,
     themeConfig: {
-        navbar: [
+        nav: [
             { text: 'Home', link: '/' },
             { text: 'Autolink', link: '/link' },
 			{ text: 'Markdown', link: '/markdown' },
@@ -26,5 +27,5 @@ module.exports = {
 				'@juliushaertl/vue-richtext/dist/vue-richtext.scss': '../../../src/vue-richtext.scss'
 			}
 		}
-	}
+	},
 }

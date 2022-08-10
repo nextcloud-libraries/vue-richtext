@@ -61,6 +61,7 @@
 		"@nextcloud/browserslist-config": "^2.3.0",
 		"@vue/test-utils": "^1",
 		"@vue/vue2-jest": "28",
+		"@vuepress/plugin-register-components": "^1.9.7",
 		"babel-core": "^6.26.3",
 		"babel-jest": "^28.1.3",
 		"clone": "^2.1.2",
@@ -88,7 +89,6 @@
 		"remark-external-links": "^9.0.1",
 		"remark-parse": "^10.0.1",
 		"remark-rehype": "^10.1.0",
-		"sass": "^1.54.4",
 		"stylelint": "^14.9.1",
 		"stylelint-config-recommended-scss": "^6.0.0",
 		"stylelint-scss": "^4.3.0",
@@ -100,7 +100,8 @@
 		"vitepress": "^0.22.4",
 		"vue-jest": "^3.0.7",
 		"vue-server-renderer": "^2.7.8",
-		"vue-template-compiler": "^2.7.8"
+		"vue-template-compiler": "^2.7.8",
+		"vuepress": "^1.9.7"
 	},
 	"peerDependencies": {
 		"vue": "^2.7.8"

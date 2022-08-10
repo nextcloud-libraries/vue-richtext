@@ -1,8 +1,5 @@
-import 'core-js/stable'
-import 'regenerator-runtime/runtime'
-
-import RichText from '../../src/RichText';
+import RichText from '../../src/RichText.vue'
 
 export default ({ Vue }) => {
-    Vue.component('RichText', RichText);
-  };
+  Vue.component('RichText', RichText);
+};
