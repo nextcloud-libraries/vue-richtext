@@ -13,6 +13,21 @@ Markdown can be used for basic text formatting.
 npm install --save @juliushaertl/vue-richtext
 ```
 
+## Usage
+
+### Importing the vue component
+
+```
+import { RichText } from '@juliushaertl/vue-richtext'
+```
+
+### Importing the shipped stylesheets
+
+```
+@import '@juliushaertl/vue-richtext/dist/style.css';
+
+```
+
 ## Basic usage with simple text placeholders
 
 - Input string: `The file {file} was added…`

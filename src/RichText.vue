@@ -23,6 +23,7 @@
 
 <script>
 import { unified } from 'unified'
+import References from './References.vue'
 import markdown from 'remark-parse'
 import breaks from 'remark-breaks'
 import remark2rehype from 'remark-rehype'
@@ -34,6 +35,9 @@ import { remarkPlaceholder, prepareTextNode } from './placeholder.js'
 
 export default {
 	name: 'RichText',
+	components: {
+		References
+	},
 	props: {
 		text: {
 			type: String,
@@ -44,6 +48,14 @@ export default {
 			default: () => {
 				return {}
 			}
+		},
+		referenceLimit: {
+			type: Number,
+			default: 0
+		},
+		/** Provide data upfront to avoid extra http request */
+		references: {
+			type: Object
 		},
 		markdownCssClasses: {
 			type: Object,
@@ -102,7 +114,14 @@ export default {
 				}
 				return entry
 			})
-			return h('div', { class: 'rich-text--wrapper' }, placeholders.flat())
+			return h('div', { class: 'rich-text--wrapper' }, [
+				h('div', {}, placeholders.flat()),
+				this.referenceLimit > 0
+					? h('div', { class: 'rich-text--reference-widget' }, [
+						h(References, { props: { text: this.text, referenceData: this.references } })
+					])
+					: null
+			])
 		},
 		renderMarkdown(h) {
 			const renderedMarkdown = unified()
@@ -155,7 +174,14 @@ export default {
 				.processSync(this.text)
 				.result
 
-			return h('div', { class: 'rich-text--wrapper' }, [renderedMarkdown])
+			return h('div', { class: 'rich-text--wrapper' }, [
+				renderedMarkdown,
+				this.referenceLimit > 0
+					? h('div', { class: 'rich-text--reference-widget' }, [
+						h(References, { props: { text: this.text, referenceData: this.references } })
+					])
+					: null
+			])
 		}
 	},
 	render(h) {
