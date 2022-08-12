@@ -7,6 +7,8 @@
 </template>
 <script>
 import ReferenceWidget from './ReferenceWidget.vue'
+import axios from '@nextcloud/axios'
+import { generateOcsUrl } from '@nextcloud/router'
 
 export default {
 	name: 'References',
@@ -17,7 +19,8 @@ export default {
 			default: ''
 		},
 		referenceData: {
-			type: Object
+			type: Object,
+			default: null,
 		},
 		limit: {
 			type: Number,
@@ -59,29 +62,16 @@ export default {
 				return
 			}
 
-			fetch('http://nextcloud.dev.local/ocs/v2.php/references/extract?format=json', {
-				method: 'POST',
-				body: JSON.stringify({
-					text: this.text,
-					resolve: true,
-					requesttoken: window.oc_requesttoken,
-					limit: this.limit
-				}),
-				headers: {
-					'Content-Type': 'application/json',
-					requesttoken: window.oc_requesttoken
-				}
+			axios.post(generateOcsUrl('references/extract', 2), {
+				text: this.text,
+				resolve: true,
+				limit: this.limit
+			}).then((response) => {
+				this.references = response.data.ocs.data.references
+				this.loading = false
+			}).catch((error) => {
+				this.loading = false
 			})
-				.then(response => response.json())
-				.then(json => {
-					console.log(json)
-					this.references = json.ocs.data.references
-					this.loading = false
-				})
-				.catch(error => {
-					console.error(error)
-					this.loading = false
-				})
 		}
 	}
 }

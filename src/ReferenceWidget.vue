@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="noAccess">
+		<div v-if="noAccess" class="widget-default">
 			<p>You may not have access to this reference!</p>
 		</div>
 
