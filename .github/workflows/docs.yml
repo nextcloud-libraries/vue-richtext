@@ -9,7 +9,7 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Build docs
         run: |
@@ -21,4 +21,4 @@ jobs:
         if: github.ref == 'refs/heads/master'
         with:
           branch: gh-pages
-          folder: dist/
+          folder: dist
