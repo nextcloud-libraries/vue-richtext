@@ -6,6 +6,7 @@ import mdPlugin from 'vite-plugin-markdown'
 const path = require('path')
 
 export default defineConfig({
+	base: '/vue-richtext/',
 	plugins: [createVuePlugin(), mdPlugin({ mode: 'html'})],
 	build: {
 		rollupOptions: {
