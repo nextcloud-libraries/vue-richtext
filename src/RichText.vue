@@ -28,7 +28,7 @@ import breaks from 'remark-breaks'
 import remark2rehype from 'remark-rehype'
 import rehype2react from 'rehype-react'
 import remarkExternalLinks from 'remark-external-links'
-import rehypeAddClasses from 'rehype-add-classes'
+// import rehypeAddClasses from 'rehype-add-classes'
 import { remarkAutolink } from './autolink.js'
 import { remarkPlaceholder, prepareTextNode } from './placeholder.js'
 
@@ -123,7 +123,7 @@ export default {
 						}
 					}
 				})
-				.use(rehypeAddClasses, this.markdownCssClasses)
+				//.use(rehypeAddClasses, this.markdownCssClasses)
 				.use(remarkPlaceholder)
 				.use(rehype2react, {
 					createElement: (tag, attrs, children) => {
