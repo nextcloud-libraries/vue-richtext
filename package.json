@@ -90,6 +90,7 @@
 		"remark-external-links": "^9.0.1",
 		"remark-parse": "^10.0.1",
 		"remark-rehype": "^10.1.0",
+		"sass": "^1.54.4",
 		"stylelint": "^14.9.1",
 		"stylelint-config-recommended-scss": "^6.0.0",
 		"stylelint-scss": "^4.3.0",
