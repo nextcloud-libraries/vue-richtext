@@ -112,6 +112,9 @@ export default {
   - username: `{ component: UserBubble, props: { username: 'Jane Doe' }`
 - Renders: `The <strong>file</strong> <i>'MyDocument'</i> was added by <UserBubble>Jane Doe</UserBubble>`
 
+
+## Reference rendering
+
 ## Documentation
 
 A full example is shown in the [documentation](https://juliushaertl.github.io/vue-richtext/)
