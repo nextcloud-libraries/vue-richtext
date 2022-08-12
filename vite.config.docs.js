@@ -8,14 +8,7 @@ const path = require('path')
 export default defineConfig({
 	plugins: [createVuePlugin(), mdPlugin({ mode: 'html'})],
 	build: {
-		lib: {
-			entry: resolve(__dirname, 'src/package.js'),
-			name: '@juliushaertl/vue-richtext',
-			fileName: (_format) => 'index.js',
-			formats: ['es'],
-		},
 		rollupOptions: {
-			external: Object.keys(dependencies),
 			output: {
 				globals: { vue: 'Vue' }
 			},

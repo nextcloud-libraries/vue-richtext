@@ -167,3 +167,8 @@ export default {
 	}
 }
 </script>
+<style scoped>
+a {
+	text-decoration: underline;
+}
+</style>

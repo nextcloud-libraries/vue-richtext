@@ -12,7 +12,9 @@
 	"repository": "https://github.com/juliushaertl/vue-richtext",
 	"license": "AGPL-3.0",
 	"author": "Julius Härtl <jus@bitgrid.net>",
-	"main": "dist/vue-richtext.js",
+	"module": "dist/index.js",
+	"main": "dist/index.js",
+	"library": "dist/vue-richtext.js",
 	"files": [
 		"LICENSE",
 		"README.md",
@@ -20,15 +22,14 @@
 	],
 	"scripts": {
 		"build": "NODE_ENV=production vite build",
-		"docs:build": "vitepress build docs",
-		"docs:dev": "vitepress dev docs",
+		"watch": "NODE_ENV=development vite",
+		"docs": "NODE_ENV=production vite --config vite.config.docs.js build",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
 		"stylelint": "stylelint src",
 		"stylelint:fix": "stylelint src --fix",
 		"test": "jest",
-		"test:coverage": "jest --coverage",
-		"watch": "NODE_ENV=development vite"
+		"test:coverage": "jest --coverage"
 	},
 	"browserslist": [
 		"extends @nextcloud/browserslist-config"
@@ -96,6 +97,7 @@
 		"unist-builder": "^3.0.0",
 		"unist-util-visit": "^4.1.0",
 		"vite": "^2.9.14",
+		"vite-plugin-markdown": "^2.1.0",
 		"vite-plugin-vue2": "^2.0.2",
 		"vitepress": "^0.22.4",
 		"vue-jest": "^3.0.7",
@@ -108,6 +110,5 @@
 	},
 	"engines": {
 		"node": ">=10.0.0"
-	},
-	"library": "dist/vue-richtext.js"
+	}
 }
