@@ -37,6 +37,7 @@
 		"extends @nextcloud/browserslist-config"
 	],
 	"dependencies": {
+		"@nextcloud/axios": "^2.0.0",
 		"clone": "^2.1.2",
 		"vue": "^2.7.8"
 	},
