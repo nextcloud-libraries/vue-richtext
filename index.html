@@ -25,19 +25,18 @@
 	<div id="app"></div>
 
      <script type="module">
-		import { html } from './README.md';
+		import Vue from 'vue'
+		import { html } from './README.md'
+		import Playground from './src/demo/Playground.vue'
 
 		document.getElementById('readme').innerHTML = html;
 
- 	    import Playground from './src/demo/Playground.vue'
- 		import Vue from 'vue'
-
- 		const app = new Vue({
- 			render: (h) => h('div', [
- 				h(Playground, {})
- 			]),
- 		})
- 	    app.$mount('#app')
+		const app = new Vue({
+			render: (h) => h('div', [
+				h(Playground, {})
+			]),
+		})
+		app.$mount('#app')
      </script>
    </body>
  </html>

@@ -32,7 +32,7 @@ export default {
 	},
 	data() {
 		return {
-			text: 'Hello {username}. The file {file} was added by {username}',
+			text: 'Hello {username}. The file {file} was added by {username} **bold text**',
 			autolink: true,
 			useMarkdown: false,
 			args: {
