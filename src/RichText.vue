@@ -22,45 +22,15 @@
   -->
 
 <script>
-import unified from 'unified'
+import { unified } from 'unified'
 import markdown from 'remark-parse'
 import breaks from 'remark-breaks'
 import remark2rehype from 'remark-rehype'
 import rehype2react from 'rehype-react'
-// import remarkDisableBlocks from 'remark-disable-tokenizers'
-import remarkDisableBlocks from './remarkDisableBlocks'
 import remarkExternalLinks from 'remark-external-links'
-import rehypeAddClasses from 'rehype-add-classes'
-
-/*
-* Code inspired by https://github.com/cool-cousin/vue-remark
-* */
-function pluginComponent() {
-	const { inlineTokenizers, inlineMethods } = this.Parser.prototype
-	inlineTokenizers.component = (eat, value, silent) => {
-		const match = /^\{([-\w]+)\}/.exec(value)
-
-		if (!match) {
-			return
-		}
-
-		if (silent) {
-			return true
-		}
-
-		const [all, component] = match
-
-		return eat(all)({
-			type: 'component',
-			component: `#${component}`,
-			value: ''
-		})
-	}
-	inlineTokenizers.component.locator = (value, fromIndex) => {
-		return value.indexOf('{', fromIndex)
-	}
-	inlineMethods.splice(inlineMethods.indexOf('text'), 0, 'component')
-}
+// import rehypeAddClasses from 'rehype-add-classes'
+import { remarkAutolink } from './autolink.js'
+import { remarkPlaceholder, prepareTextNode } from './placeholder.js'
 
 export default {
 	name: 'RichText',
@@ -103,127 +73,102 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		disableMarkdownInlineFeatures: {
-			type: Array,
-			default: () => {
-				return []
-			}
-		},
-		disableMarkdownBlockFeatures: {
-			type: Array,
-			default: () => {
-				return []
-			}
-		},
-		disableHTML: {
-			type: Boolean,
-			default: true
-		},
 		autolink: {
 			type: Boolean,
-			default: false
+			default: true
 		}
 	},
-	computed: {
-		remarkDisableOptions() {
-			const disableAutoLink = this.autolink ? [] : ['url']
-			const disableHTML = this.disableHTML ? ['html'] : []
-
-			if (this.useMarkdown) {
-				return {
-					inline: [...disableAutoLink, ...disableHTML, ...this.disableMarkdownInlineFeatures],
-					block: [...disableHTML, ...this.disableMarkdownBlockFeatures]
+	methods: {
+		renderPlaintext(h) {
+			const context = this
+			const placeholders = this.text.split(/(\{[a-z\-_.0-9]+\})/ig).map(function(entry, index, list) {
+				const matches = entry.match(/^\{([a-z\-_.0-9]+)\}$/i)
+				// just return plain string nodes as text
+				if (!matches) {
+					return prepareTextNode({ h, context }, entry)
 				}
-			}
+				// return component instance if argument is an object
+				const argumentId = matches[1]
+				const argument = context.arguments[argumentId]
+				if (typeof argument === 'object') {
+					const { component, props } = argument
+					return h(component, {
+						props,
+						class: 'rich-text--component'
+					})
+				}
+				if (argument) {
+					return h('span', { class: 'rich-text--fallback' }, argument)
+				}
+				return entry
+			})
+			return h('div', { class: 'rich-text--wrapper' }, placeholders.flat())
+		},
+		renderMarkdown(h) {
+			const renderedMarkdown = unified()
+				.use(markdown)
+				.use(remarkAutolink, {
+					autolink: this.autolink,
+					useMarkdown: this.useMarkdown
+				})
+				.use(remarkExternalLinks, {
+					target: '_blank',
+					rel: ['noopener noreferrer']
+				})
+				.use(breaks)
+				.use(remark2rehype, {
+					handlers: {
+						component(toHast, node) {
+							return toHast(node, node.component, { value: node.value })
+						}
+					}
+				})
+				//.use(rehypeAddClasses, this.markdownCssClasses)
+				.use(remarkPlaceholder)
+				.use(rehype2react, {
+					createElement: (tag, attrs, children) => {
+						if (!tag.startsWith('#')) {
+							return h(tag, attrs, children)
+						}
 
-			return {
-				inline: [
-					...disableAutoLink,
-					...[
-						'escape',
-						'autoLink',
-						'email',
-						'html',
-						'link',
-						'reference',
-						'strong',
-						'emphasis',
-						'deletion',
-						'code'
-						// 'break'
-						// 'text' // do not uncomment or pluginComponent's register will have no point to insert itself
-					]
-				],
-				block: [
-					// 'blankLine',
-					'indentedCode',
-					'fencedCode',
-					'blockquote',
-					'atxHeading',
-					'thematicBreak',
-					'list',
-					'setextHeading',
-					'html',
-					'definition',
-					'table'
-					// 'paragraph' // do not uncomment we need at least one block quote rule to be enabled
-				]
-			}
+						const placeholder = this.arguments[tag.slice(1)]
+						if (!placeholder) {
+							return h('span', { ...{ attrs }, ...{ class: 'rich-text--fallback' } }, [`{${tag.slice(1)}}`])
+						}
+
+						if (!placeholder.component) {
+							return h('span', attrs, [placeholder])
+						}
+
+						return h(
+							placeholder.component,
+							{
+								attrs,
+								props: placeholder.props,
+								class: 'rich-text--component'
+							},
+							children
+						)
+					},
+					prefix: false
+				})
+				.processSync(this.text)
+				.result
+
+			return h('div', { class: 'rich-text--wrapper' }, [renderedMarkdown])
 		}
 	},
 	render(h) {
-		const renderedMarkdown = unified()
-			.use(markdown)
-			.use(remarkExternalLinks, {
-				target: '_blank',
-				rel: ['noopener noreferrer']
-			})
-			.use(breaks)
-			.use(remarkDisableBlocks, this.remarkDisableOptions)
-			.use(remark2rehype, {
-				handlers: {
-					component(toHast, node) {
-						return toHast(node, node.component, { value: node.value })
-					}
-				}
-			})
-			.use(rehypeAddClasses, this.markdownCssClasses)
-			.use(pluginComponent)
-			.use(rehype2react, {
-				createElement: (tag, attrs, children) => {
-					if (!tag.startsWith('#')) {
-						return h(tag, attrs, children)
-					}
+		if (!this.useMarkdown) {
+			return this.renderPlaintext(h)
+		}
 
-					const placeholder = this.arguments[tag.slice(1)]
-					if (!placeholder) {
-						return h('span', { ...{ attrs }, ...{ class: 'rich-text--fallback' } }, [`{${tag.slice(1)}}`])
-					}
-
-					if (!placeholder.component) {
-						return h('span', attrs, [placeholder])
-					}
-
-					return h(
-						placeholder.component,
-						{
-							attrs,
-							props: placeholder.props,
-							class: 'rich-text--component'
-						},
-						children
-					)
-				},
-				prefix: false
-			})
-			.processSync(this.text)
-			.result
-
-		return h('div', { class: 'rich-text--wrapper' }, [renderedMarkdown])
+		return this.renderMarkdown(h)
 	}
 }
 </script>
-
-<style lang="scss" scoped>
-@import "vue-richtext";
+<style scoped>
+a {
+	text-decoration: underline;
+}
 </style>

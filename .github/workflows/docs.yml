@@ -14,13 +14,11 @@ jobs:
       - name: Build docs
         run: |
           npm ci
-          npm run build
-          npm run test
-          VUEPRESS_BASE="/vue-richtext/" npm run docs:build
+          npm run docs
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
         if: github.ref == 'refs/heads/master'
         with:
           branch: gh-pages
-          folder: docs/.vuepress/dist
+          folder: dist/
