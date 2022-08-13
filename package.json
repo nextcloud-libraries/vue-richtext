@@ -103,8 +103,7 @@
 		"vitepress": "^0.22.4",
 		"vue-jest": "^3.0.7",
 		"vue-server-renderer": "^2.7.8",
-		"vue-template-compiler": "^2.7.8",
-		"vuepress": "^1.9.7"
+		"vue-template-compiler": "^2.7.8"
 	},
 	"peerDependencies": {
 		"vue": "^2.7.8"
