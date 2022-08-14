@@ -1,6 +1,6 @@
 {
 	"name": "@juliushaertl/vue-richtext",
-	"version": "1.0.1",
+	"version": "2.0.0-dev.0",
 	"description": "Vue component for rich content strings including markdown support.",
 	"keywords": [
 		"vuejs",
