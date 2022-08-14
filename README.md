@@ -20,21 +20,82 @@ npm install --save @juliushaertl/vue-richtext
   - file: `'MyDocument'`
 - Renders: `The file 'MyDocument' was added…`
 
+### Example usage:
+
+```
+<template>
+	<RichText :text="text" :arguments="args" />
+</template>
+
+<script>
+import RichText from '@juliushaertl/vue-richtext'
+import UserBubble from './UserBubble'
+
+export default {
+    name: 'RichTextDemo',
+	components: {
+		RichText,
+	},
+    data: () => {
+        return {
+            text: 'The file {file} was added by {username}',
+            args: {
+                file: 'MyDocument.odt',
+                username: {
+                    component: UserBubble,
+                    props: {
+                        user: 'Jane Doe'
+                    }
+                }
+            }
+        }
+    }
+}
+</script>
+```
+
+#### UserBubble.vue
+```
+<template>
+    <span class="user">{{ user }}</span>
+</template>
+
+<script>
+export default {
+	name: 'UserBubble',
+	props: {
+		user: {
+			type: String,
+			default: ''
+		}
+	}
+}
+</script>
+
+<style scoped>
+.user {
+	border-radius: 3px;
+	background-color: #eee;
+	padding: 3px;
+}
+</style>
+```
+
 ## Usage with vue components
 
 - Input string: `The file {file} was added by {username}`
 - Arguments:
   - file: `'MyDocument'`
-  - username: `{ component: User, props: { username: 'Jane Doe' }`
-- Renders: `The file 'MyDocument' was added by <User>Jane Doe</User>`
+  - username: `{ component: UserBubble, props: { username: 'Jane Doe' }`
+- Renders: `The file 'MyDocument' was added by <UserBubble>Jane Doe</UserBubble>`
 
 ## Usage with markdown
 
 - Input string: `The **file** *{file}* was added by {username}`
 - Arguments:
   - file: `'MyDocument'`
-  - username: `{ component: User, props: { username: 'Jane Doe' }`
-- Renders: `The <strong>file</strong> <i>'MyDocument'</i> was added by <User>Jane Doe</User>`
+  - username: `{ component: UserBubble, props: { username: 'Jane Doe' }`
+- Renders: `The <strong>file</strong> <i>'MyDocument'</i> was added by <UserBubble>Jane Doe</UserBubble>`
 
 ## Documentation
 

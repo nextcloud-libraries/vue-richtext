@@ -22,28 +22,31 @@
 	</div>
 </template>
 <script>
+// eslint-disable-next-line node/no-missing-import
 import RichText from '@juliushaertl/vue-richtext'
-import User from './User.vue'
+import UserBubble from './UserBubble.vue'
 
 export default {
-	name: 'Playground',
+	name: 'DemoPlayground',
 	components: {
 		RichText
 	},
 	data() {
 		return {
-			text: 'Hello {username}. The file {file} was added by {username} **bold text**',
+			text: `Hello {username}. The file {file} was added by {username}. Go visit https://nextcloud.com
+
+Some examples for markdown syntax: **bold text** *italic text* ~~strikethrough~~`,
 			autolink: true,
 			useMarkdown: false,
 			args: {
-                file: 'MyDocument.odt',
-                username: {
-                    component: User,
-                    props: {
-                        user: 'Jane Doe'
-                    }
-                }
-            }
+				file: 'MyDocument.odt',
+				username: {
+					component: UserBubble,
+					props: {
+						user: 'Jane Doe'
+					}
+				}
+			}
 		}
 	}
 }

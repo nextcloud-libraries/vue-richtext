@@ -24,20 +24,24 @@
 		"build": "NODE_ENV=production vite build",
 		"watch": "NODE_ENV=development vite",
 		"docs": "NODE_ENV=production vite --config vite.config.docs.js build",
+		"docs:watch": "NODE_ENV=production vite --config vite.config.docs.js",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
 		"stylelint": "stylelint src",
 		"stylelint:fix": "stylelint src --fix",
-		"test": "vitest",
+		"test": "vitest --run",
+		"test:watch": "vitest",
 		"test:coverage": "vitest --coverage"
 	},
 	"browserslist": [
 		"extends @nextcloud/browserslist-config"
 	],
 	"dependencies": {
+		"clone": "^2.1.2",
 		"vue": "^2.7.8"
 	},
 	"devDependencies": {
+		"@babel/eslint-parser": "^7.18.9",
 		"@babel/preset-env": "^7.18.10",
 		"@nextcloud/browserslist-config": "^2.3.0",
 		"@vitejs/plugin-vue2": "^1.1.2",
