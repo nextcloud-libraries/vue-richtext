@@ -5488,16 +5488,72 @@ Markdown can be used for basic text formatting.</p>
 </li>
 <li>Renders: <code>The file 'MyDocument' was added\u2026</code></li>
 </ul>
+<h3>Example usage:</h3>
+<pre><code>&lt;template&gt;
+	&lt;RichText :text=&quot;text&quot; :arguments=&quot;args&quot; /&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import RichText from '@juliushaertl/vue-richtext'
+import UserBubble from './UserBubble'
+
+export default {
+    name: 'RichTextDemo',
+	components: {
+		RichText,
+	},
+    data: () =&gt; {
+        return {
+            text: 'The file {file} was added by {username}',
+            args: {
+                file: 'MyDocument.odt',
+                username: {
+                    component: UserBubble,
+                    props: {
+                        user: 'Jane Doe'
+                    }
+                }
+            }
+        }
+    }
+}
+&lt;/script&gt;
+</code></pre>
+<h4>UserBubble.vue</h4>
+<pre><code>&lt;template&gt;
+    &lt;span class=&quot;user&quot;&gt;{{ user }}&lt;/span&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+	name: 'UserBubble',
+	props: {
+		user: {
+			type: String,
+			default: ''
+		}
+	}
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.user {
+	border-radius: 3px;
+	background-color: #eee;
+	padding: 3px;
+}
+&lt;/style&gt;
+</code></pre>
 <h2>Usage with vue components</h2>
 <ul>
 <li>Input string: <code>The file {file} was added by {username}</code></li>
 <li>Arguments:
 <ul>
 <li>file: <code>'MyDocument'</code></li>
-<li>username: <code>{ component: User, props: { username: 'Jane Doe' }</code></li>
+<li>username: <code>{ component: UserBubble, props: { username: 'Jane Doe' }</code></li>
 </ul>
 </li>
-<li>Renders: <code>The file 'MyDocument' was added by &lt;User&gt;Jane Doe&lt;/User&gt;</code></li>
+<li>Renders: <code>The file 'MyDocument' was added by &lt;UserBubble&gt;Jane Doe&lt;/UserBubble&gt;</code></li>
 </ul>
 <h2>Usage with markdown</h2>
 <ul>
@@ -5505,10 +5561,10 @@ Markdown can be used for basic text formatting.</p>
 <li>Arguments:
 <ul>
 <li>file: <code>'MyDocument'</code></li>
-<li>username: <code>{ component: User, props: { username: 'Jane Doe' }</code></li>
+<li>username: <code>{ component: UserBubble, props: { username: 'Jane Doe' }</code></li>
 </ul>
 </li>
-<li>Renders: <code>The &lt;strong&gt;file&lt;/strong&gt; &lt;i&gt;'MyDocument'&lt;/i&gt; was added by &lt;User&gt;Jane Doe&lt;/User&gt;</code></li>
+<li>Renders: <code>The &lt;strong&gt;file&lt;/strong&gt; &lt;i&gt;'MyDocument'&lt;/i&gt; was added by &lt;UserBubble&gt;Jane Doe&lt;/UserBubble&gt;</code></li>
 </ul>
 <h2>Documentation</h2>
 <p>A full example is shown in the <a href="https://juliushaertl.github.io/vue-richtext/">documentation</a></p>
@@ -13709,7 +13765,7 @@ const prepareTextNode = ({ h, context }, text2) => {
   }
   return text2;
 };
-var RichText_vue_vue_type_style_index_0_scoped_f7debf78_lang = "";
+var RichText_vue_vue_type_style_index_0_scoped_d7653ffe_lang = "";
 function normalizeComponent(scriptExports, render3, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
   var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
   if (render3) {
@@ -13889,14 +13945,14 @@ var __component__$2 = /* @__PURE__ */ normalizeComponent(
   _sfc_staticRenderFns$2,
   false,
   null,
-  "f7debf78",
+  "d7653ffe",
   null,
   null
 );
 var RichText = __component__$2.exports;
-var User_vue_vue_type_style_index_0_scoped_682574a6_lang = "";
+var UserBubble_vue_vue_type_style_index_0_scoped_aa533d85_lang = "";
 const _sfc_main$1 = {
-  name: "User",
+  name: "UserBubble",
   props: {
     user: {
       type: String,
@@ -13915,26 +13971,28 @@ var __component__$1 = /* @__PURE__ */ normalizeComponent(
   _sfc_staticRenderFns$1,
   false,
   null,
-  "682574a6",
+  "aa533d85",
   null,
   null
 );
-var User = __component__$1.exports;
-var Playground_vue_vue_type_style_index_0_lang = "";
+var UserBubble = __component__$1.exports;
+var DemoPlayground_vue_vue_type_style_index_0_lang = "";
 const _sfc_main = {
-  name: "Playground",
+  name: "DemoPlayground",
   components: {
     RichText
   },
   data() {
     return {
-      text: "Hello {username}. The file {file} was added by {username} **bold text**",
+      text: `Hello {username}. The file {file} was added by {username}. Go visit https://nextcloud.com
+
+Some examples for markdown syntax: **bold text** *italic text* ~~strikethrough~~`,
       autolink: true,
       useMarkdown: false,
       args: {
         file: "MyDocument.odt",
         username: {
-          component: User,
+          component: UserBubble,
           props: {
             user: "Jane Doe"
           }
@@ -13986,11 +14044,11 @@ var __component__ = /* @__PURE__ */ normalizeComponent(
   null,
   null
 );
-var Playground = __component__.exports;
+var DemoPlayground = __component__.exports;
 document.getElementById("readme").innerHTML = html$3;
 const app = new Vue({
   render: (h) => h("div", [
-    h(Playground, {})
+    h(DemoPlayground, {})
   ])
 });
 app.$mount("#app");
