@@ -1,13 +1,13 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
-import { createVuePlugin } from 'vite-plugin-vue2'
+import vue from '@vitejs/plugin-vue2'
 import { dependencies } from './package.json'
 import mdPlugin from 'vite-plugin-markdown'
 const path = require('path')
 
 export default defineConfig({
 	base: '/vue-richtext/',
-	plugins: [createVuePlugin(), mdPlugin({ mode: 'html'})],
+	plugins: [vue(), mdPlugin({ mode: 'html'})],
 	build: {
 		rollupOptions: {
 			output: {

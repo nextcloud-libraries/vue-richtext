@@ -1,12 +1,12 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
-import { createVuePlugin } from 'vite-plugin-vue2'
+import vue from '@vitejs/plugin-vue2'
 import { dependencies } from './package.json'
 import mdPlugin from 'vite-plugin-markdown'
 const path = require('path')
 
 export default defineConfig({
-	plugins: [createVuePlugin(), mdPlugin({ mode: 'html'})],
+	plugins: [vue(), mdPlugin({ mode: 'html'})],
 	build: {
 		lib: {
 			entry: resolve(__dirname, 'src/package.js'),
@@ -26,5 +26,10 @@ export default defineConfig({
 		alias: {
 			'@juliushaertl/vue-richtext': path.resolve(__dirname, './src/RichText.vue')
 		},
+	},
+	test: {
+		/* for example, use global to avoid globals imports (describe, test, expect): */
+		// globals: true,
+		environment : "jsdom",
 	},
 })
