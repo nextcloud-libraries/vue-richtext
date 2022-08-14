@@ -62,19 +62,19 @@
 
 	<div id="readme"></div>
 	
-	<h2>Playground</h2>
+	<h2>DemoPlayground</h2>
 	<div id="app"></div>
 
      <script type="module">
 		import Vue from 'vue'
 		import { html } from './README.md'
-		import Playground from './src/demo/Playground.vue'
+		import DemoPlayground from './src/demo/DemoPlayground.vue'
 
 		document.getElementById('readme').innerHTML = html;
 
 		const app = new Vue({
 			render: (h) => h('div', [
-				h(Playground, {})
+				h(DemoPlayground, {})
 			]),
 		})
 		app.$mount('#app')
