@@ -46,7 +46,7 @@ p();
  * Released under the MIT License.
  */
 var emptyObject = Object.freeze({});
-var isArray$5 = Array.isArray;
+var isArray$1 = Array.isArray;
 function isUndef(v) {
   return v === void 0 || v === null;
 }
@@ -65,7 +65,7 @@ function isPrimitive(value) {
 function isFunction(value) {
   return typeof value === "function";
 }
-function isObject$9(obj) {
+function isObject(obj) {
   return obj !== null && typeof obj === "object";
 }
 var _toString = Object.prototype.toString;
@@ -85,7 +85,7 @@ function isValidArrayIndex(val) {
 function isPromise(val) {
   return isDef(val) && typeof val.then === "function" && typeof val.catch === "function";
 }
-function toString$3(val) {
+function toString$1(val) {
   return val == null ? "" : Array.isArray(val) || isPlainObject$2(val) && val.toString === _toString ? JSON.stringify(val, null, 2) : String(val);
 }
 function toNumber(val) {
@@ -114,9 +114,9 @@ function remove$2(arr, item) {
     }
   }
 }
-var hasOwnProperty$3 = Object.prototype.hasOwnProperty;
-function hasOwn$8(obj, key) {
-  return hasOwnProperty$3.call(obj, key);
+var hasOwnProperty$2 = Object.prototype.hasOwnProperty;
+function hasOwn$1(obj, key) {
+  return hasOwnProperty$2.call(obj, key);
 }
 function cached(fn) {
   var cache = /* @__PURE__ */ Object.create(null);
@@ -149,7 +149,7 @@ function polyfillBind(fn, ctx) {
 function nativeBind(fn, ctx) {
   return fn.bind(ctx);
 }
-var bind$1 = Function.prototype.bind ? nativeBind : polyfillBind;
+var bind = Function.prototype.bind ? nativeBind : polyfillBind;
 function toArray(list2, start) {
   start = start || 0;
   var i = list2.length - start;
@@ -165,7 +165,7 @@ function extend$1(to, _from) {
   }
   return to;
 }
-function toObject$3(arr) {
+function toObject(arr) {
   var res = {};
   for (var i = 0; i < arr.length; i++) {
     if (arr[i]) {
@@ -174,7 +174,7 @@ function toObject$3(arr) {
   }
   return res;
 }
-function noop$1(a, b, c) {
+function noop(a, b, c) {
 }
 var no = function(a, b, c) {
   return false;
@@ -185,8 +185,8 @@ var identity = function(_) {
 function looseEqual(a, b) {
   if (a === b)
     return true;
-  var isObjectA = isObject$9(a);
-  var isObjectB = isObject$9(b);
+  var isObjectA = isObject(a);
+  var isObjectB = isObject(b);
   if (isObjectA && isObjectB) {
     try {
       var isArrayA = Array.isArray(a);
@@ -269,7 +269,7 @@ var config = {
   isReservedTag: no,
   isReservedAttr: no,
   isUnknownElement: no,
-  getTagNamespace: noop$1,
+  getTagNamespace: noop,
   parsePlatformTagName: identity,
   mustUseProp: no,
   async: true,
@@ -375,9 +375,9 @@ function setCurrentInstance(vm) {
   vm && vm._scope.on();
 }
 var VNode = function() {
-  function VNode2(tag, data2, children, text2, elm, context, componentOptions, asyncFactory) {
+  function VNode2(tag, data, children, text2, elm, context, componentOptions, asyncFactory) {
     this.tag = tag;
-    this.data = data2;
+    this.data = data;
     this.children = children;
     this.text = text2;
     this.elm = elm;
@@ -386,7 +386,7 @@ var VNode = function() {
     this.fnContext = void 0;
     this.fnOptions = void 0;
     this.fnScopeId = void 0;
-    this.key = data2 && data2.key;
+    this.key = data && data.key;
     this.componentOptions = componentOptions;
     this.componentInstance = void 0;
     this.parent = void 0;
@@ -443,10 +443,10 @@ function cloneVNode(vnode) {
   cloned.isCloned = true;
   return cloned;
 }
-var uid$2$1 = 0;
+var uid$2 = 0;
 var Dep = function() {
   function Dep2() {
-    this.id = uid$2$1++;
+    this.id = uid$2++;
     this.subs = [];
   }
   Dep2.prototype.addSub = function(sub) {
@@ -523,10 +523,10 @@ function toggleObserving(value) {
   shouldObserve = value;
 }
 var mockDep = {
-  notify: noop$1,
-  depend: noop$1,
-  addSub: noop$1,
-  removeSub: noop$1
+  notify: noop,
+  depend: noop,
+  addSub: noop,
+  removeSub: noop
 };
 var Observer = function() {
   function Observer2(value, shallow, mock) {
@@ -542,7 +542,7 @@ var Observer = function() {
     this.dep = mock ? mockDep : new Dep();
     this.vmCount = 0;
     def(value, "__ob__", this);
-    if (isArray$5(value)) {
+    if (isArray$1(value)) {
       if (!mock) {
         if (hasProto) {
           value.__proto__ = arrayMethods;
@@ -572,13 +572,13 @@ var Observer = function() {
   return Observer2;
 }();
 function observe(value, shallow, ssrMockReactivity) {
-  if (!isObject$9(value) || isRef(value) || value instanceof VNode) {
+  if (!isObject(value) || isRef(value) || value instanceof VNode) {
     return;
   }
   var ob;
-  if (hasOwn$8(value, "__ob__") && value.__ob__ instanceof Observer) {
+  if (hasOwn$1(value, "__ob__") && value.__ob__ instanceof Observer) {
     ob = value.__ob__;
-  } else if (shouldObserve && (ssrMockReactivity || !isServerRendering()) && (isArray$5(value) || isPlainObject$2(value)) && Object.isExtensible(value) && !value.__v_skip) {
+  } else if (shouldObserve && (ssrMockReactivity || !isServerRendering()) && (isArray$1(value) || isPlainObject$2(value)) && Object.isExtensible(value) && !value.__v_skip) {
     ob = new Observer(value, shallow, ssrMockReactivity);
   }
   return ob;
@@ -606,7 +606,7 @@ function defineReactive(obj, key, val, customSetter, shallow, mock) {
         }
         if (childOb) {
           childOb.dep.depend();
-          if (isArray$5(value)) {
+          if (isArray$1(value)) {
             dependArray(value);
           }
         }
@@ -636,12 +636,12 @@ function defineReactive(obj, key, val, customSetter, shallow, mock) {
   });
   return dep;
 }
-function set$1(target2, key, val) {
+function set(target2, key, val) {
   if (isReadonly(target2)) {
     return;
   }
   var ob = target2.__ob__;
-  if (isArray$5(target2) && isValidArrayIndex(key)) {
+  if (isArray$1(target2) && isValidArrayIndex(key)) {
     target2.length = Math.max(target2.length, key);
     target2.splice(key, 1, val);
     if (ob && !ob.shallow && ob.mock) {
@@ -667,7 +667,7 @@ function set$1(target2, key, val) {
   return val;
 }
 function del(target2, key) {
-  if (isArray$5(target2) && isValidArrayIndex(key)) {
+  if (isArray$1(target2) && isValidArrayIndex(key)) {
     target2.splice(key, 1);
     return;
   }
@@ -678,7 +678,7 @@ function del(target2, key) {
   if (isReadonly(target2)) {
     return;
   }
-  if (!hasOwn$8(target2, key)) {
+  if (!hasOwn$1(target2, key)) {
     return;
   }
   delete target2[key];
@@ -695,7 +695,7 @@ function dependArray(value) {
     if (e && e.__ob__) {
       e.__ob__.dep.depend();
     }
-    if (isArray$5(e)) {
+    if (isArray$1(e)) {
       dependArray(e);
     }
   }
@@ -832,7 +832,7 @@ var normalizeEvent = cached(function(name) {
 function createFnInvoker(fns, vm) {
   function invoker() {
     var fns2 = invoker.fns;
-    if (isArray$5(fns2)) {
+    if (isArray$1(fns2)) {
       var cloned = fns2.slice();
       for (var i = 0; i < cloned.length; i++) {
         invokeWithErrorHandling(cloned[i], null, arguments, vm, "v-on handler");
@@ -895,13 +895,13 @@ function mergeVNodeHook(def2, hookKey, hook) {
   invoker.merged = true;
   def2[hookKey] = invoker;
 }
-function extractPropsFromVNodeData(data2, Ctor, tag) {
+function extractPropsFromVNodeData(data, Ctor, tag) {
   var propOptions = Ctor.options.props;
   if (isUndef(propOptions)) {
     return;
   }
   var res = {};
-  var attrs2 = data2.attrs, props2 = data2.props;
+  var attrs2 = data.attrs, props2 = data.props;
   if (isDef(attrs2) || isDef(props2)) {
     for (var key in propOptions) {
       var altKey = hyphenate(key);
@@ -912,13 +912,13 @@ function extractPropsFromVNodeData(data2, Ctor, tag) {
 }
 function checkProp(res, hash, key, altKey, preserve) {
   if (isDef(hash)) {
-    if (hasOwn$8(hash, key)) {
+    if (hasOwn$1(hash, key)) {
       res[key] = hash[key];
       if (!preserve) {
         delete hash[key];
       }
       return true;
-    } else if (hasOwn$8(hash, altKey)) {
+    } else if (hasOwn$1(hash, altKey)) {
       res[key] = hash[altKey];
       if (!preserve) {
         delete hash[altKey];
@@ -930,14 +930,14 @@ function checkProp(res, hash, key, altKey, preserve) {
 }
 function simpleNormalizeChildren(children) {
   for (var i = 0; i < children.length; i++) {
-    if (isArray$5(children[i])) {
+    if (isArray$1(children[i])) {
       return Array.prototype.concat.apply([], children);
     }
   }
   return children;
 }
 function normalizeChildren(children) {
-  return isPrimitive(children) ? [createTextVNode(children)] : isArray$5(children) ? normalizeArrayChildren(children) : void 0;
+  return isPrimitive(children) ? [createTextVNode(children)] : isArray$1(children) ? normalizeArrayChildren(children) : void 0;
 }
 function isTextNode(node) {
   return isDef(node) && isDef(node.text) && isFalse(node.isComment);
@@ -951,7 +951,7 @@ function normalizeArrayChildren(children, nestedIndex) {
       continue;
     lastIndex = res.length - 1;
     last = res[lastIndex];
-    if (isArray$5(c)) {
+    if (isArray$1(c)) {
       if (c.length > 0) {
         c = normalizeArrayChildren(c, "".concat(nestedIndex || "", "_").concat(i));
         if (isTextNode(c[0]) && isTextNode(last)) {
@@ -979,25 +979,25 @@ function normalizeArrayChildren(children, nestedIndex) {
   }
   return res;
 }
-function renderList(val, render2) {
+function renderList(val, render3) {
   var ret = null, i, l, keys2, key;
-  if (isArray$5(val) || typeof val === "string") {
+  if (isArray$1(val) || typeof val === "string") {
     ret = new Array(val.length);
     for (i = 0, l = val.length; i < l; i++) {
-      ret[i] = render2(val[i], i);
+      ret[i] = render3(val[i], i);
     }
   } else if (typeof val === "number") {
     ret = new Array(val);
     for (i = 0; i < val; i++) {
-      ret[i] = render2(i + 1, i);
+      ret[i] = render3(i + 1, i);
     }
-  } else if (isObject$9(val)) {
+  } else if (isObject(val)) {
     if (hasSymbol && val[Symbol.iterator]) {
       ret = [];
       var iterator = val[Symbol.iterator]();
       var result = iterator.next();
       while (!result.done) {
-        ret.push(render2(result.value, ret.length));
+        ret.push(render3(result.value, ret.length));
         result = iterator.next();
       }
     } else {
@@ -1005,7 +1005,7 @@ function renderList(val, render2) {
       ret = new Array(keys2.length);
       for (i = 0, l = keys2.length; i < l; i++) {
         key = keys2[i];
-        ret[i] = render2(val[key], key, i);
+        ret[i] = render3(val[key], key, i);
       }
     }
   }
@@ -1034,11 +1034,11 @@ function renderSlot(name, fallbackRender, props2, bindObject) {
     return nodes;
   }
 }
-function resolveFilter(id2) {
-  return resolveAsset(this.$options, "filters", id2) || identity;
+function resolveFilter(id) {
+  return resolveAsset(this.$options, "filters", id) || identity;
 }
 function isKeyNotMatch(expect, actual) {
-  if (isArray$5(expect)) {
+  if (isArray$1(expect)) {
     return expect.indexOf(actual) === -1;
   } else {
     return expect !== actual;
@@ -1055,28 +1055,28 @@ function checkKeyCodes(eventKeyCode, key, builtInKeyCode, eventKeyName, builtInK
   }
   return eventKeyCode === void 0;
 }
-function bindObjectProps(data2, tag, value, asProp, isSync) {
+function bindObjectProps(data, tag, value, asProp, isSync) {
   if (value) {
-    if (!isObject$9(value))
+    if (!isObject(value))
       ;
     else {
-      if (isArray$5(value)) {
-        value = toObject$3(value);
+      if (isArray$1(value)) {
+        value = toObject(value);
       }
       var hash = void 0;
       var _loop_1 = function(key2) {
         if (key2 === "class" || key2 === "style" || isReservedAttribute(key2)) {
-          hash = data2;
+          hash = data;
         } else {
-          var type = data2.attrs && data2.attrs.type;
-          hash = asProp || config.mustUseProp(tag, type, key2) ? data2.domProps || (data2.domProps = {}) : data2.attrs || (data2.attrs = {});
+          var type = data.attrs && data.attrs.type;
+          hash = asProp || config.mustUseProp(tag, type, key2) ? data.domProps || (data.domProps = {}) : data.attrs || (data.attrs = {});
         }
         var camelizedKey = camelize(key2);
         var hyphenatedKey = hyphenate(key2);
         if (!(camelizedKey in hash) && !(hyphenatedKey in hash)) {
           hash[key2] = value[key2];
           if (isSync) {
-            var on = data2.on || (data2.on = {});
+            var on = data.on || (data.on = {});
             on["update:".concat(key2)] = function($event) {
               value[key2] = $event;
             };
@@ -1088,7 +1088,7 @@ function bindObjectProps(data2, tag, value, asProp, isSync) {
       }
     }
   }
-  return data2;
+  return data;
 }
 function renderStatic(index2, isInFor) {
   var cached2 = this._staticTrees || (this._staticTrees = []);
@@ -1109,7 +1109,7 @@ function markOnce(tree, index2, key) {
   return tree;
 }
 function markStatic(tree, key, isOnce) {
-  if (isArray$5(tree)) {
+  if (isArray$1(tree)) {
     for (var i = 0; i < tree.length; i++) {
       if (tree[i] && typeof tree[i] !== "string") {
         markStaticNode(tree[i], "".concat(key, "_").concat(i), isOnce);
@@ -1124,12 +1124,12 @@ function markStaticNode(node, key, isOnce) {
   node.key = key;
   node.isOnce = isOnce;
 }
-function bindObjectListeners(data2, value) {
+function bindObjectListeners(data, value) {
   if (value) {
     if (!isPlainObject$2(value))
       ;
     else {
-      var on = data2.on = data2.on ? extend$1({}, data2.on) : {};
+      var on = data.on = data.on ? extend$1({}, data.on) : {};
       for (var key in value) {
         var existing = on[key];
         var ours = value[key];
@@ -1137,13 +1137,13 @@ function bindObjectListeners(data2, value) {
       }
     }
   }
-  return data2;
+  return data;
 }
 function resolveScopedSlots(fns, res, hasDynamicKeys, contentHashKey) {
   res = res || { $stable: !hasDynamicKeys };
   for (var i = 0; i < fns.length; i++) {
     var slot = fns[i];
-    if (isArray$5(slot)) {
+    if (isArray$1(slot)) {
       resolveScopedSlots(slot, res, hasDynamicKeys);
     } else if (slot) {
       if (slot.proxy) {
@@ -1172,7 +1172,7 @@ function prependModifier(value, symbol) {
 function installRenderHelpers(target2) {
   target2._o = markOnce;
   target2._n = toNumber;
-  target2._s = toString$3;
+  target2._s = toString$1;
   target2._l = renderList;
   target2._t = renderSlot;
   target2._q = looseEqual;
@@ -1195,12 +1195,12 @@ function resolveSlots(children, context) {
   var slots = {};
   for (var i = 0, l = children.length; i < l; i++) {
     var child = children[i];
-    var data2 = child.data;
-    if (data2 && data2.attrs && data2.attrs.slot) {
-      delete data2.attrs.slot;
+    var data = child.data;
+    if (data && data.attrs && data.attrs.slot) {
+      delete data.attrs.slot;
     }
-    if ((child.context === context || child.fnContext === context) && data2 && data2.slot != null) {
-      var name_1 = data2.slot;
+    if ((child.context === context || child.fnContext === context) && data && data.slot != null) {
+      var name_1 = data.slot;
       var slot = slots[name_1] || (slots[name_1] = []);
       if (child.tag === "template") {
         slot.push.apply(slot, child.children || []);
@@ -1261,7 +1261,7 @@ function normalizeScopedSlot(vm, normalSlots, key, fn) {
     var cur = currentInstance;
     setCurrentInstance(vm);
     var res = arguments.length ? fn.apply(null, arguments) : fn({});
-    res = res && typeof res === "object" && !isArray$5(res) ? [res] : normalizeChildren(res);
+    res = res && typeof res === "object" && !isArray$1(res) ? [res] : normalizeChildren(res);
     var vnode = res && res[0];
     setCurrentInstance(cur);
     return res && (!vnode || res.length === 1 && vnode.isComment && !isAsyncPlaceholder(vnode)) ? void 0 : res;
@@ -1292,7 +1292,7 @@ function initSetup(vm) {
     setCurrentInstance();
     if (isFunction(setupResult)) {
       options.render = setupResult;
-    } else if (isObject$9(setupResult)) {
+    } else if (isObject(setupResult)) {
       vm._setupState = setupResult;
       if (!setupResult.__sfc) {
         for (var key in setupResult) {
@@ -1332,7 +1332,7 @@ function createSetupContext(vm) {
     get slots() {
       return initSlotsProxy(vm);
     },
-    emit: bind$1(vm.$emit, vm),
+    emit: bind(vm.$emit, vm),
     expose: function(exposed) {
       if (exposed) {
         Object.keys(exposed).forEach(function(key) {
@@ -1413,7 +1413,7 @@ function renderMixin(Vue2) {
   };
   Vue2.prototype._render = function() {
     var vm = this;
-    var _a = vm.$options, render2 = _a.render, _parentVnode = _a._parentVnode;
+    var _a = vm.$options, render3 = _a.render, _parentVnode = _a._parentVnode;
     if (_parentVnode && vm._isMounted) {
       vm.$scopedSlots = normalizeScopedSlots(vm.$parent, _parentVnode.data.scopedSlots, vm.$slots, vm.$scopedSlots);
       if (vm._slotsProxy) {
@@ -1425,7 +1425,7 @@ function renderMixin(Vue2) {
     try {
       setCurrentInstance(vm);
       currentRenderingInstance = vm;
-      vnode = render2.call(vm._renderProxy, vm.$createElement);
+      vnode = render3.call(vm._renderProxy, vm.$createElement);
     } catch (e) {
       handleError(e, vm, "render");
       {
@@ -1435,7 +1435,7 @@ function renderMixin(Vue2) {
       currentRenderingInstance = null;
       setCurrentInstance();
     }
-    if (isArray$5(vnode) && vnode.length === 1) {
+    if (isArray$1(vnode) && vnode.length === 1) {
       vnode = vnode[0];
     }
     if (!(vnode instanceof VNode)) {
@@ -1449,12 +1449,12 @@ function ensureCtor(comp, base2) {
   if (comp.__esModule || hasSymbol && comp[Symbol.toStringTag] === "Module") {
     comp = comp.default;
   }
-  return isObject$9(comp) ? base2.extend(comp) : comp;
+  return isObject(comp) ? base2.extend(comp) : comp;
 }
-function createAsyncPlaceholder(factory2, data2, context, children, tag) {
+function createAsyncPlaceholder(factory2, data, context, children, tag) {
   var node = createEmptyVNode();
   node.asyncFactory = factory2;
-  node.asyncMeta = { data: data2, context, children, tag };
+  node.asyncMeta = { data, context, children, tag };
   return node;
 }
 function resolveAsyncComponent(factory2, baseCtor) {
@@ -1510,7 +1510,7 @@ function resolveAsyncComponent(factory2, baseCtor) {
       }
     });
     var res_1 = factory2(resolve, reject_1);
-    if (isObject$9(res_1)) {
+    if (isObject(res_1)) {
       if (isPromise(res_1)) {
         if (isUndef(factory2.resolved)) {
           res_1.then(resolve, reject_1);
@@ -1549,7 +1549,7 @@ function resolveAsyncComponent(factory2, baseCtor) {
   }
 }
 function getFirstComponentChild(children) {
-  if (isArray$5(children)) {
+  if (isArray$1(children)) {
     for (var i = 0; i < children.length; i++) {
       var c = children[i];
       if (isDef(c) && (isDef(c.componentOptions) || isAsyncPlaceholder(c))) {
@@ -1560,30 +1560,30 @@ function getFirstComponentChild(children) {
 }
 var SIMPLE_NORMALIZE = 1;
 var ALWAYS_NORMALIZE = 2;
-function createElement$1(context, tag, data2, children, normalizationType, alwaysNormalize) {
-  if (isArray$5(data2) || isPrimitive(data2)) {
+function createElement$1(context, tag, data, children, normalizationType, alwaysNormalize) {
+  if (isArray$1(data) || isPrimitive(data)) {
     normalizationType = children;
-    children = data2;
-    data2 = void 0;
+    children = data;
+    data = void 0;
   }
   if (isTrue(alwaysNormalize)) {
     normalizationType = ALWAYS_NORMALIZE;
   }
-  return _createElement(context, tag, data2, children, normalizationType);
+  return _createElement(context, tag, data, children, normalizationType);
 }
-function _createElement(context, tag, data2, children, normalizationType) {
-  if (isDef(data2) && isDef(data2.__ob__)) {
+function _createElement(context, tag, data, children, normalizationType) {
+  if (isDef(data) && isDef(data.__ob__)) {
     return createEmptyVNode();
   }
-  if (isDef(data2) && isDef(data2.is)) {
-    tag = data2.is;
+  if (isDef(data) && isDef(data.is)) {
+    tag = data.is;
   }
   if (!tag) {
     return createEmptyVNode();
   }
-  if (isArray$5(children) && isFunction(children[0])) {
-    data2 = data2 || {};
-    data2.scopedSlots = { default: children[0] };
+  if (isArray$1(children) && isFunction(children[0])) {
+    data = data || {};
+    data.scopedSlots = { default: children[0] };
     children.length = 0;
   }
   if (normalizationType === ALWAYS_NORMALIZE) {
@@ -1596,22 +1596,22 @@ function _createElement(context, tag, data2, children, normalizationType) {
     var Ctor = void 0;
     ns2 = context.$vnode && context.$vnode.ns || config.getTagNamespace(tag);
     if (config.isReservedTag(tag)) {
-      vnode = new VNode(config.parsePlatformTagName(tag), data2, children, void 0, void 0, context);
-    } else if ((!data2 || !data2.pre) && isDef(Ctor = resolveAsset(context.$options, "components", tag))) {
-      vnode = createComponent(Ctor, data2, context, children, tag);
+      vnode = new VNode(config.parsePlatformTagName(tag), data, children, void 0, void 0, context);
+    } else if ((!data || !data.pre) && isDef(Ctor = resolveAsset(context.$options, "components", tag))) {
+      vnode = createComponent(Ctor, data, context, children, tag);
     } else {
-      vnode = new VNode(tag, data2, children, void 0, void 0, context);
+      vnode = new VNode(tag, data, children, void 0, void 0, context);
     }
   } else {
-    vnode = createComponent(tag, data2, context, children);
+    vnode = createComponent(tag, data, context, children);
   }
-  if (isArray$5(vnode)) {
+  if (isArray$1(vnode)) {
     return vnode;
   } else if (isDef(vnode)) {
     if (isDef(ns2))
       applyNS(vnode, ns2);
-    if (isDef(data2))
-      registerDeepBindings(data2);
+    if (isDef(data))
+      registerDeepBindings(data);
     return vnode;
   } else {
     return createEmptyVNode();
@@ -1632,12 +1632,12 @@ function applyNS(vnode, ns2, force) {
     }
   }
 }
-function registerDeepBindings(data2) {
-  if (isObject$9(data2.style)) {
-    traverse(data2.style);
+function registerDeepBindings(data) {
+  if (isObject(data.style)) {
+    traverse(data.style);
   }
-  if (isObject$9(data2.class)) {
-    traverse(data2.class);
+  if (isObject(data.class)) {
+    traverse(data.class);
   }
 }
 function handleError(err, vm, info) {
@@ -1716,7 +1716,7 @@ if (typeof Promise !== "undefined" && isNative(Promise)) {
   timerFunc = function() {
     p_1.then(flushCallbacks);
     if (isIOS)
-      setTimeout(noop$1);
+      setTimeout(noop);
   };
   isUsingMicroTask = true;
 } else if (!isIE && typeof MutationObserver !== "undefined" && (isNative(MutationObserver) || MutationObserver.toString() === "[object MutationObserverConstructor]")) {
@@ -1763,7 +1763,7 @@ function nextTick(cb, ctx) {
     });
   }
 }
-var version$1 = "2.7.8";
+var version = "2.7.8";
 var seenObjects = new _Set();
 function traverse(val) {
   _traverse(val, seenObjects);
@@ -1772,8 +1772,8 @@ function traverse(val) {
 }
 function _traverse(val, seen) {
   var i, keys2;
-  var isA = isArray$5(val);
-  if (!isA && !isObject$9(val) || Object.isFrozen(val) || val instanceof VNode) {
+  var isA = isArray$1(val);
+  if (!isA && !isObject(val) || Object.isFrozen(val) || val instanceof VNode) {
     return;
   }
   if (val.__ob__) {
@@ -1796,7 +1796,7 @@ function _traverse(val, seen) {
       _traverse(val[keys2[i]], seen);
   }
 }
-var uid$1$1 = 0;
+var uid$1 = 0;
 var Watcher = function() {
   function Watcher2(vm, expOrFn, cb, options, isRenderWatcher) {
     recordEffectScope(this, activeEffectScope || (vm ? vm._scope : void 0));
@@ -1815,7 +1815,7 @@ var Watcher = function() {
       this.deep = this.user = this.lazy = this.sync = false;
     }
     this.cb = cb;
-    this.id = ++uid$1$1;
+    this.id = ++uid$1;
     this.active = true;
     this.post = false;
     this.dirty = this.lazy;
@@ -1829,7 +1829,7 @@ var Watcher = function() {
     } else {
       this.getter = parsePath(expOrFn);
       if (!this.getter) {
-        this.getter = noop$1;
+        this.getter = noop;
       }
     }
     this.value = this.lazy ? void 0 : this.get();
@@ -1856,11 +1856,11 @@ var Watcher = function() {
     return value;
   };
   Watcher2.prototype.addDep = function(dep) {
-    var id2 = dep.id;
-    if (!this.newDepIds.has(id2)) {
-      this.newDepIds.add(id2);
+    var id = dep.id;
+    if (!this.newDepIds.has(id)) {
+      this.newDepIds.add(id);
       this.newDeps.push(dep);
-      if (!this.depIds.has(id2)) {
+      if (!this.depIds.has(id)) {
         dep.addSub(this);
       }
     }
@@ -1894,7 +1894,7 @@ var Watcher = function() {
   Watcher2.prototype.run = function() {
     if (this.active) {
       var value = this.get();
-      if (value !== this.value || isObject$9(value) || this.deep) {
+      if (value !== this.value || isObject(value) || this.deep) {
         var oldValue = this.value;
         this.value = value;
         if (this.user) {
@@ -1966,7 +1966,7 @@ function eventsMixin(Vue2) {
   var hookRE = /^hook:/;
   Vue2.prototype.$on = function(event, fn) {
     var vm = this;
-    if (isArray$5(event)) {
+    if (isArray$1(event)) {
       for (var i = 0, l = event.length; i < l; i++) {
         vm.$on(event[i], fn);
       }
@@ -1994,7 +1994,7 @@ function eventsMixin(Vue2) {
       vm._events = /* @__PURE__ */ Object.create(null);
       return vm;
     }
-    if (isArray$5(event)) {
+    if (isArray$1(event)) {
       for (var i_1 = 0, l = event.length; i_1 < l; i_1++) {
         vm.$off(event[i_1], fn);
       }
@@ -2137,7 +2137,7 @@ function mountComponent(vm, el, hydrating) {
       }
     }
   };
-  new Watcher(vm, updateComponent, noop$1, watcherOptions, true);
+  new Watcher(vm, updateComponent, noop, watcherOptions, true);
   hydrating = false;
   var preWatchers = vm._preWatchers;
   if (preWatchers) {
@@ -2255,13 +2255,13 @@ function callHook$1(vm, hook, args, setContext) {
 }
 var queue = [];
 var activatedChildren = [];
-var has$1 = {};
+var has = {};
 var waiting = false;
 var flushing = false;
 var index$1 = 0;
 function resetSchedulerState() {
   index$1 = queue.length = activatedChildren.length = 0;
-  has$1 = {};
+  has = {};
   waiting = flushing = false;
 }
 var currentFlushTimestamp = 0;
@@ -2286,15 +2286,15 @@ var sortCompareFn = function(a, b) {
 function flushSchedulerQueue() {
   currentFlushTimestamp = getNow();
   flushing = true;
-  var watcher, id2;
+  var watcher, id;
   queue.sort(sortCompareFn);
   for (index$1 = 0; index$1 < queue.length; index$1++) {
     watcher = queue[index$1];
     if (watcher.before) {
       watcher.before();
     }
-    id2 = watcher.id;
-    has$1[id2] = null;
+    id = watcher.id;
+    has[id] = null;
     watcher.run();
   }
   var activatedQueue = activatedChildren.slice();
@@ -2327,14 +2327,14 @@ function callActivatedHooks(queue2) {
   }
 }
 function queueWatcher(watcher) {
-  var id2 = watcher.id;
-  if (has$1[id2] != null) {
+  var id = watcher.id;
+  if (has[id] != null) {
     return;
   }
   if (watcher === Dep.target && watcher.noRecurse) {
     return;
   }
-  has$1[id2] = true;
+  has[id] = true;
   if (!flushing) {
     queue.push(watcher);
   } else {
@@ -2353,7 +2353,7 @@ function initProvide(vm) {
   var provideOption = vm.$options.provide;
   if (provideOption) {
     var provided = isFunction(provideOption) ? provideOption.call(vm) : provideOption;
-    if (!isObject$9(provided)) {
+    if (!isObject(provided)) {
       return;
     }
     var source = resolveProvided(vm);
@@ -2396,11 +2396,11 @@ function resolveInject(inject, vm) {
     return result;
   }
 }
-function FunctionalRenderContext(data2, props2, children, parent, Ctor) {
+function FunctionalRenderContext(data, props2, children, parent, Ctor) {
   var _this = this;
   var options = Ctor.options;
   var contextVm;
-  if (hasOwn$8(parent, "_uid")) {
+  if (hasOwn$1(parent, "_uid")) {
     contextVm = Object.create(parent);
     contextVm._original = parent;
   } else {
@@ -2409,33 +2409,33 @@ function FunctionalRenderContext(data2, props2, children, parent, Ctor) {
   }
   var isCompiled = isTrue(options._compiled);
   var needNormalization = !isCompiled;
-  this.data = data2;
+  this.data = data;
   this.props = props2;
   this.children = children;
   this.parent = parent;
-  this.listeners = data2.on || emptyObject;
+  this.listeners = data.on || emptyObject;
   this.injections = resolveInject(options.inject, parent);
   this.slots = function() {
     if (!_this.$slots) {
-      normalizeScopedSlots(parent, data2.scopedSlots, _this.$slots = resolveSlots(children, parent));
+      normalizeScopedSlots(parent, data.scopedSlots, _this.$slots = resolveSlots(children, parent));
     }
     return _this.$slots;
   };
   Object.defineProperty(this, "scopedSlots", {
     enumerable: true,
     get: function() {
-      return normalizeScopedSlots(parent, data2.scopedSlots, this.slots());
+      return normalizeScopedSlots(parent, data.scopedSlots, this.slots());
     }
   });
   if (isCompiled) {
     this.$options = options;
     this.$slots = this.slots();
-    this.$scopedSlots = normalizeScopedSlots(parent, data2.scopedSlots, this.$slots);
+    this.$scopedSlots = normalizeScopedSlots(parent, data.scopedSlots, this.$slots);
   }
   if (options._scopeId) {
     this._c = function(a, b, c, d) {
       var vnode = createElement$1(contextVm, a, b, c, d, needNormalization);
-      if (vnode && !isArray$5(vnode)) {
+      if (vnode && !isArray$1(vnode)) {
         vnode.fnScopeId = options._scopeId;
         vnode.fnContext = parent;
       }
@@ -2448,7 +2448,7 @@ function FunctionalRenderContext(data2, props2, children, parent, Ctor) {
   }
 }
 installRenderHelpers(FunctionalRenderContext.prototype);
-function createFunctionalComponent(Ctor, propsData, data2, contextVm, children) {
+function createFunctionalComponent(Ctor, propsData, data, contextVm, children) {
   var options = Ctor.options;
   var props2 = {};
   var propOptions = options.props;
@@ -2457,30 +2457,30 @@ function createFunctionalComponent(Ctor, propsData, data2, contextVm, children) 
       props2[key] = validateProp(key, propOptions, propsData || emptyObject);
     }
   } else {
-    if (isDef(data2.attrs))
-      mergeProps(props2, data2.attrs);
-    if (isDef(data2.props))
-      mergeProps(props2, data2.props);
+    if (isDef(data.attrs))
+      mergeProps(props2, data.attrs);
+    if (isDef(data.props))
+      mergeProps(props2, data.props);
   }
-  var renderContext = new FunctionalRenderContext(data2, props2, children, contextVm, Ctor);
+  var renderContext = new FunctionalRenderContext(data, props2, children, contextVm, Ctor);
   var vnode = options.render.call(null, renderContext._c, renderContext);
   if (vnode instanceof VNode) {
-    return cloneAndMarkFunctionalResult(vnode, data2, renderContext.parent, options);
-  } else if (isArray$5(vnode)) {
+    return cloneAndMarkFunctionalResult(vnode, data, renderContext.parent, options);
+  } else if (isArray$1(vnode)) {
     var vnodes = normalizeChildren(vnode) || [];
     var res = new Array(vnodes.length);
     for (var i = 0; i < vnodes.length; i++) {
-      res[i] = cloneAndMarkFunctionalResult(vnodes[i], data2, renderContext.parent, options);
+      res[i] = cloneAndMarkFunctionalResult(vnodes[i], data, renderContext.parent, options);
     }
     return res;
   }
 }
-function cloneAndMarkFunctionalResult(vnode, data2, contextVm, options, renderContext) {
+function cloneAndMarkFunctionalResult(vnode, data, contextVm, options, renderContext) {
   var clone = cloneVNode(vnode);
   clone.fnContext = contextVm;
   clone.fnOptions = options;
-  if (data2.slot) {
-    (clone.data || (clone.data = {})).slot = data2.slot;
+  if (data.slot) {
+    (clone.data || (clone.data = {})).slot = data.slot;
   }
   return clone;
 }
@@ -2539,12 +2539,12 @@ var componentVNodeHooks = {
   }
 };
 var hooksToMerge = Object.keys(componentVNodeHooks);
-function createComponent(Ctor, data2, context, children, tag) {
+function createComponent(Ctor, data, context, children, tag) {
   if (isUndef(Ctor)) {
     return;
   }
   var baseCtor = context.$options._base;
-  if (isObject$9(Ctor)) {
+  if (isObject(Ctor)) {
     Ctor = baseCtor.extend(Ctor);
   }
   if (typeof Ctor !== "function") {
@@ -2555,32 +2555,32 @@ function createComponent(Ctor, data2, context, children, tag) {
     asyncFactory = Ctor;
     Ctor = resolveAsyncComponent(asyncFactory, baseCtor);
     if (Ctor === void 0) {
-      return createAsyncPlaceholder(asyncFactory, data2, context, children, tag);
+      return createAsyncPlaceholder(asyncFactory, data, context, children, tag);
     }
   }
-  data2 = data2 || {};
+  data = data || {};
   resolveConstructorOptions(Ctor);
-  if (isDef(data2.model)) {
-    transformModel(Ctor.options, data2);
+  if (isDef(data.model)) {
+    transformModel(Ctor.options, data);
   }
-  var propsData = extractPropsFromVNodeData(data2, Ctor);
+  var propsData = extractPropsFromVNodeData(data, Ctor);
   if (isTrue(Ctor.options.functional)) {
-    return createFunctionalComponent(Ctor, propsData, data2, context, children);
+    return createFunctionalComponent(Ctor, propsData, data, context, children);
   }
-  var listeners = data2.on;
-  data2.on = data2.nativeOn;
+  var listeners = data.on;
+  data.on = data.nativeOn;
   if (isTrue(Ctor.options.abstract)) {
-    var slot = data2.slot;
-    data2 = {};
+    var slot = data.slot;
+    data = {};
     if (slot) {
-      data2.slot = slot;
+      data.slot = slot;
     }
   }
-  installComponentHooks(data2);
+  installComponentHooks(data);
   var name = getComponentName(Ctor.options) || tag;
   var vnode = new VNode(
     "vue-component-".concat(Ctor.cid).concat(name ? "-".concat(name) : ""),
-    data2,
+    data,
     void 0,
     void 0,
     void 0,
@@ -2603,8 +2603,8 @@ function createComponentInstanceForVnode(vnode, parent) {
   }
   return new vnode.componentOptions.Ctor(options);
 }
-function installComponentHooks(data2) {
-  var hooks2 = data2.hook || (data2.hook = {});
+function installComponentHooks(data) {
+  var hooks2 = data.hook || (data.hook = {});
   for (var i = 0; i < hooksToMerge.length; i++) {
     var key = hooksToMerge[i];
     var existing = hooks2[key];
@@ -2622,22 +2622,22 @@ function mergeHook(f1, f2) {
   merged._merged = true;
   return merged;
 }
-function transformModel(options, data2) {
+function transformModel(options, data) {
   var prop = options.model && options.model.prop || "value";
   var event = options.model && options.model.event || "input";
-  (data2.attrs || (data2.attrs = {}))[prop] = data2.model.value;
-  var on = data2.on || (data2.on = {});
+  (data.attrs || (data.attrs = {}))[prop] = data.model.value;
+  var on = data.on || (data.on = {});
   var existing = on[event];
-  var callback = data2.model.callback;
+  var callback = data.model.callback;
   if (isDef(existing)) {
-    if (isArray$5(existing) ? existing.indexOf(callback) === -1 : existing !== callback) {
+    if (isArray$1(existing) ? existing.indexOf(callback) === -1 : existing !== callback) {
       on[event] = [callback].concat(existing);
     }
   } else {
     on[event] = callback;
   }
 }
-var warn = noop$1;
+var warn = noop;
 var strats = config.optionMergeStrategies;
 function mergeData(to, from) {
   if (!from)
@@ -2650,8 +2650,8 @@ function mergeData(to, from) {
       continue;
     toVal = to[key];
     fromVal = from[key];
-    if (!hasOwn$8(to, key)) {
-      set$1(to, key, fromVal);
+    if (!hasOwn$1(to, key)) {
+      set(to, key, fromVal);
     } else if (toVal !== fromVal && isPlainObject$2(toVal) && isPlainObject$2(fromVal)) {
       mergeData(toVal, fromVal);
     }
@@ -2691,7 +2691,7 @@ strats.data = function(parentVal, childVal, vm) {
   return mergeDataOrFn(parentVal, childVal, vm);
 };
 function mergeLifecycleHook(parentVal, childVal) {
-  var res = childVal ? parentVal ? parentVal.concat(childVal) : isArray$5(childVal) ? childVal : [childVal] : parentVal;
+  var res = childVal ? parentVal ? parentVal.concat(childVal) : isArray$1(childVal) ? childVal : [childVal] : parentVal;
   return res ? dedupeHooks(res) : res;
 }
 function dedupeHooks(hooks2) {
@@ -2731,10 +2731,10 @@ strats.watch = function(parentVal, childVal, vm, key) {
   for (var key_1 in childVal) {
     var parent_1 = ret[key_1];
     var child = childVal[key_1];
-    if (parent_1 && !isArray$5(parent_1)) {
+    if (parent_1 && !isArray$1(parent_1)) {
       parent_1 = [parent_1];
     }
-    ret[key_1] = parent_1 ? parent_1.concat(child) : isArray$5(child) ? child : [child];
+    ret[key_1] = parent_1 ? parent_1.concat(child) : isArray$1(child) ? child : [child];
   }
   return ret;
 };
@@ -2760,7 +2760,7 @@ function normalizeProps(options, vm) {
     return;
   var res = {};
   var i, val, name;
-  if (isArray$5(props2)) {
+  if (isArray$1(props2)) {
     i = props2.length;
     while (i--) {
       val = props2[i];
@@ -2784,7 +2784,7 @@ function normalizeInject(options, vm) {
   if (!inject)
     return;
   var normalized = options.inject = {};
-  if (isArray$5(inject)) {
+  if (isArray$1(inject)) {
     for (var i = 0; i < inject.length; i++) {
       normalized[inject[i]] = { from: inject[i] };
     }
@@ -2835,7 +2835,7 @@ function mergeOptions(parent, child, vm) {
     mergeField(key);
   }
   for (key in child) {
-    if (!hasOwn$8(parent, key)) {
+    if (!hasOwn$1(parent, key)) {
       mergeField(key);
     }
   }
@@ -2845,29 +2845,29 @@ function mergeOptions(parent, child, vm) {
   }
   return options;
 }
-function resolveAsset(options, type, id2, warnMissing) {
-  if (typeof id2 !== "string") {
+function resolveAsset(options, type, id, warnMissing) {
+  if (typeof id !== "string") {
     return;
   }
   var assets = options[type];
-  if (hasOwn$8(assets, id2))
-    return assets[id2];
-  var camelizedId = camelize(id2);
-  if (hasOwn$8(assets, camelizedId))
+  if (hasOwn$1(assets, id))
+    return assets[id];
+  var camelizedId = camelize(id);
+  if (hasOwn$1(assets, camelizedId))
     return assets[camelizedId];
   var PascalCaseId = capitalize(camelizedId);
-  if (hasOwn$8(assets, PascalCaseId))
+  if (hasOwn$1(assets, PascalCaseId))
     return assets[PascalCaseId];
-  var res = assets[id2] || assets[camelizedId] || assets[PascalCaseId];
+  var res = assets[id] || assets[camelizedId] || assets[PascalCaseId];
   return res;
 }
 function validateProp(key, propOptions, propsData, vm) {
   var prop = propOptions[key];
-  var absent = !hasOwn$8(propsData, key);
+  var absent = !hasOwn$1(propsData, key);
   var value = propsData[key];
   var booleanIndex = getTypeIndex(Boolean, prop.type);
   if (booleanIndex > -1) {
-    if (absent && !hasOwn$8(prop, "default")) {
+    if (absent && !hasOwn$1(prop, "default")) {
       value = false;
     } else if (value === "" || value === hyphenate(key)) {
       var stringIndex = getTypeIndex(String, prop.type);
@@ -2886,7 +2886,7 @@ function validateProp(key, propOptions, propsData, vm) {
   return value;
 }
 function getPropDefaultValue(vm, prop, key) {
-  if (!hasOwn$8(prop, "default")) {
+  if (!hasOwn$1(prop, "default")) {
     return void 0;
   }
   var def2 = prop.default;
@@ -2897,14 +2897,14 @@ function getPropDefaultValue(vm, prop, key) {
 }
 var functionTypeCheckRE = /^\s*function (\w+)/;
 function getType(fn) {
-  var match2 = fn && fn.toString().match(functionTypeCheckRE);
-  return match2 ? match2[1] : "";
+  var match = fn && fn.toString().match(functionTypeCheckRE);
+  return match ? match[1] : "";
 }
 function isSameType(a, b) {
   return getType(a) === getType(b);
 }
 function getTypeIndex(type, expectedTypes) {
-  if (!isArray$5(expectedTypes)) {
+  if (!isArray$1(expectedTypes)) {
     return isSameType(expectedTypes, type) ? 0 : -1;
   }
   for (var i = 0, len = expectedTypes.length; i < len; i++) {
@@ -2917,8 +2917,8 @@ function getTypeIndex(type, expectedTypes) {
 var sharedPropertyDefinition = {
   enumerable: true,
   configurable: true,
-  get: noop$1,
-  set: noop$1
+  get: noop,
+  set: noop
 };
 function proxy(target2, sourceKey, key) {
   sharedPropertyDefinition.get = function proxyGetter() {
@@ -2972,30 +2972,30 @@ function initProps$1(vm, propsOptions) {
   toggleObserving(true);
 }
 function initData(vm) {
-  var data2 = vm.$options.data;
-  data2 = vm._data = isFunction(data2) ? getData(data2, vm) : data2 || {};
-  if (!isPlainObject$2(data2)) {
-    data2 = {};
+  var data = vm.$options.data;
+  data = vm._data = isFunction(data) ? getData(data, vm) : data || {};
+  if (!isPlainObject$2(data)) {
+    data = {};
   }
-  var keys2 = Object.keys(data2);
+  var keys2 = Object.keys(data);
   var props2 = vm.$options.props;
   vm.$options.methods;
   var i = keys2.length;
   while (i--) {
     var key = keys2[i];
-    if (props2 && hasOwn$8(props2, key))
+    if (props2 && hasOwn$1(props2, key))
       ;
     else if (!isReserved(key)) {
       proxy(vm, "_data", key);
     }
   }
-  var ob = observe(data2);
+  var ob = observe(data);
   ob && ob.vmCount++;
 }
-function getData(data2, vm) {
+function getData(data, vm) {
   pushTarget();
   try {
-    return data2.call(vm, vm);
+    return data.call(vm, vm);
   } catch (e) {
     handleError(e, vm, "data()");
     return {};
@@ -3011,7 +3011,7 @@ function initComputed$1(vm, computed) {
     var userDef = computed[key];
     var getter = isFunction(userDef) ? userDef : userDef.get;
     if (!isSSR) {
-      watchers[key] = new Watcher(vm, getter || noop$1, noop$1, computedWatcherOptions);
+      watchers[key] = new Watcher(vm, getter || noop, noop, computedWatcherOptions);
     }
     if (!(key in vm)) {
       defineComputed(vm, key, userDef);
@@ -3022,10 +3022,10 @@ function defineComputed(target2, key, userDef) {
   var shouldCache = !isServerRendering();
   if (isFunction(userDef)) {
     sharedPropertyDefinition.get = shouldCache ? createComputedGetter(key) : createGetterInvoker(userDef);
-    sharedPropertyDefinition.set = noop$1;
+    sharedPropertyDefinition.set = noop;
   } else {
-    sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(key) : createGetterInvoker(userDef.get) : noop$1;
-    sharedPropertyDefinition.set = userDef.set || noop$1;
+    sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(key) : createGetterInvoker(userDef.get) : noop;
+    sharedPropertyDefinition.set = userDef.set || noop;
   }
   Object.defineProperty(target2, key, sharedPropertyDefinition);
 }
@@ -3051,13 +3051,13 @@ function createGetterInvoker(fn) {
 function initMethods(vm, methods) {
   vm.$options.props;
   for (var key in methods) {
-    vm[key] = typeof methods[key] !== "function" ? noop$1 : bind$1(methods[key], vm);
+    vm[key] = typeof methods[key] !== "function" ? noop : bind(methods[key], vm);
   }
 }
 function initWatch(vm, watch) {
   for (var key in watch) {
     var handler = watch[key];
-    if (isArray$5(handler)) {
+    if (isArray$1(handler)) {
       for (var i = 0; i < handler.length; i++) {
         createWatcher(vm, key, handler[i]);
       }
@@ -3087,7 +3087,7 @@ function stateMixin(Vue2) {
   };
   Object.defineProperty(Vue2.prototype, "$data", dataDef);
   Object.defineProperty(Vue2.prototype, "$props", propsDef);
-  Vue2.prototype.$set = set$1;
+  Vue2.prototype.$set = set;
   Vue2.prototype.$delete = del;
   Vue2.prototype.$watch = function(expOrFn, cb, options) {
     var vm = this;
@@ -3108,11 +3108,11 @@ function stateMixin(Vue2) {
     };
   };
 }
-var uid$3 = 0;
+var uid = 0;
 function initMixin$1(Vue2) {
   Vue2.prototype._init = function(options) {
     var vm = this;
-    vm._uid = uid$3++;
+    vm._uid = uid++;
     vm._isVue = true;
     vm.__v_skip = true;
     vm._scope = new EffectScope(true);
@@ -3272,18 +3272,18 @@ function initComputed(Comp) {
 }
 function initAssetRegisters(Vue2) {
   ASSET_TYPES.forEach(function(type) {
-    Vue2[type] = function(id2, definition2) {
+    Vue2[type] = function(id, definition2) {
       if (!definition2) {
-        return this.options[type + "s"][id2];
+        return this.options[type + "s"][id];
       } else {
         if (type === "component" && isPlainObject$2(definition2)) {
-          definition2.name = definition2.name || id2;
+          definition2.name = definition2.name || id;
           definition2 = this.options._base.extend(definition2);
         }
         if (type === "directive" && isFunction(definition2)) {
           definition2 = { bind: definition2, update: definition2 };
         }
-        this.options[type + "s"][id2] = definition2;
+        this.options[type + "s"][id] = definition2;
         return definition2;
       }
     };
@@ -3293,7 +3293,7 @@ function _getComponentName(opts2) {
   return opts2 && (getComponentName(opts2.Ctor.options) || opts2.tag);
 }
 function matches(pattern, name) {
-  if (isArray$5(pattern)) {
+  if (isArray$1(pattern)) {
     return pattern.indexOf(name) > -1;
   } else if (typeof pattern === "string") {
     return pattern.split(",").indexOf(name) > -1;
@@ -3415,7 +3415,7 @@ function initGlobalAPI(Vue2) {
     mergeOptions,
     defineReactive
   };
-  Vue2.set = set$1;
+  Vue2.set = set;
   Vue2.delete = del;
   Vue2.nextTick = nextTick;
   Vue2.observable = function(obj) {
@@ -3445,7 +3445,7 @@ Object.defineProperty(Vue.prototype, "$ssrContext", {
 Object.defineProperty(Vue, "FunctionalRenderContext", {
   value: FunctionalRenderContext
 });
-Vue.version = version$1;
+Vue.version = version;
 var isReservedAttr = makeMap("style,class");
 var acceptValue = makeMap("input,textarea,option,select,progress");
 var mustUseProp = function(tag, type, attr) {
@@ -3468,42 +3468,42 @@ var isFalsyAttrValue = function(val) {
   return val == null || val === false;
 };
 function genClassForVnode(vnode) {
-  var data2 = vnode.data;
+  var data = vnode.data;
   var parentNode2 = vnode;
   var childNode = vnode;
   while (isDef(childNode.componentInstance)) {
     childNode = childNode.componentInstance._vnode;
     if (childNode && childNode.data) {
-      data2 = mergeClassData(childNode.data, data2);
+      data = mergeClassData(childNode.data, data);
     }
   }
   while (isDef(parentNode2 = parentNode2.parent)) {
     if (parentNode2 && parentNode2.data) {
-      data2 = mergeClassData(data2, parentNode2.data);
+      data = mergeClassData(data, parentNode2.data);
     }
   }
-  return renderClass(data2.staticClass, data2.class);
+  return renderClass(data.staticClass, data.class);
 }
 function mergeClassData(child, parent) {
   return {
-    staticClass: concat$1(child.staticClass, parent.staticClass),
+    staticClass: concat(child.staticClass, parent.staticClass),
     class: isDef(child.class) ? [child.class, parent.class] : parent.class
   };
 }
 function renderClass(staticClass, dynamicClass) {
   if (isDef(staticClass) || isDef(dynamicClass)) {
-    return concat$1(staticClass, stringifyClass(dynamicClass));
+    return concat(staticClass, stringifyClass(dynamicClass));
   }
   return "";
 }
-function concat$1(a, b) {
+function concat(a, b) {
   return a ? b ? a + " " + b : a : b || "";
 }
 function stringifyClass(value) {
   if (Array.isArray(value)) {
     return stringifyArray(value);
   }
-  if (isObject$9(value)) {
+  if (isObject(value)) {
     return stringifyObject(value);
   }
   if (typeof value === "string") {
@@ -3582,7 +3582,7 @@ function query(el) {
     return el;
   }
 }
-function createElement$2(tagName2, vnode) {
+function createElement(tagName2, vnode) {
   var elm = document.createElement(tagName2);
   if (tagName2 !== "select") {
     return elm;
@@ -3627,7 +3627,7 @@ function setStyleScope(node, scopeId) {
 }
 var nodeOps = /* @__PURE__ */ Object.freeze({
   __proto__: null,
-  createElement: createElement$2,
+  createElement,
   createElementNS,
   createTextNode,
   createComment,
@@ -3674,9 +3674,9 @@ function registerRef(vnode, isRemoval) {
     if (isFor) {
       var existing = _isString ? refs[ref2] : ref2.value;
       if (isRemoval) {
-        isArray$5(existing) && remove$2(existing, refValue);
+        isArray$1(existing) && remove$2(existing, refValue);
       } else {
-        if (!isArray$5(existing)) {
+        if (!isArray$1(existing)) {
           if (_isString) {
             refs[ref2] = [refValue];
             setSetupRef(vm, ref2, refs[ref2]);
@@ -3704,7 +3704,7 @@ function registerRef(vnode, isRemoval) {
 }
 function setSetupRef(_a, key, val) {
   var _setupState = _a._setupState;
-  if (_setupState && hasOwn$8(_setupState, key)) {
+  if (_setupState && hasOwn$1(_setupState, key)) {
     if (isRef(_setupState[key])) {
       _setupState[key].value = val;
     } else {
@@ -3773,14 +3773,14 @@ function createPatchFunction(backend) {
     if (createComponent2(vnode, insertedVnodeQueue, parentElm, refElm)) {
       return;
     }
-    var data2 = vnode.data;
+    var data = vnode.data;
     var children = vnode.children;
     var tag = vnode.tag;
     if (isDef(tag)) {
       vnode.elm = vnode.ns ? nodeOps2.createElementNS(vnode.ns, tag) : nodeOps2.createElement(tag, vnode);
       setScope(vnode);
       createChildren(vnode, children, insertedVnodeQueue);
-      if (isDef(data2)) {
+      if (isDef(data)) {
         invokeCreateHooks(vnode, insertedVnodeQueue);
       }
       insert(parentElm, vnode.elm, refElm);
@@ -3850,7 +3850,7 @@ function createPatchFunction(backend) {
     }
   }
   function createChildren(vnode, children, insertedVnodeQueue) {
-    if (isArray$5(children)) {
+    if (isArray$1(children)) {
       for (var i_1 = 0; i_1 < children.length; ++i_1) {
         createElm(children[i_1], insertedVnodeQueue, vnode.elm, null, true, children, i_1);
       }
@@ -3900,9 +3900,9 @@ function createPatchFunction(backend) {
   }
   function invokeDestroyHook(vnode) {
     var i2, j2;
-    var data2 = vnode.data;
-    if (isDef(data2)) {
-      if (isDef(i2 = data2.hook) && isDef(i2 = i2.destroy))
+    var data = vnode.data;
+    if (isDef(data)) {
+      if (isDef(i2 = data.hook) && isDef(i2 = i2.destroy))
         i2(vnode);
       for (i2 = 0; i2 < cbs.destroy.length; ++i2)
         cbs.destroy[i2](vnode);
@@ -4038,16 +4038,16 @@ function createPatchFunction(backend) {
       return;
     }
     var i2;
-    var data2 = vnode.data;
-    if (isDef(data2) && isDef(i2 = data2.hook) && isDef(i2 = i2.prepatch)) {
+    var data = vnode.data;
+    if (isDef(data) && isDef(i2 = data.hook) && isDef(i2 = i2.prepatch)) {
       i2(oldVnode, vnode);
     }
     var oldCh = oldVnode.children;
     var ch = vnode.children;
-    if (isDef(data2) && isPatchable(vnode)) {
+    if (isDef(data) && isPatchable(vnode)) {
       for (i2 = 0; i2 < cbs.update.length; ++i2)
         cbs.update[i2](oldVnode, vnode);
-      if (isDef(i2 = data2.hook) && isDef(i2 = i2.update))
+      if (isDef(i2 = data.hook) && isDef(i2 = i2.update))
         i2(oldVnode, vnode);
     }
     if (isUndef(vnode.text)) {
@@ -4066,8 +4066,8 @@ function createPatchFunction(backend) {
     } else if (oldVnode.text !== vnode.text) {
       nodeOps2.setTextContent(elm, vnode.text);
     }
-    if (isDef(data2)) {
-      if (isDef(i2 = data2.hook) && isDef(i2 = i2.postpatch))
+    if (isDef(data)) {
+      if (isDef(i2 = data.hook) && isDef(i2 = i2.postpatch))
         i2(oldVnode, vnode);
     }
   }
@@ -4083,15 +4083,15 @@ function createPatchFunction(backend) {
   var isRenderedModule = makeMap("attrs,class,staticClass,staticStyle,key");
   function hydrate(elm, vnode, insertedVnodeQueue, inVPre) {
     var i2;
-    var tag = vnode.tag, data2 = vnode.data, children = vnode.children;
-    inVPre = inVPre || data2 && data2.pre;
+    var tag = vnode.tag, data = vnode.data, children = vnode.children;
+    inVPre = inVPre || data && data.pre;
     vnode.elm = elm;
     if (isTrue(vnode.isComment) && isDef(vnode.asyncFactory)) {
       vnode.isAsyncPlaceholder = true;
       return true;
     }
-    if (isDef(data2)) {
-      if (isDef(i2 = data2.hook) && isDef(i2 = i2.init))
+    if (isDef(data)) {
+      if (isDef(i2 = data.hook) && isDef(i2 = i2.init))
         i2(vnode, true);
       if (isDef(i2 = vnode.componentInstance)) {
         initComponent(vnode, insertedVnodeQueue);
@@ -4103,7 +4103,7 @@ function createPatchFunction(backend) {
         if (!elm.hasChildNodes()) {
           createChildren(vnode, children, insertedVnodeQueue);
         } else {
-          if (isDef(i2 = data2) && isDef(i2 = i2.domProps) && isDef(i2 = i2.innerHTML)) {
+          if (isDef(i2 = data) && isDef(i2 = i2.domProps) && isDef(i2 = i2.innerHTML)) {
             if (i2 !== elm.innerHTML) {
               return false;
             }
@@ -4123,17 +4123,17 @@ function createPatchFunction(backend) {
           }
         }
       }
-      if (isDef(data2)) {
+      if (isDef(data)) {
         var fullInvoke = false;
-        for (var key in data2) {
+        for (var key in data) {
           if (!isRenderedModule(key)) {
             fullInvoke = true;
             invokeCreateHooks(vnode, insertedVnodeQueue);
             break;
           }
         }
-        if (!fullInvoke && data2["class"]) {
-          traverse(data2["class"]);
+        if (!fullInvoke && data["class"]) {
+          traverse(data["class"]);
         }
       }
     } else if (elm.data !== vnode.text) {
@@ -4389,15 +4389,15 @@ var attrs = {
 };
 function updateClass(oldVnode, vnode) {
   var el = vnode.elm;
-  var data2 = vnode.data;
+  var data = vnode.data;
   var oldData = oldVnode.data;
-  if (isUndef(data2.staticClass) && isUndef(data2.class) && (isUndef(oldData) || isUndef(oldData.staticClass) && isUndef(oldData.class))) {
+  if (isUndef(data.staticClass) && isUndef(data.class) && (isUndef(oldData) || isUndef(oldData.staticClass) && isUndef(oldData.class))) {
     return;
   }
   var cls = genClassForVnode(vnode);
   var transitionClass = el._transitionClasses;
   if (isDef(transitionClass)) {
-    cls = concat$1(cls, stringifyClass(transitionClass));
+    cls = concat(cls, stringifyClass(transitionClass));
   }
   if (cls !== el._prevClass) {
     el.setAttribute("class", cls);
@@ -4561,13 +4561,13 @@ var parseStyleText = cached(function(cssText) {
   });
   return res;
 });
-function normalizeStyleData(data2) {
-  var style2 = normalizeStyleBinding(data2.style);
-  return data2.staticStyle ? extend$1(data2.staticStyle, style2) : style2;
+function normalizeStyleData(data) {
+  var style2 = normalizeStyleBinding(data.style);
+  return data.staticStyle ? extend$1(data.staticStyle, style2) : style2;
 }
 function normalizeStyleBinding(bindingStyle) {
   if (Array.isArray(bindingStyle)) {
-    return toObject$3(bindingStyle);
+    return toObject(bindingStyle);
   }
   if (typeof bindingStyle === "string") {
     return parseStyleText(bindingStyle);
@@ -4605,7 +4605,7 @@ var setProp = function(el, name, val) {
   } else if (importantRE.test(val)) {
     el.style.setProperty(hyphenate(name), val.replace(importantRE, ""), "important");
   } else {
-    var normalizedName = normalize$3(name);
+    var normalizedName = normalize$2(name);
     if (Array.isArray(val)) {
       for (var i = 0, len = val.length; i < len; i++) {
         el.style[normalizedName] = val[i];
@@ -4617,7 +4617,7 @@ var setProp = function(el, name, val) {
 };
 var vendorNames = ["Webkit", "Moz", "ms"];
 var emptyStyle;
-var normalize$3 = cached(function(prop) {
+var normalize$2 = cached(function(prop) {
   emptyStyle = emptyStyle || document.createElement("div").style;
   prop = camelize(prop);
   if (prop !== "filter" && prop in emptyStyle) {
@@ -4632,9 +4632,9 @@ var normalize$3 = cached(function(prop) {
   }
 });
 function updateStyle(oldVnode, vnode) {
-  var data2 = vnode.data;
+  var data = vnode.data;
   var oldData = oldVnode.data;
-  if (isUndef(data2.staticStyle) && isUndef(data2.style) && isUndef(oldData.staticStyle) && isUndef(oldData.style)) {
+  if (isUndef(data.staticStyle) && isUndef(data.style) && isUndef(oldData.staticStyle) && isUndef(oldData.style)) {
     return;
   }
   var cur, name;
@@ -4851,14 +4851,14 @@ function enter(vnode, toggleDisplay) {
     el._leaveCb.cancelled = true;
     el._leaveCb();
   }
-  var data2 = resolveTransition(vnode.data.transition);
-  if (isUndef(data2)) {
+  var data = resolveTransition(vnode.data.transition);
+  if (isUndef(data)) {
     return;
   }
   if (isDef(el._enterCb) || el.nodeType !== 1) {
     return;
   }
-  var css = data2.css, type = data2.type, enterClass = data2.enterClass, enterToClass = data2.enterToClass, enterActiveClass = data2.enterActiveClass, appearClass = data2.appearClass, appearToClass = data2.appearToClass, appearActiveClass = data2.appearActiveClass, beforeEnter = data2.beforeEnter, enter2 = data2.enter, afterEnter = data2.afterEnter, enterCancelled = data2.enterCancelled, beforeAppear = data2.beforeAppear, appear = data2.appear, afterAppear = data2.afterAppear, appearCancelled = data2.appearCancelled, duration = data2.duration;
+  var css = data.css, type = data.type, enterClass = data.enterClass, enterToClass = data.enterToClass, enterActiveClass = data.enterActiveClass, appearClass = data.appearClass, appearToClass = data.appearToClass, appearActiveClass = data.appearActiveClass, beforeEnter = data.beforeEnter, enter2 = data.enter, afterEnter = data.afterEnter, enterCancelled = data.enterCancelled, beforeAppear = data.beforeAppear, appear = data.appear, afterAppear = data.afterAppear, appearCancelled = data.appearCancelled, duration = data.duration;
   var context = activeInstance;
   var transitionNode = activeInstance.$vnode;
   while (transitionNode && transitionNode.parent) {
@@ -4876,7 +4876,7 @@ function enter(vnode, toggleDisplay) {
   var enterHook = isAppear ? isFunction(appear) ? appear : enter2 : enter2;
   var afterEnterHook = isAppear ? afterAppear || afterEnter : afterEnter;
   var enterCancelledHook = isAppear ? appearCancelled || enterCancelled : enterCancelled;
-  var explicitEnterDuration = toNumber(isObject$9(duration) ? duration.enter : duration);
+  var explicitEnterDuration = toNumber(isObject(duration) ? duration.enter : duration);
   var expectsCSS = css !== false && !isIE9;
   var userWantsControl = getHookArgumentsLength(enterHook);
   var cb = el._enterCb = once(function() {
@@ -4936,17 +4936,17 @@ function leave(vnode, rm) {
     el._enterCb.cancelled = true;
     el._enterCb();
   }
-  var data2 = resolveTransition(vnode.data.transition);
-  if (isUndef(data2) || el.nodeType !== 1) {
+  var data = resolveTransition(vnode.data.transition);
+  if (isUndef(data) || el.nodeType !== 1) {
     return rm();
   }
   if (isDef(el._leaveCb)) {
     return;
   }
-  var css = data2.css, type = data2.type, leaveClass = data2.leaveClass, leaveToClass = data2.leaveToClass, leaveActiveClass = data2.leaveActiveClass, beforeLeave = data2.beforeLeave, leave2 = data2.leave, afterLeave = data2.afterLeave, leaveCancelled = data2.leaveCancelled, delayLeave = data2.delayLeave, duration = data2.duration;
+  var css = data.css, type = data.type, leaveClass = data.leaveClass, leaveToClass = data.leaveToClass, leaveActiveClass = data.leaveActiveClass, beforeLeave = data.beforeLeave, leave2 = data.leave, afterLeave = data.afterLeave, leaveCancelled = data.leaveCancelled, delayLeave = data.delayLeave, duration = data.duration;
   var expectsCSS = css !== false && !isIE9;
   var userWantsControl = getHookArgumentsLength(leave2);
-  var explicitLeaveDuration = toNumber(isObject$9(duration) ? duration.leave : duration);
+  var explicitLeaveDuration = toNumber(isObject(duration) ? duration.leave : duration);
   var cb = el._leaveCb = once(function() {
     if (el.parentNode && el.parentNode._pending) {
       el.parentNode._pending[vnode.key] = null;
@@ -5216,16 +5216,16 @@ function getRealChild(vnode) {
   }
 }
 function extractTransitionData(comp) {
-  var data2 = {};
+  var data = {};
   var options = comp.$options;
   for (var key in options.propsData) {
-    data2[key] = comp[key];
+    data[key] = comp[key];
   }
   var listeners = options._parentListeners;
   for (var key in listeners) {
-    data2[camelize(key)] = listeners[key];
+    data[camelize(key)] = listeners[key];
   }
-  return data2;
+  return data;
 }
 function placeholder(h, rawChild) {
   if (/\d-keep-alive$/.test(rawChild.tag)) {
@@ -5276,16 +5276,16 @@ var Transition = {
     if (this._leaving) {
       return placeholder(h, rawChild);
     }
-    var id2 = "__transition-".concat(this._uid, "-");
-    child.key = child.key == null ? child.isComment ? id2 + "comment" : id2 + child.tag : isPrimitive(child.key) ? String(child.key).indexOf(id2) === 0 ? child.key : id2 + child.key : child.key;
-    var data2 = (child.data || (child.data = {})).transition = extractTransitionData(this);
+    var id = "__transition-".concat(this._uid, "-");
+    child.key = child.key == null ? child.isComment ? id + "comment" : id + child.tag : isPrimitive(child.key) ? String(child.key).indexOf(id) === 0 ? child.key : id + child.key : child.key;
+    var data = (child.data || (child.data = {})).transition = extractTransitionData(this);
     var oldRawChild = this._vnode;
     var oldChild = getRealChild(oldRawChild);
     if (child.data.directives && child.data.directives.some(isVShowDirective)) {
       child.data.show = true;
     }
     if (oldChild && oldChild.data && !isSameChild(child, oldChild) && !isAsyncPlaceholder(oldChild) && !(oldChild.componentInstance && oldChild.componentInstance._vnode.isComment)) {
-      var oldData = oldChild.data.transition = extend$1({}, data2);
+      var oldData = oldChild.data.transition = extend$1({}, data);
       if (mode === "out-in") {
         this._leaving = true;
         mergeVNodeHook(oldData, "afterLeave", function() {
@@ -5301,8 +5301,8 @@ var Transition = {
         var performLeave = function() {
           delayedLeave_1();
         };
-        mergeVNodeHook(data2, "afterEnter", performLeave);
-        mergeVNodeHook(data2, "enterCancelled", performLeave);
+        mergeVNodeHook(data, "afterEnter", performLeave);
+        mergeVNodeHook(data, "enterCancelled", performLeave);
         mergeVNodeHook(oldData, "delayLeave", function(leave2) {
           delayedLeave_1 = leave2;
         });
@@ -5455,7 +5455,7 @@ Vue.config.getTagNamespace = getTagNamespace;
 Vue.config.isUnknownElement = isUnknownElement;
 extend$1(Vue.options.directives, platformDirectives);
 extend$1(Vue.options.components, platformComponents);
-Vue.prototype.__patch__ = inBrowser ? patch : noop$1;
+Vue.prototype.__patch__ = inBrowser ? patch : noop;
 Vue.prototype.$mount = function(el, hydrating) {
   el = el && inBrowser ? query(el) : void 0;
   return mountComponent(this, el, hydrating);
@@ -5518,7 +5518,6 @@ function bail(error) {
     throw error;
   }
 }
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 /*!
  * Determine if an object is a Buffer
  *
@@ -5528,11 +5527,11 @@ var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof win
 var isBuffer$1 = function isBuffer2(obj) {
   return obj != null && obj.constructor != null && typeof obj.constructor.isBuffer === "function" && obj.constructor.isBuffer(obj);
 };
-var hasOwn$7 = Object.prototype.hasOwnProperty;
+var hasOwn = Object.prototype.hasOwnProperty;
 var toStr = Object.prototype.toString;
-var defineProperty$2 = Object.defineProperty;
+var defineProperty = Object.defineProperty;
 var gOPD = Object.getOwnPropertyDescriptor;
-var isArray$4 = function isArray2(arr) {
+var isArray = function isArray2(arr) {
   if (typeof Array.isArray === "function") {
     return Array.isArray(arr);
   }
@@ -5542,19 +5541,19 @@ var isPlainObject$1 = function isPlainObject2(obj) {
   if (!obj || toStr.call(obj) !== "[object Object]") {
     return false;
   }
-  var hasOwnConstructor = hasOwn$7.call(obj, "constructor");
-  var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && hasOwn$7.call(obj.constructor.prototype, "isPrototypeOf");
+  var hasOwnConstructor = hasOwn.call(obj, "constructor");
+  var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, "isPrototypeOf");
   if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
     return false;
   }
   var key;
   for (key in obj) {
   }
-  return typeof key === "undefined" || hasOwn$7.call(obj, key);
+  return typeof key === "undefined" || hasOwn.call(obj, key);
 };
 var setProperty = function setProperty2(target2, options) {
-  if (defineProperty$2 && options.name === "__proto__") {
-    defineProperty$2(target2, options.name, {
+  if (defineProperty && options.name === "__proto__") {
+    defineProperty(target2, options.name, {
       enumerable: true,
       configurable: true,
       value: options.newValue,
@@ -5566,7 +5565,7 @@ var setProperty = function setProperty2(target2, options) {
 };
 var getProperty = function getProperty2(obj, name) {
   if (name === "__proto__") {
-    if (!hasOwn$7.call(obj, name)) {
+    if (!hasOwn.call(obj, name)) {
       return void 0;
     } else if (gOPD) {
       return gOPD(obj, name).value;
@@ -5595,10 +5594,10 @@ var extend = function extend2() {
         src = getProperty(target2, name);
         copy = getProperty(options, name);
         if (target2 !== copy) {
-          if (deep && copy && (isPlainObject$1(copy) || (copyIsArray = isArray$4(copy)))) {
+          if (deep && copy && (isPlainObject$1(copy) || (copyIsArray = isArray(copy)))) {
             if (copyIsArray) {
               copyIsArray = false;
-              clone = src && isArray$4(src) ? src : [];
+              clone = src && isArray(src) ? src : [];
             } else {
               clone = src && isPlainObject$1(src) ? src : {};
             }
@@ -5915,9 +5914,9 @@ function join(...segments) {
       joined = joined === void 0 ? segments[index2] : joined + "/" + segments[index2];
     }
   }
-  return joined === void 0 ? "." : normalize$2(joined);
+  return joined === void 0 ? "." : normalize$1(joined);
 }
-function normalize$2(path2) {
+function normalize$1(path2) {
   assertPath$1(path2);
   const absolute = path2.charCodeAt(0) === 47;
   let value = normalizeString(path2, !absolute);
@@ -6183,7 +6182,7 @@ function base() {
   let namespace = {};
   let frozen;
   let freezeIndex = -1;
-  processor.data = data2;
+  processor.data = data;
   processor.Parser = void 0;
   processor.Compiler = void 0;
   processor.freeze = freeze;
@@ -6193,7 +6192,7 @@ function base() {
   processor.stringify = stringify2;
   processor.run = run;
   processor.runSync = runSync;
-  processor.process = process2;
+  processor.process = process;
   processor.processSync = processSync;
   return processor;
   function processor() {
@@ -6205,7 +6204,7 @@ function base() {
     destination.data(extend(true, {}, namespace));
     return destination;
   }
-  function data2(key, value) {
+  function data(key, value) {
     if (typeof key === "string") {
       if (arguments.length === 2) {
         assertUnfrozen("data", frozen);
@@ -6372,7 +6371,7 @@ function base() {
       complete = true;
     }
   }
-  function process2(doc, callback) {
+  function process(doc, callback) {
     processor.freeze();
     assertParser("process", processor.Parser);
     assertCompiler("process", processor.Compiler);
@@ -6424,9 +6423,9 @@ function base() {
   }
 }
 function newable(value, name) {
-  return typeof value === "function" && value.prototype && (keys$1(value.prototype) || name in value.prototype);
+  return typeof value === "function" && value.prototype && (keys(value.prototype) || name in value.prototype);
 }
-function keys$1(value) {
+function keys(value) {
   let key;
   for (key in value) {
     if (own$7.call(value, key)) {
@@ -6475,7 +6474,7 @@ function looksLikeAVFile(value) {
 function looksLikeAVFileValue(value) {
   return typeof value === "string" || isBuffer$1(value);
 }
-function toString$2(node, options) {
+function toString(node, options) {
   var { includeImageAlt = true } = options || {};
   return one$1(node, includeImageAlt);
 }
@@ -6516,14 +6515,14 @@ function splice(list2, start, remove2, items) {
     }
   }
 }
-function push$1(list2, items) {
+function push(list2, items) {
   if (list2.length > 0) {
     splice(list2, list2.length, 0, items);
     return list2;
   }
   return items;
 }
-const hasOwnProperty$2 = {}.hasOwnProperty;
+const hasOwnProperty$1 = {}.hasOwnProperty;
 function combineExtensions(extensions) {
   const all2 = {};
   let index2 = -1;
@@ -6535,12 +6534,12 @@ function combineExtensions(extensions) {
 function syntaxExtension(all2, extension2) {
   let hook;
   for (hook in extension2) {
-    const maybe = hasOwnProperty$2.call(all2, hook) ? all2[hook] : void 0;
+    const maybe = hasOwnProperty$1.call(all2, hook) ? all2[hook] : void 0;
     const left = maybe || (all2[hook] = {});
     const right = extension2[hook];
     let code2;
     for (code2 in right) {
-      if (!hasOwnProperty$2.call(left, code2))
+      if (!hasOwnProperty$1.call(left, code2))
         left[code2] = [];
       const value = right[code2];
       constructs(
@@ -6580,13 +6579,13 @@ function markdownSpace(code2) {
 const unicodeWhitespace = regexCheck(/\s/);
 const unicodePunctuation = regexCheck(unicodePunctuationRegex);
 function regexCheck(regex) {
-  return check2;
-  function check2(code2) {
+  return check;
+  function check(code2) {
     return code2 !== null && regex.test(String.fromCharCode(code2));
   }
 }
-function factorySpace(effects, ok2, type, max2) {
-  const limit = max2 ? max2 - 1 : Number.POSITIVE_INFINITY;
+function factorySpace(effects, ok2, type, max) {
+  const limit = max ? max - 1 : Number.POSITIVE_INFINITY;
   let size = 0;
   return start;
   function start(code2) {
@@ -6639,9 +6638,9 @@ function initializeContent(effects) {
       previous2.next = token;
     }
     previous2 = token;
-    return data2(code2);
+    return data(code2);
   }
-  function data2(code2) {
+  function data(code2) {
     if (code2 === null) {
       effects.exit("chunkText");
       effects.exit("paragraph");
@@ -6654,17 +6653,17 @@ function initializeContent(effects) {
       return lineStart;
     }
     effects.consume(code2);
-    return data2;
+    return data;
   }
 }
-const document$3 = {
+const document$2 = {
   tokenize: initializeDocument
 };
 const containerConstruct = {
   tokenize: tokenizeContainer
 };
 function initializeDocument(effects) {
-  const self2 = this;
+  const self = this;
   const stack = [];
   let continued = 0;
   let childFlow;
@@ -6674,7 +6673,7 @@ function initializeDocument(effects) {
   function start(code2) {
     if (continued < stack.length) {
       const item = stack[continued];
-      self2.containerState = item[1];
+      self.containerState = item[1];
       return effects.attempt(
         item[0].continuation,
         documentContinue,
@@ -6685,33 +6684,33 @@ function initializeDocument(effects) {
   }
   function documentContinue(code2) {
     continued++;
-    if (self2.containerState._closeFlow) {
-      self2.containerState._closeFlow = void 0;
+    if (self.containerState._closeFlow) {
+      self.containerState._closeFlow = void 0;
       if (childFlow) {
         closeFlow();
       }
-      const indexBeforeExits = self2.events.length;
+      const indexBeforeExits = self.events.length;
       let indexBeforeFlow = indexBeforeExits;
       let point2;
       while (indexBeforeFlow--) {
-        if (self2.events[indexBeforeFlow][0] === "exit" && self2.events[indexBeforeFlow][1].type === "chunkFlow") {
-          point2 = self2.events[indexBeforeFlow][1].end;
+        if (self.events[indexBeforeFlow][0] === "exit" && self.events[indexBeforeFlow][1].type === "chunkFlow") {
+          point2 = self.events[indexBeforeFlow][1].end;
           break;
         }
       }
       exitContainers(continued);
       let index2 = indexBeforeExits;
-      while (index2 < self2.events.length) {
-        self2.events[index2][1].end = Object.assign({}, point2);
+      while (index2 < self.events.length) {
+        self.events[index2][1].end = Object.assign({}, point2);
         index2++;
       }
       splice(
-        self2.events,
+        self.events,
         indexBeforeFlow + 1,
         0,
-        self2.events.slice(indexBeforeExits)
+        self.events.slice(indexBeforeExits)
       );
-      self2.events.length = index2;
+      self.events.length = index2;
       return checkNewContainers(code2);
     }
     return start(code2);
@@ -6724,11 +6723,11 @@ function initializeDocument(effects) {
       if (childFlow.currentConstruct && childFlow.currentConstruct.concrete) {
         return flowStart(code2);
       }
-      self2.interrupt = Boolean(
+      self.interrupt = Boolean(
         childFlow.currentConstruct && !childFlow._gfmTableDynamicInterruptHack
       );
     }
-    self2.containerState = {};
+    self.containerState = {};
     return effects.check(
       containerConstruct,
       thereIsANewContainer,
@@ -6742,12 +6741,12 @@ function initializeDocument(effects) {
     return documentContinued(code2);
   }
   function thereIsNoNewContainer(code2) {
-    self2.parser.lazy[self2.now().line] = continued !== stack.length;
-    lineStartOffset = self2.now().offset;
+    self.parser.lazy[self.now().line] = continued !== stack.length;
+    lineStartOffset = self.now().offset;
     return flowStart(code2);
   }
   function documentContinued(code2) {
-    self2.containerState = {};
+    self.containerState = {};
     return effects.attempt(
       containerConstruct,
       containerContinue,
@@ -6756,7 +6755,7 @@ function initializeDocument(effects) {
   }
   function containerContinue(code2) {
     continued++;
-    stack.push([self2.currentConstruct, self2.containerState]);
+    stack.push([self.currentConstruct, self.containerState]);
     return documentContinued(code2);
   }
   function flowStart(code2) {
@@ -6767,7 +6766,7 @@ function initializeDocument(effects) {
       effects.consume(code2);
       return;
     }
-    childFlow = childFlow || self2.parser.flow(self2.now());
+    childFlow = childFlow || self.parser.flow(self.now());
     effects.enter("chunkFlow", {
       contentType: "flow",
       previous: childToken,
@@ -6786,14 +6785,14 @@ function initializeDocument(effects) {
       effects.consume(code2);
       writeToChild(effects.exit("chunkFlow"));
       continued = 0;
-      self2.interrupt = void 0;
+      self.interrupt = void 0;
       return start;
     }
     effects.consume(code2);
     return flowContinue;
   }
   function writeToChild(token, eof) {
-    const stream = self2.sliceStream(token);
+    const stream = self.sliceStream(token);
     if (eof)
       stream.push(null);
     token.previous = childToken;
@@ -6802,21 +6801,21 @@ function initializeDocument(effects) {
     childToken = token;
     childFlow.defineSkip(token.start);
     childFlow.write(stream);
-    if (self2.parser.lazy[token.start.line]) {
+    if (self.parser.lazy[token.start.line]) {
       let index2 = childFlow.events.length;
       while (index2--) {
         if (childFlow.events[index2][1].start.offset < lineStartOffset && (!childFlow.events[index2][1].end || childFlow.events[index2][1].end.offset > lineStartOffset)) {
           return;
         }
       }
-      const indexBeforeExits = self2.events.length;
+      const indexBeforeExits = self.events.length;
       let indexBeforeFlow = indexBeforeExits;
       let seen;
       let point2;
       while (indexBeforeFlow--) {
-        if (self2.events[indexBeforeFlow][0] === "exit" && self2.events[indexBeforeFlow][1].type === "chunkFlow") {
+        if (self.events[indexBeforeFlow][0] === "exit" && self.events[indexBeforeFlow][1].type === "chunkFlow") {
           if (seen) {
-            point2 = self2.events[indexBeforeFlow][1].end;
+            point2 = self.events[indexBeforeFlow][1].end;
             break;
           }
           seen = true;
@@ -6824,25 +6823,25 @@ function initializeDocument(effects) {
       }
       exitContainers(continued);
       index2 = indexBeforeExits;
-      while (index2 < self2.events.length) {
-        self2.events[index2][1].end = Object.assign({}, point2);
+      while (index2 < self.events.length) {
+        self.events[index2][1].end = Object.assign({}, point2);
         index2++;
       }
       splice(
-        self2.events,
+        self.events,
         indexBeforeFlow + 1,
         0,
-        self2.events.slice(indexBeforeExits)
+        self.events.slice(indexBeforeExits)
       );
-      self2.events.length = index2;
+      self.events.length = index2;
     }
   }
   function exitContainers(size) {
     let index2 = stack.length;
     while (index2-- > size) {
       const entry = stack[index2];
-      self2.containerState = entry[1];
-      entry[0].exit.call(self2, effects);
+      self.containerState = entry[1];
+      entry[0].exit.call(self, effects);
     }
     stack.length = size;
   }
@@ -6850,7 +6849,7 @@ function initializeDocument(effects) {
     childFlow.write([null]);
     childToken = void 0;
     childFlow = void 0;
-    self2.containerState._closeFlow = void 0;
+    self.containerState._closeFlow = void 0;
   }
 }
 function tokenizeContainer(effects, ok2, nok) {
@@ -6933,18 +6932,18 @@ function resolveAllAttention(events2, context) {
           events2[index2][1].start = Object.assign({}, closingSequence.end);
           nextEvents = [];
           if (events2[open][1].end.offset - events2[open][1].start.offset) {
-            nextEvents = push$1(nextEvents, [
+            nextEvents = push(nextEvents, [
               ["enter", events2[open][1], context],
               ["exit", events2[open][1], context]
             ]);
           }
-          nextEvents = push$1(nextEvents, [
+          nextEvents = push(nextEvents, [
             ["enter", group, context],
             ["enter", openingSequence, context],
             ["exit", openingSequence, context],
             ["enter", text2, context]
           ]);
-          nextEvents = push$1(
+          nextEvents = push(
             nextEvents,
             resolveAll(
               context.parser.constructs.insideSpan.null,
@@ -6952,7 +6951,7 @@ function resolveAllAttention(events2, context) {
               context
             )
           );
-          nextEvents = push$1(nextEvents, [
+          nextEvents = push(nextEvents, [
             ["exit", text2, context],
             ["enter", closingSequence, context],
             ["exit", closingSequence, context],
@@ -6960,7 +6959,7 @@ function resolveAllAttention(events2, context) {
           ]);
           if (events2[index2][1].end.offset - events2[index2][1].start.offset) {
             offset = 2;
-            nextEvents = push$1(nextEvents, [
+            nextEvents = push(nextEvents, [
               ["enter", events2[index2][1], context],
               ["exit", events2[index2][1], context]
             ]);
@@ -7120,11 +7119,11 @@ const blockQuote = {
   exit
 };
 function tokenizeBlockQuoteStart(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   return start;
   function start(code2) {
     if (code2 === 62) {
-      const state = self2.containerState;
+      const state = self.containerState;
       if (!state.open) {
         effects.enter("blockQuote", {
           _container: true
@@ -7201,10 +7200,10 @@ const characterReference = {
   tokenize: tokenizeCharacterReference
 };
 function tokenizeCharacterReference(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   let size = 0;
-  let max2;
-  let test2;
+  let max;
+  let test;
   return start;
   function start(code2) {
     effects.enter("characterReference");
@@ -7221,8 +7220,8 @@ function tokenizeCharacterReference(effects, ok2, nok) {
       return numeric;
     }
     effects.enter("characterReferenceValue");
-    max2 = 31;
-    test2 = asciiAlphanumeric;
+    max = 31;
+    test = asciiAlphanumeric;
     return value(code2);
   }
   function numeric(code2) {
@@ -7231,20 +7230,20 @@ function tokenizeCharacterReference(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("characterReferenceMarkerHexadecimal");
       effects.enter("characterReferenceValue");
-      max2 = 6;
-      test2 = asciiHexDigit;
+      max = 6;
+      test = asciiHexDigit;
       return value;
     }
     effects.enter("characterReferenceValue");
-    max2 = 7;
-    test2 = asciiDigit;
+    max = 7;
+    test = asciiDigit;
     return value(code2);
   }
   function value(code2) {
     let token;
     if (code2 === 59 && size) {
       token = effects.exit("characterReferenceValue");
-      if (test2 === asciiAlphanumeric && !decodeNamedCharacterReference(self2.sliceSerialize(token))) {
+      if (test === asciiAlphanumeric && !decodeNamedCharacterReference(self.sliceSerialize(token))) {
         return nok(code2);
       }
       effects.enter("characterReferenceMarker");
@@ -7253,7 +7252,7 @@ function tokenizeCharacterReference(effects, ok2, nok) {
       effects.exit("characterReference");
       return ok2;
     }
-    if (test2(code2) && size++ < max2) {
+    if (test(code2) && size++ < max) {
       effects.consume(code2);
       return value;
     }
@@ -7266,7 +7265,7 @@ const codeFenced = {
   concrete: true
 };
 function tokenizeCodeFenced(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   const closingFenceConstruct = {
     tokenize: tokenizeClosingFence,
     partial: true
@@ -7340,7 +7339,7 @@ function tokenizeCodeFenced(effects, ok2, nok) {
   }
   function openAfter(code2) {
     effects.exit("codeFencedFence");
-    return self2.interrupt ? ok2(code2) : contentStart(code2);
+    return self.interrupt ? ok2(code2) : contentStart(code2);
   }
   function contentStart(code2) {
     if (code2 === null) {
@@ -7378,7 +7377,7 @@ function tokenizeCodeFenced(effects, ok2, nok) {
     return ok2(code2);
   }
   function tokenizeNonLazyLine(effects2, ok3, nok2) {
-    const self3 = this;
+    const self2 = this;
     return start2;
     function start2(code2) {
       effects2.enter("lineEnding");
@@ -7387,7 +7386,7 @@ function tokenizeCodeFenced(effects, ok2, nok) {
       return lineStart;
     }
     function lineStart(code2) {
-      return self3.parser.lazy[self3.now().line] ? nok2(code2) : ok3(code2);
+      return self2.parser.lazy[self2.now().line] ? nok2(code2) : ok3(code2);
     }
   }
   function tokenizeClosingFence(effects2, ok3, nok2) {
@@ -7432,14 +7431,14 @@ const indentedContent = {
   partial: true
 };
 function tokenizeCodeIndented(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   return start;
   function start(code2) {
     effects.enter("codeIndented");
     return factorySpace(effects, afterStartPrefix, "linePrefix", 4 + 1)(code2);
   }
   function afterStartPrefix(code2) {
-    const tail = self2.events[self2.events.length - 1];
+    const tail = self.events[self.events.length - 1];
     return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? afterPrefix(code2) : nok(code2);
   }
   function afterPrefix(code2) {
@@ -7466,10 +7465,10 @@ function tokenizeCodeIndented(effects, ok2, nok) {
   }
 }
 function tokenizeIndentedContent(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   return start;
   function start(code2) {
-    if (self2.parser.lazy[self2.now().line]) {
+    if (self.parser.lazy[self.now().line]) {
       return nok(code2);
     }
     if (markdownLineEnding(code2)) {
@@ -7481,7 +7480,7 @@ function tokenizeIndentedContent(effects, ok2, nok) {
     return factorySpace(effects, afterPrefix, "linePrefix", 4 + 1)(code2);
   }
   function afterPrefix(code2) {
-    const tail = self2.events[self2.events.length - 1];
+    const tail = self.events[self.events.length - 1];
     return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? ok2(code2) : markdownLineEnding(code2) ? start(code2) : nok(code2);
   }
 }
@@ -7572,15 +7571,15 @@ function tokenizeCodeText(effects, ok2, nok) {
       return gap;
     }
     effects.enter("codeTextData");
-    return data2(code2);
+    return data(code2);
   }
-  function data2(code2) {
+  function data(code2) {
     if (code2 === null || code2 === 32 || code2 === 96 || markdownLineEnding(code2)) {
       effects.exit("codeTextData");
       return gap(code2);
     }
     effects.consume(code2);
-    return data2;
+    return data;
   }
   function closingSequence(code2) {
     if (code2 === 96) {
@@ -7594,7 +7593,7 @@ function tokenizeCodeText(effects, ok2, nok) {
       return ok2(code2);
     }
     token.type = "codeTextData";
-    return data2(code2);
+    return data(code2);
   }
 }
 function subtokenize(events2) {
@@ -7721,10 +7720,10 @@ function subcontent(events2, eventIndex) {
   }
   index2 = breaks.length;
   while (index2--) {
-    const slice2 = childEvents.slice(breaks[index2], breaks[index2 + 1]);
+    const slice = childEvents.slice(breaks[index2], breaks[index2 + 1]);
     const start2 = startPositions.pop();
-    jumps.unshift([start2, start2 + slice2.length - 1]);
-    splice(events2, start2, 2, slice2);
+    jumps.unshift([start2, start2 + slice.length - 1]);
+    splice(events2, start2, 2, slice);
   }
   index2 = -1;
   while (++index2 < jumps.length) {
@@ -7753,9 +7752,9 @@ function tokenizeContent(effects, ok2) {
     previous2 = effects.enter("chunkContent", {
       contentType: "content"
     });
-    return data2(code2);
+    return data(code2);
   }
-  function data2(code2) {
+  function data(code2) {
     if (code2 === null) {
       return contentEnd(code2);
     }
@@ -7767,7 +7766,7 @@ function tokenizeContent(effects, ok2) {
       )(code2);
     }
     effects.consume(code2);
-    return data2;
+    return data;
   }
   function contentEnd(code2) {
     effects.exit("chunkContent");
@@ -7782,11 +7781,11 @@ function tokenizeContent(effects, ok2) {
       previous: previous2
     });
     previous2 = previous2.next;
-    return data2;
+    return data;
   }
 }
 function tokenizeContinuation(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   return startLookahead;
   function startLookahead(code2) {
     effects.exit("chunkContent");
@@ -7799,15 +7798,15 @@ function tokenizeContinuation(effects, ok2, nok) {
     if (code2 === null || markdownLineEnding(code2)) {
       return nok(code2);
     }
-    const tail = self2.events[self2.events.length - 1];
-    if (!self2.parser.constructs.disable.null.includes("codeIndented") && tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4) {
+    const tail = self.events[self.events.length - 1];
+    if (!self.parser.constructs.disable.null.includes("codeIndented") && tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4) {
       return ok2(code2);
     }
-    return effects.interrupt(self2.parser.constructs.flow, nok, ok2)(code2);
+    return effects.interrupt(self.parser.constructs.flow, nok, ok2)(code2);
   }
 }
-function factoryDestination(effects, ok2, nok, type, literalType, literalMarkerType, rawType, stringType, max2) {
-  const limit = max2 || Number.POSITIVE_INFINITY;
+function factoryDestination(effects, ok2, nok, type, literalType, literalMarkerType, rawType, stringType, max) {
+  const limit = max || Number.POSITIVE_INFINITY;
   let balance = 0;
   return start;
   function start(code2) {
@@ -7905,9 +7904,9 @@ function factoryDestination(effects, ok2, nok, type, literalType, literalMarkerT
   }
 }
 function factoryLabel(effects, ok2, nok, type, markerType, stringType) {
-  const self2 = this;
+  const self = this;
   let size = 0;
-  let data2;
+  let data;
   return start;
   function start(code2) {
     effects.enter(type);
@@ -7918,7 +7917,7 @@ function factoryLabel(effects, ok2, nok, type, markerType, stringType) {
     return atBreak;
   }
   function atBreak(code2) {
-    if (code2 === null || code2 === 91 || code2 === 93 && !data2 || code2 === 94 && !size && "_hiddenFootnoteSupport" in self2.parser.constructs || size > 999) {
+    if (code2 === null || code2 === 91 || code2 === 93 && !data || code2 === 94 && !size && "_hiddenFootnoteSupport" in self.parser.constructs || size > 999) {
       return nok(code2);
     }
     if (code2 === 93) {
@@ -7946,7 +7945,7 @@ function factoryLabel(effects, ok2, nok, type, markerType, stringType) {
       return atBreak(code2);
     }
     effects.consume(code2);
-    data2 = data2 || !markdownSpace(code2);
+    data = data || !markdownSpace(code2);
     return code2 === 92 ? labelEscape : label;
   }
   function labelEscape(code2) {
@@ -8048,13 +8047,13 @@ const titleConstruct = {
   partial: true
 };
 function tokenizeDefinition(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   let identifier;
   return start;
   function start(code2) {
     effects.enter("definition");
     return factoryLabel.call(
-      self2,
+      self,
       effects,
       labelAfter,
       nok,
@@ -8065,7 +8064,7 @@ function tokenizeDefinition(effects, ok2, nok) {
   }
   function labelAfter(code2) {
     identifier = normalizeIdentifier(
-      self2.sliceSerialize(self2.events[self2.events.length - 1][1]).slice(1, -1)
+      self.sliceSerialize(self.events[self.events.length - 1][1]).slice(1, -1)
     );
     if (code2 === 58) {
       effects.enter("definitionMarker");
@@ -8094,8 +8093,8 @@ function tokenizeDefinition(effects, ok2, nok) {
   function after(code2) {
     if (code2 === null || markdownLineEnding(code2)) {
       effects.exit("definition");
-      if (!self2.parser.defined.includes(identifier)) {
-        self2.parser.defined.push(identifier);
+      if (!self.parser.defined.includes(identifier)) {
+        self.parser.defined.push(identifier);
       }
       return ok2(code2);
     }
@@ -8186,7 +8185,7 @@ function resolveHeadingAtx(events2, context) {
   return events2;
 }
 function tokenizeHeadingAtx(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   let size = 0;
   return start;
   function start(code2) {
@@ -8201,7 +8200,7 @@ function tokenizeHeadingAtx(effects, ok2, nok) {
     }
     if (code2 === null || markdownLineEndingOrSpace(code2)) {
       effects.exit("atxHeadingSequence");
-      return self2.interrupt ? ok2(code2) : headingBreak(code2);
+      return self.interrupt ? ok2(code2) : headingBreak(code2);
     }
     return nok(code2);
   }
@@ -8218,7 +8217,7 @@ function tokenizeHeadingAtx(effects, ok2, nok) {
       return factorySpace(effects, headingBreak, "whitespace")(code2);
     }
     effects.enter("atxHeadingText");
-    return data2(code2);
+    return data(code2);
   }
   function sequence(code2) {
     if (code2 === 35) {
@@ -8228,13 +8227,13 @@ function tokenizeHeadingAtx(effects, ok2, nok) {
     effects.exit("atxHeadingSequence");
     return headingBreak(code2);
   }
-  function data2(code2) {
+  function data(code2) {
     if (code2 === null || code2 === 35 || markdownLineEndingOrSpace(code2)) {
       effects.exit("atxHeadingText");
       return headingBreak(code2);
     }
     effects.consume(code2);
-    return data2;
+    return data;
   }
 }
 const htmlBlockNames = [
@@ -8326,7 +8325,7 @@ function resolveToHtmlFlow(events2) {
   return events2;
 }
 function tokenizeHtmlFlow(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   let kind;
   let startTag;
   let buffer;
@@ -8351,7 +8350,7 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
     if (code2 === 63) {
       effects.consume(code2);
       kind = 3;
-      return self2.interrupt ? ok2 : continuationDeclarationInside;
+      return self.interrupt ? ok2 : continuationDeclarationInside;
     }
     if (asciiAlpha(code2)) {
       effects.consume(code2);
@@ -8377,21 +8376,21 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
     if (asciiAlpha(code2)) {
       effects.consume(code2);
       kind = 4;
-      return self2.interrupt ? ok2 : continuationDeclarationInside;
+      return self.interrupt ? ok2 : continuationDeclarationInside;
     }
     return nok(code2);
   }
   function commentOpenInside(code2) {
     if (code2 === 45) {
       effects.consume(code2);
-      return self2.interrupt ? ok2 : continuationDeclarationInside;
+      return self.interrupt ? ok2 : continuationDeclarationInside;
     }
     return nok(code2);
   }
   function cdataOpenInside(code2) {
     if (code2 === buffer.charCodeAt(index2++)) {
       effects.consume(code2);
-      return index2 === buffer.length ? self2.interrupt ? ok2 : continuation : cdataOpenInside;
+      return index2 === buffer.length ? self.interrupt ? ok2 : continuation : cdataOpenInside;
     }
     return nok(code2);
   }
@@ -8407,7 +8406,7 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
     if (code2 === null || code2 === 47 || code2 === 62 || markdownLineEndingOrSpace(code2)) {
       if (code2 !== 47 && startTag && htmlRawNames.includes(buffer.toLowerCase())) {
         kind = 1;
-        return self2.interrupt ? ok2(code2) : continuation(code2);
+        return self.interrupt ? ok2(code2) : continuation(code2);
       }
       if (htmlBlockNames.includes(buffer.toLowerCase())) {
         kind = 6;
@@ -8415,10 +8414,10 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
           effects.consume(code2);
           return basicSelfClosing;
         }
-        return self2.interrupt ? ok2(code2) : continuation(code2);
+        return self.interrupt ? ok2(code2) : continuation(code2);
       }
       kind = 7;
-      return self2.interrupt && !self2.parser.lazy[self2.now().line] ? nok(code2) : startTag ? completeAttributeNameBefore(code2) : completeClosingTagAfter(code2);
+      return self.interrupt && !self.parser.lazy[self.now().line] ? nok(code2) : startTag ? completeAttributeNameBefore(code2) : completeClosingTagAfter(code2);
     }
     if (code2 === 45 || asciiAlphanumeric(code2)) {
       effects.consume(code2);
@@ -8430,7 +8429,7 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
   function basicSelfClosing(code2) {
     if (code2 === 62) {
       effects.consume(code2);
-      return self2.interrupt ? ok2 : continuation;
+      return self.interrupt ? ok2 : continuation;
     }
     return nok(code2);
   }
@@ -8592,7 +8591,7 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
       return lineStart;
     }
     function lineStart(code2) {
-      return self2.parser.lazy[self2.now().line] ? nok2(code2) : ok3(code2);
+      return self.parser.lazy[self.now().line] ? nok2(code2) : ok3(code2);
     }
   }
   function continuationCommentInside(code2) {
@@ -8668,7 +8667,7 @@ const htmlText = {
   tokenize: tokenizeHtmlText
 };
 function tokenizeHtmlText(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   let marker;
   let buffer;
   let index2;
@@ -8966,7 +8965,7 @@ function tokenizeHtmlText(effects, ok2, nok) {
       effects,
       afterPrefix,
       "linePrefix",
-      self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
+      self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
     );
   }
   function afterPrefix(code2) {
@@ -9058,9 +9057,9 @@ function resolveToLabelEnd(events2, context) {
     ["enter", group, context],
     ["enter", label, context]
   ];
-  media = push$1(media, events2.slice(open + 1, open + offset + 3));
-  media = push$1(media, [["enter", text2, context]]);
-  media = push$1(
+  media = push(media, events2.slice(open + 1, open + offset + 3));
+  media = push(media, [["enter", text2, context]]);
+  media = push(
     media,
     resolveAll(
       context.parser.constructs.insideSpan.null,
@@ -9068,25 +9067,25 @@ function resolveToLabelEnd(events2, context) {
       context
     )
   );
-  media = push$1(media, [
+  media = push(media, [
     ["exit", text2, context],
     events2[close - 2],
     events2[close - 1],
     ["exit", label, context]
   ]);
-  media = push$1(media, events2.slice(close + 1));
-  media = push$1(media, [["exit", group, context]]);
+  media = push(media, events2.slice(close + 1));
+  media = push(media, [["exit", group, context]]);
   splice(events2, open, events2.length, media);
   return events2;
 }
 function tokenizeLabelEnd(effects, ok2, nok) {
-  const self2 = this;
-  let index2 = self2.events.length;
+  const self = this;
+  let index2 = self.events.length;
   let labelStart;
   let defined;
   while (index2--) {
-    if ((self2.events[index2][1].type === "labelImage" || self2.events[index2][1].type === "labelLink") && !self2.events[index2][1]._balanced) {
-      labelStart = self2.events[index2][1];
+    if ((self.events[index2][1].type === "labelImage" || self.events[index2][1].type === "labelLink") && !self.events[index2][1]._balanced) {
+      labelStart = self.events[index2][1];
       break;
     }
   }
@@ -9097,11 +9096,11 @@ function tokenizeLabelEnd(effects, ok2, nok) {
     }
     if (labelStart._inactive)
       return balanced(code2);
-    defined = self2.parser.defined.includes(
+    defined = self.parser.defined.includes(
       normalizeIdentifier(
-        self2.sliceSerialize({
+        self.sliceSerialize({
           start: labelStart.end,
-          end: self2.now()
+          end: self.now()
         })
       )
     );
@@ -9187,11 +9186,11 @@ function tokenizeResource(effects, ok2, nok) {
   }
 }
 function tokenizeFullReference(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   return start;
   function start(code2) {
     return factoryLabel.call(
-      self2,
+      self,
       effects,
       afterLabel,
       nok,
@@ -9201,9 +9200,9 @@ function tokenizeFullReference(effects, ok2, nok) {
     )(code2);
   }
   function afterLabel(code2) {
-    return self2.parser.defined.includes(
+    return self.parser.defined.includes(
       normalizeIdentifier(
-        self2.sliceSerialize(self2.events[self2.events.length - 1][1]).slice(1, -1)
+        self.sliceSerialize(self.events[self.events.length - 1][1]).slice(1, -1)
       )
     ) ? ok2(code2) : nok(code2);
   }
@@ -9234,7 +9233,7 @@ const labelStartImage = {
   resolveAll: labelEnd.resolveAll
 };
 function tokenizeLabelStartImage(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   return start;
   function start(code2) {
     effects.enter("labelImage");
@@ -9254,7 +9253,7 @@ function tokenizeLabelStartImage(effects, ok2, nok) {
     return nok(code2);
   }
   function after(code2) {
-    return code2 === 94 && "_hiddenFootnoteSupport" in self2.parser.constructs ? nok(code2) : ok2(code2);
+    return code2 === 94 && "_hiddenFootnoteSupport" in self.parser.constructs ? nok(code2) : ok2(code2);
   }
 }
 const labelStartLink = {
@@ -9263,7 +9262,7 @@ const labelStartLink = {
   resolveAll: labelEnd.resolveAll
 };
 function tokenizeLabelStartLink(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   return start;
   function start(code2) {
     effects.enter("labelLink");
@@ -9274,7 +9273,7 @@ function tokenizeLabelStartLink(effects, ok2, nok) {
     return after;
   }
   function after(code2) {
-    return code2 === 94 && "_hiddenFootnoteSupport" in self2.parser.constructs ? nok(code2) : ok2(code2);
+    return code2 === 94 && "_hiddenFootnoteSupport" in self.parser.constructs ? nok(code2) : ok2(code2);
   }
 }
 const lineEnding = {
@@ -9344,16 +9343,16 @@ const indentConstruct = {
   partial: true
 };
 function tokenizeListStart(effects, ok2, nok) {
-  const self2 = this;
-  const tail = self2.events[self2.events.length - 1];
+  const self = this;
+  const tail = self.events[self.events.length - 1];
   let initialSize = tail && tail[1].type === "linePrefix" ? tail[2].sliceSerialize(tail[1], true).length : 0;
   let size = 0;
   return start;
   function start(code2) {
-    const kind = self2.containerState.type || (code2 === 42 || code2 === 43 || code2 === 45 ? "listUnordered" : "listOrdered");
-    if (kind === "listUnordered" ? !self2.containerState.marker || code2 === self2.containerState.marker : asciiDigit(code2)) {
-      if (!self2.containerState.type) {
-        self2.containerState.type = kind;
+    const kind = self.containerState.type || (code2 === 42 || code2 === 43 || code2 === 45 ? "listUnordered" : "listOrdered");
+    if (kind === "listUnordered" ? !self.containerState.marker || code2 === self.containerState.marker : asciiDigit(code2)) {
+      if (!self.containerState.type) {
+        self.containerState.type = kind;
         effects.enter(kind, {
           _container: true
         });
@@ -9362,7 +9361,7 @@ function tokenizeListStart(effects, ok2, nok) {
         effects.enter("listItemPrefix");
         return code2 === 42 || code2 === 45 ? effects.check(thematicBreak$1, nok, atMarker)(code2) : atMarker(code2);
       }
-      if (!self2.interrupt || code2 === 49) {
+      if (!self.interrupt || code2 === 49) {
         effects.enter("listItemPrefix");
         effects.enter("listItemValue");
         return inside(code2);
@@ -9375,7 +9374,7 @@ function tokenizeListStart(effects, ok2, nok) {
       effects.consume(code2);
       return inside;
     }
-    if ((!self2.interrupt || size < 2) && (self2.containerState.marker ? code2 === self2.containerState.marker : code2 === 41 || code2 === 46)) {
+    if ((!self.interrupt || size < 2) && (self.containerState.marker ? code2 === self.containerState.marker : code2 === 41 || code2 === 46)) {
       effects.exit("listItemValue");
       return atMarker(code2);
     }
@@ -9385,10 +9384,10 @@ function tokenizeListStart(effects, ok2, nok) {
     effects.enter("listItemMarker");
     effects.consume(code2);
     effects.exit("listItemMarker");
-    self2.containerState.marker = self2.containerState.marker || code2;
+    self.containerState.marker = self.containerState.marker || code2;
     return effects.check(
       blankLine,
-      self2.interrupt ? nok : onBlank,
+      self.interrupt ? nok : onBlank,
       effects.attempt(
         listItemPrefixWhitespaceConstruct,
         endOfPrefix,
@@ -9397,7 +9396,7 @@ function tokenizeListStart(effects, ok2, nok) {
     );
   }
   function onBlank(code2) {
-    self2.containerState.initialBlankLine = true;
+    self.containerState.initialBlankLine = true;
     initialSize++;
     return endOfPrefix(code2);
   }
@@ -9411,70 +9410,70 @@ function tokenizeListStart(effects, ok2, nok) {
     return nok(code2);
   }
   function endOfPrefix(code2) {
-    self2.containerState.size = initialSize + self2.sliceSerialize(effects.exit("listItemPrefix"), true).length;
+    self.containerState.size = initialSize + self.sliceSerialize(effects.exit("listItemPrefix"), true).length;
     return ok2(code2);
   }
 }
 function tokenizeListContinuation(effects, ok2, nok) {
-  const self2 = this;
-  self2.containerState._closeFlow = void 0;
+  const self = this;
+  self.containerState._closeFlow = void 0;
   return effects.check(blankLine, onBlank, notBlank);
   function onBlank(code2) {
-    self2.containerState.furtherBlankLines = self2.containerState.furtherBlankLines || self2.containerState.initialBlankLine;
+    self.containerState.furtherBlankLines = self.containerState.furtherBlankLines || self.containerState.initialBlankLine;
     return factorySpace(
       effects,
       ok2,
       "listItemIndent",
-      self2.containerState.size + 1
+      self.containerState.size + 1
     )(code2);
   }
   function notBlank(code2) {
-    if (self2.containerState.furtherBlankLines || !markdownSpace(code2)) {
-      self2.containerState.furtherBlankLines = void 0;
-      self2.containerState.initialBlankLine = void 0;
+    if (self.containerState.furtherBlankLines || !markdownSpace(code2)) {
+      self.containerState.furtherBlankLines = void 0;
+      self.containerState.initialBlankLine = void 0;
       return notInCurrentItem(code2);
     }
-    self2.containerState.furtherBlankLines = void 0;
-    self2.containerState.initialBlankLine = void 0;
+    self.containerState.furtherBlankLines = void 0;
+    self.containerState.initialBlankLine = void 0;
     return effects.attempt(indentConstruct, ok2, notInCurrentItem)(code2);
   }
   function notInCurrentItem(code2) {
-    self2.containerState._closeFlow = true;
-    self2.interrupt = void 0;
+    self.containerState._closeFlow = true;
+    self.interrupt = void 0;
     return factorySpace(
       effects,
       effects.attempt(list$1, ok2, nok),
       "linePrefix",
-      self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
+      self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
     )(code2);
   }
 }
 function tokenizeIndent(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   return factorySpace(
     effects,
     afterPrefix,
     "listItemIndent",
-    self2.containerState.size + 1
+    self.containerState.size + 1
   );
   function afterPrefix(code2) {
-    const tail = self2.events[self2.events.length - 1];
-    return tail && tail[1].type === "listItemIndent" && tail[2].sliceSerialize(tail[1], true).length === self2.containerState.size ? ok2(code2) : nok(code2);
+    const tail = self.events[self.events.length - 1];
+    return tail && tail[1].type === "listItemIndent" && tail[2].sliceSerialize(tail[1], true).length === self.containerState.size ? ok2(code2) : nok(code2);
   }
 }
 function tokenizeListEnd(effects) {
   effects.exit(this.containerState.type);
 }
 function tokenizeListItemPrefixWhitespace(effects, ok2, nok) {
-  const self2 = this;
+  const self = this;
   return factorySpace(
     effects,
     afterPrefix,
     "listItemPrefixWhitespace",
-    self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4 + 1
+    self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4 + 1
   );
   function afterPrefix(code2) {
-    const tail = self2.events[self2.events.length - 1];
+    const tail = self.events[self.events.length - 1];
     return !markdownSpace(code2) && tail && tail[1].type === "listItemPrefixWhitespace" ? ok2(code2) : nok(code2);
   }
 }
@@ -9523,19 +9522,19 @@ function resolveToSetextUnderline(events2, context) {
   return events2;
 }
 function tokenizeSetextUnderline(effects, ok2, nok) {
-  const self2 = this;
-  let index2 = self2.events.length;
+  const self = this;
+  let index2 = self.events.length;
   let marker;
   let paragraph2;
   while (index2--) {
-    if (self2.events[index2][1].type !== "lineEnding" && self2.events[index2][1].type !== "linePrefix" && self2.events[index2][1].type !== "content") {
-      paragraph2 = self2.events[index2][1].type === "paragraph";
+    if (self.events[index2][1].type !== "lineEnding" && self.events[index2][1].type !== "linePrefix" && self.events[index2][1].type !== "content") {
+      paragraph2 = self.events[index2][1].type === "paragraph";
       break;
     }
   }
   return start;
   function start(code2) {
-    if (!self2.parser.lazy[self2.now().line] && (self2.interrupt || paragraph2)) {
+    if (!self.parser.lazy[self.now().line] && (self.interrupt || paragraph2)) {
       effects.enter("setextHeadingLine");
       effects.enter("setextHeadingLineSequence");
       marker = code2;
@@ -9563,7 +9562,7 @@ const flow$1 = {
   tokenize: initializeFlow
 };
 function initializeFlow(effects) {
-  const self2 = this;
+  const self = this;
   const initial = effects.attempt(
     blankLine,
     atBlankEnding,
@@ -9590,7 +9589,7 @@ function initializeFlow(effects) {
     effects.enter("lineEndingBlank");
     effects.consume(code2);
     effects.exit("lineEndingBlank");
-    self2.currentConstruct = void 0;
+    self.currentConstruct = void 0;
     return initial;
   }
   function afterConstruct(code2) {
@@ -9601,7 +9600,7 @@ function initializeFlow(effects) {
     effects.enter("lineEnding");
     effects.consume(code2);
     effects.exit("lineEnding");
-    self2.currentConstruct = void 0;
+    self.currentConstruct = void 0;
     return initial;
   }
 }
@@ -9618,7 +9617,7 @@ function initializeFactory(field) {
     )
   };
   function initializeText(effects) {
-    const self2 = this;
+    const self = this;
     const constructs2 = this.parser.constructs[field];
     const text2 = effects.attempt(constructs2, start, notText);
     return start;
@@ -9632,15 +9631,15 @@ function initializeFactory(field) {
       }
       effects.enter("data");
       effects.consume(code2);
-      return data2;
+      return data;
     }
-    function data2(code2) {
+    function data(code2) {
       if (atBreak(code2)) {
         effects.exit("data");
         return text2(code2);
       }
       effects.consume(code2);
-      return data2;
+      return data;
     }
     function atBreak(code2) {
       if (code2 === null) {
@@ -9651,7 +9650,7 @@ function initializeFactory(field) {
       if (list2) {
         while (++index2 < list2.length) {
           const item = list2[index2];
-          if (!item.previous || item.previous.call(self2, self2.previous)) {
+          if (!item.previous || item.previous.call(self, self.previous)) {
             return true;
           }
         }
@@ -9687,8 +9686,8 @@ function resolveAllLineSuffixes(events2, context) {
   let eventIndex = 0;
   while (++eventIndex <= events2.length) {
     if ((eventIndex === events2.length || events2[eventIndex][1].type === "lineEnding") && events2[eventIndex - 1][1].type === "data") {
-      const data2 = events2[eventIndex - 1][1];
-      const chunks = context.sliceStream(data2);
+      const data = events2[eventIndex - 1][1];
+      const chunks = context.sliceStream(data);
       let index2 = chunks.length;
       let bufferIndex = -1;
       let size = 0;
@@ -9718,17 +9717,17 @@ function resolveAllLineSuffixes(events2, context) {
         const token = {
           type: eventIndex === events2.length || tabs || size < 2 ? "lineSuffix" : "hardBreakTrailing",
           start: {
-            line: data2.end.line,
-            column: data2.end.column - size,
-            offset: data2.end.offset - size,
-            _index: data2.start._index + index2,
-            _bufferIndex: index2 ? bufferIndex : data2.start._bufferIndex + bufferIndex
+            line: data.end.line,
+            column: data.end.column - size,
+            offset: data.end.offset - size,
+            _index: data.start._index + index2,
+            _bufferIndex: index2 ? bufferIndex : data.start._bufferIndex + bufferIndex
           },
-          end: Object.assign({}, data2.end)
+          end: Object.assign({}, data.end)
         };
-        data2.end = Object.assign({}, token.start);
-        if (data2.start.offset === data2.end.offset) {
-          Object.assign(data2, token);
+        data.end = Object.assign({}, token.start);
+        if (data.start.offset === data.end.offset) {
+          Object.assign(data, token);
         } else {
           events2.splice(
             eventIndex,
@@ -9787,8 +9786,8 @@ function createTokenizer(parser, initialize, from) {
     resolveAllConstructs.push(initialize);
   }
   return context;
-  function write(slice2) {
-    chunks = push$1(chunks, slice2);
+  function write(slice) {
+    chunks = push(chunks, slice);
     main();
     if (chunks[chunks.length - 1] !== null) {
       return [];
@@ -9865,8 +9864,8 @@ function createTokenizer(parser, initialize, from) {
     context.events.push(["exit", token, context]);
     return token;
   }
-  function onsuccessfulconstruct(construct2, info) {
-    addResult(construct2, info.from);
+  function onsuccessfulconstruct(construct, info) {
+    addResult(construct, info.from);
   }
   function onsuccessfulcheck(_, info) {
     info.restore();
@@ -9899,18 +9898,18 @@ function createTokenizer(parser, initialize, from) {
         }
         return handleConstruct(list2[constructIndex]);
       }
-      function handleConstruct(construct2) {
+      function handleConstruct(construct) {
         return start;
         function start(code2) {
-          info = store2();
-          currentConstruct = construct2;
-          if (!construct2.partial) {
-            context.currentConstruct = construct2;
+          info = store();
+          currentConstruct = construct;
+          if (!construct.partial) {
+            context.currentConstruct = construct;
           }
-          if (construct2.name && context.parser.constructs.disable.null.includes(construct2.name)) {
+          if (construct.name && context.parser.constructs.disable.null.includes(construct.name)) {
             return nok();
           }
-          return construct2.tokenize.call(
+          return construct.tokenize.call(
             fields ? Object.assign(Object.create(context), fields) : context,
             effects,
             ok2,
@@ -9931,23 +9930,23 @@ function createTokenizer(parser, initialize, from) {
       }
     }
   }
-  function addResult(construct2, from2) {
-    if (construct2.resolveAll && !resolveAllConstructs.includes(construct2)) {
-      resolveAllConstructs.push(construct2);
+  function addResult(construct, from2) {
+    if (construct.resolveAll && !resolveAllConstructs.includes(construct)) {
+      resolveAllConstructs.push(construct);
     }
-    if (construct2.resolve) {
+    if (construct.resolve) {
       splice(
         context.events,
         from2,
         context.events.length - from2,
-        construct2.resolve(context.events.slice(from2), context)
+        construct.resolve(context.events.slice(from2), context)
       );
     }
-    if (construct2.resolveTo) {
-      context.events = construct2.resolveTo(context.events, context);
+    if (construct.resolveTo) {
+      context.events = construct.resolveTo(context.events, context);
     }
   }
-  function store2() {
+  function store() {
     const startPoint = now();
     const startPrevious = context.previous;
     const startCurrentConstruct = context.currentConstruct;
@@ -10034,7 +10033,7 @@ function serializeChunks(chunks, expandTabs) {
   }
   return result.join("");
 }
-const document$2 = {
+const document$1 = {
   [42]: list$1,
   [43]: list$1,
   [45]: list$1,
@@ -10097,7 +10096,7 @@ const disable = {
 };
 var defaultConstructs = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  document: document$2,
+  document: document$1,
   contentInitial,
   flowInitial,
   flow,
@@ -10116,7 +10115,7 @@ function parse$2(options = {}) {
     lazy: {},
     constructs: constructs2,
     content: create2(content$1),
-    document: create2(document$3),
+    document: create2(document$2),
     flow: create2(flow$1),
     string: create2(string$1),
     text: create2(text$3)
@@ -10138,7 +10137,7 @@ function preprocess() {
   return preprocessor;
   function preprocessor(value, encoding, end) {
     const chunks = [];
-    let match2;
+    let match;
     let next;
     let startPosition;
     let endPosition;
@@ -10154,10 +10153,10 @@ function preprocess() {
     }
     while (startPosition < value.length) {
       search.lastIndex = startPosition;
-      match2 = search.exec(value);
-      endPosition = match2 && match2.index !== void 0 ? match2.index : value.length;
+      match = search.exec(value);
+      endPosition = match && match.index !== void 0 ? match.index : value.length;
       code2 = value.charCodeAt(endPosition);
-      if (!match2) {
+      if (!match) {
         buffer = value.slice(startPosition);
         break;
       }
@@ -10356,7 +10355,7 @@ function compiler(options = {}) {
     },
     options.mdastExtensions || []
   );
-  const data2 = {};
+  const data = {};
   return compile;
   function compile(events2) {
     let tree = {
@@ -10509,10 +10508,10 @@ function compiler(options = {}) {
     return length;
   }
   function setData(key, value) {
-    data2[key] = value;
+    data[key] = value;
   }
   function getData2(key) {
-    return data2[key];
+    return data[key];
   }
   function point2(d) {
     return {
@@ -10575,7 +10574,7 @@ function compiler(options = {}) {
     return node;
   }
   function resume() {
-    return toString$2(this.stack.pop());
+    return toString(this.stack.pop());
   }
   function onenterlistordered() {
     setData("expectingFirstListItemValue", true);
@@ -10588,14 +10587,14 @@ function compiler(options = {}) {
     }
   }
   function onexitcodefencedfenceinfo() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.lang = data3;
+    node.lang = data2;
   }
   function onexitcodefencedfencemeta() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.meta = data3;
+    node.meta = data2;
   }
   function onexitcodefencedfence() {
     if (getData2("flowCodeInside"))
@@ -10604,15 +10603,15 @@ function compiler(options = {}) {
     setData("flowCodeInside", true);
   }
   function onexitcodefenced() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.value = data3.replace(/^(\r?\n|\r)|(\r?\n|\r)$/g, "");
+    node.value = data2.replace(/^(\r?\n|\r)|(\r?\n|\r)$/g, "");
     setData("flowCodeInside");
   }
   function onexitcodeindented() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.value = data3.replace(/(\r?\n|\r)$/g, "");
+    node.value = data2.replace(/(\r?\n|\r)$/g, "");
   }
   function onexitdefinitionlabelstring(token) {
     const label = this.resume();
@@ -10623,14 +10622,14 @@ function compiler(options = {}) {
     ).toLowerCase();
   }
   function onexitdefinitiontitlestring() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.title = data3;
+    node.title = data2;
   }
   function onexitdefinitiondestinationstring() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.url = data3;
+    node.url = data2;
   }
   function onexitatxheadingsequence(token) {
     const node = this.stack[this.stack.length - 1];
@@ -10683,19 +10682,19 @@ function compiler(options = {}) {
     setData("atHardBreak", true);
   }
   function onexithtmlflow() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.value = data3;
+    node.value = data2;
   }
   function onexithtmltext() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.value = data3;
+    node.value = data2;
   }
   function onexitcodetext() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.value = data3;
+    node.value = data2;
   }
   function onexitlink() {
     const context = this.stack[this.stack.length - 1];
@@ -10741,14 +10740,14 @@ function compiler(options = {}) {
     }
   }
   function onexitresourcedestinationstring() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.url = data3;
+    node.url = data2;
   }
   function onexitresourcetitlestring() {
-    const data3 = this.resume();
+    const data2 = this.resume();
     const node = this.stack[this.stack.length - 1];
-    node.title = data3;
+    node.title = data2;
   }
   function onexitresource() {
     setData("inReference");
@@ -10769,17 +10768,17 @@ function compiler(options = {}) {
     setData("characterReferenceType", token.type);
   }
   function onexitcharacterreferencevalue(token) {
-    const data3 = this.sliceSerialize(token);
+    const data2 = this.sliceSerialize(token);
     const type = getData2("characterReferenceType");
     let value;
     if (type) {
       value = decodeNumericCharacterReference(
-        data3,
+        data2,
         type === "characterReferenceMarkerNumeric" ? 10 : 16
       );
       setData("characterReferenceType");
     } else {
-      value = decodeNamedCharacterReference(data3);
+      value = decodeNamedCharacterReference(data2);
     }
     const tail = this.stack.pop();
     tail.value += value;
@@ -10968,18 +10967,18 @@ function remarkParse(options) {
   };
   Object.assign(this, { Parser: parser });
 }
-const convert$2 = function(test2) {
-  if (test2 === void 0 || test2 === null) {
+const convert$2 = function(test) {
+  if (test === void 0 || test === null) {
     return ok$1;
   }
-  if (typeof test2 === "string") {
-    return typeFactory$1(test2);
+  if (typeof test === "string") {
+    return typeFactory$1(test);
   }
-  if (typeof test2 === "object") {
-    return Array.isArray(test2) ? anyFactory$1(test2) : propsFactory(test2);
+  if (typeof test === "object") {
+    return Array.isArray(test) ? anyFactory$1(test) : propsFactory(test);
   }
-  if (typeof test2 === "function") {
-    return castFactory(test2);
+  if (typeof test === "function") {
+    return castFactory(test);
   }
   throw new Error("Expected function, string, or object as test");
 };
@@ -10999,27 +10998,27 @@ function anyFactory$1(tests) {
     return false;
   }
 }
-function propsFactory(check2) {
+function propsFactory(check) {
   return castFactory(all2);
   function all2(node) {
     let key;
-    for (key in check2) {
-      if (node[key] !== check2[key])
+    for (key in check) {
+      if (node[key] !== check[key])
         return false;
     }
     return true;
   }
 }
-function typeFactory$1(check2) {
+function typeFactory$1(check) {
   return castFactory(type);
   function type(node) {
-    return node && node.type === check2;
+    return node && node.type === check;
   }
 }
-function castFactory(check2) {
+function castFactory(check) {
   return assertion;
   function assertion(...parameters) {
-    return Boolean(check2.call(this, ...parameters));
+    return Boolean(check.call(this, ...parameters));
   }
 }
 function ok$1() {
@@ -11031,13 +11030,13 @@ function color(d) {
 const CONTINUE$2 = true;
 const SKIP$2 = "skip";
 const EXIT$2 = false;
-const visitParents$2 = function(tree, test2, visitor2, reverse) {
-  if (typeof test2 === "function" && typeof visitor2 !== "function") {
+const visitParents$2 = function(tree, test, visitor2, reverse) {
+  if (typeof test === "function" && typeof visitor2 !== "function") {
     reverse = visitor2;
-    visitor2 = test2;
-    test2 = null;
+    visitor2 = test;
+    test = null;
   }
-  const is = convert$2(test2);
+  const is = convert$2(test);
   const step = reverse ? -1 : 1;
   factory2(tree, null, [])();
   function factory2(node, index2, parents) {
@@ -11055,7 +11054,7 @@ const visitParents$2 = function(tree, test2, visitor2, reverse) {
       let subresult;
       let offset;
       let grandparents;
-      if (!test2 || is(node, index2, parents[parents.length - 1] || null)) {
+      if (!test || is(node, index2, parents[parents.length - 1] || null)) {
         result = toResult$1(visitor2(node, parents));
         if (result[0] === EXIT$2) {
           return result;
@@ -11085,13 +11084,13 @@ function toResult$1(value) {
   }
   return [value];
 }
-const visit$2 = function(tree, test2, visitor2, reverse) {
-  if (typeof test2 === "function" && typeof visitor2 !== "function") {
+const visit$2 = function(tree, test, visitor2, reverse) {
+  if (typeof test === "function" && typeof visitor2 !== "function") {
     reverse = visitor2;
-    visitor2 = test2;
-    test2 = null;
+    visitor2 = test;
+    test = null;
   }
-  visitParents$2(tree, test2, overload, reverse);
+  visitParents$2(tree, test, overload, reverse);
   function overload(node, parents) {
     const parent = parents[parents.length - 1];
     return visitor2(
@@ -11108,15 +11107,15 @@ function remarkBreaks() {
       const result = [];
       let start = 0;
       find$1.lastIndex = 0;
-      let match2 = find$1.exec(node.value);
-      while (match2) {
-        const position2 = match2.index;
+      let match = find$1.exec(node.value);
+      while (match) {
+        const position2 = match.index;
         if (start !== position2) {
           result.push({ type: "text", value: node.value.slice(start, position2) });
         }
         result.push({ type: "break" });
-        start = position2 + match2[0].length;
-        match2 = find$1.exec(node.value);
+        start = position2 + match[0].length;
+        match = find$1.exec(node.value);
       }
       if (result.length > 0 && parent && typeof index2 === "number") {
         if (start < node.value.length) {
@@ -11144,8 +11143,8 @@ var u = function(type, props2, value) {
 };
 const own$5 = {}.hasOwnProperty;
 function unknown(h, node) {
-  const data2 = node.data || {};
-  if ("value" in node && !(own$5.call(data2, "hName") || own$5.call(data2, "hProperties") || own$5.call(data2, "hChildren"))) {
+  const data = node.data || {};
+  if ("value" in node && !(own$5.call(data, "hName") || own$5.call(data, "hProperties") || own$5.call(data, "hChildren"))) {
     return h.augment(node, u("text", node.value));
   }
   return h(node, "div", all(h, node));
@@ -11220,15 +11219,15 @@ function definitions(node) {
     throw new Error("mdast-util-definitions expected node");
   }
   visit$2(node, "definition", (definition3) => {
-    const id2 = clean(definition3.identifier);
-    if (id2 && !own$4.call(cache, id2)) {
-      cache[id2] = definition3;
+    const id = clean(definition3.identifier);
+    if (id && !own$4.call(cache, id)) {
+      cache[id] = definition3;
     }
   });
   return definition2;
   function definition2(identifier) {
-    const id2 = clean(identifier);
-    return id2 && own$4.call(cache, id2) ? cache[id2] : null;
+    const id = clean(identifier);
+    return id && own$4.call(cache, id) ? cache[id] : null;
   }
 }
 function clean(value) {
@@ -11317,11 +11316,11 @@ function footer(h) {
       continue;
     }
     const content2 = all(h, def2);
-    const id2 = String(def2.identifier);
-    const safeId = sanitizeUri(id2.toLowerCase());
+    const id = String(def2.identifier);
+    const safeId = sanitizeUri(id.toLowerCase());
     let referenceIndex = 0;
     const backReferences = [];
-    while (++referenceIndex <= h.footnoteCounts[id2]) {
+    while (++referenceIndex <= h.footnoteCounts[id]) {
       const backReference = {
         type: "element",
         tagName: "a",
@@ -11419,19 +11418,19 @@ function emphasis(h, node) {
   return h(node, "em", all(h, node));
 }
 function footnoteReference(h, node) {
-  const id2 = String(node.identifier);
-  const safeId = sanitizeUri(id2.toLowerCase());
-  const index2 = h.footnoteOrder.indexOf(id2);
+  const id = String(node.identifier);
+  const safeId = sanitizeUri(id.toLowerCase());
+  const index2 = h.footnoteOrder.indexOf(id);
   let counter;
   if (index2 === -1) {
-    h.footnoteOrder.push(id2);
-    h.footnoteCounts[id2] = 1;
+    h.footnoteOrder.push(id);
+    h.footnoteCounts[id] = 1;
     counter = h.footnoteOrder.length;
   } else {
-    h.footnoteCounts[id2]++;
+    h.footnoteCounts[id]++;
     counter = index2 + 1;
   }
-  const reuseCounter = h.footnoteCounts[id2];
+  const reuseCounter = h.footnoteCounts[id];
   return h(node, "sup", [
     h(
       node.position,
@@ -11721,16 +11720,16 @@ const space = 32;
 function trimLines(value) {
   const source = String(value);
   const search2 = /\r?\n|\r/g;
-  let match2 = search2.exec(source);
+  let match = search2.exec(source);
   let last = 0;
   const lines = [];
-  while (match2) {
+  while (match) {
     lines.push(
-      trimLine(source.slice(last, match2.index), last > 0, true),
-      match2[0]
+      trimLine(source.slice(last, match.index), last > 0, true),
+      match[0]
     );
-    last = match2.index + match2[0].length;
-    match2 = search2.exec(source);
+    last = match.index + match[0].length;
+    match = search2.exec(source);
   }
   lines.push(trimLine(source.slice(last), last > 0, false));
   return lines.join("");
@@ -11814,16 +11813,16 @@ function factory(tree, options) {
   h.unknownHandler = settings.unknownHandler;
   h.passThrough = settings.passThrough;
   visit$2(tree, "footnoteDefinition", (definition2) => {
-    const id2 = String(definition2.identifier).toUpperCase();
-    if (!own$3.call(footnoteById, id2)) {
-      footnoteById[id2] = definition2;
+    const id = String(definition2.identifier).toUpperCase();
+    if (!own$3.call(footnoteById, id)) {
+      footnoteById[id] = definition2;
     }
   });
   return h;
   function augment(left, right) {
     if (left && "data" in left && left.data) {
-      const data2 = left.data;
-      if (data2.hName) {
+      const data = left.data;
+      if (data.hName) {
         if (right.type !== "element") {
           right = {
             type: "element",
@@ -11832,13 +11831,13 @@ function factory(tree, options) {
             children: []
           };
         }
-        right.tagName = data2.hName;
+        right.tagName = data.hName;
       }
-      if (right.type === "element" && data2.hProperties) {
-        right.properties = { ...right.properties, ...data2.hProperties };
+      if (right.type === "element" && data.hProperties) {
+        right.properties = { ...right.properties, ...data.hProperties };
       }
-      if ("children" in right && right.children && data2.hChildren) {
-        right.children = data2.hChildren;
+      if ("children" in right && right.children && data.hChildren) {
+        right.children = data.hChildren;
       }
     }
     if (left) {
@@ -11907,7 +11906,7 @@ function merge(definitions2, space2) {
   }
   return new Schema(property, normal, space2);
 }
-function normalize$1(value) {
+function normalize(value) {
   return value.toLowerCase();
 }
 class Info {
@@ -11955,8 +11954,8 @@ class DefinedInfo extends Info {
     mark(this, "space", space2);
     if (typeof mask === "number") {
       while (++index2 < checks.length) {
-        const check2 = checks[index2];
-        mark(this, checks[index2], (mask & types[check2]) === types[check2]);
+        const check = checks[index2];
+        mark(this, checks[index2], (mask & types[check]) === types[check]);
       }
     }
   }
@@ -11985,8 +11984,8 @@ function create(definition2) {
         info.mustUseProperty = true;
       }
       property[prop] = info;
-      normal[normalize$1(prop)] = prop;
-      normal[normalize$1(info.attribute)] = prop;
+      normal[normalize(prop)] = prop;
+      normal[normalize(info.attribute)] = prop;
     }
   }
   return new Schema(property, normal, definition2.space);
@@ -12931,7 +12930,7 @@ const valid = /^data[-\w.:]+$/i;
 const dash = /-[a-z]/g;
 const cap = /[A-Z]/g;
 function find(schema, value) {
-  const normal = normalize$1(value);
+  const normal = normalize(value);
   let prop = value;
   let Type = Info;
   if (normal in schema.normal) {
@@ -13053,7 +13052,7 @@ var inlineStyleParser = function(style2, options) {
       throw err;
     }
   }
-  function match2(re) {
+  function match(re) {
     var m = re.exec(style2);
     if (!m)
       return;
@@ -13063,7 +13062,7 @@ var inlineStyleParser = function(style2, options) {
     return m;
   }
   function whitespace2() {
-    match2(WHITESPACE_REGEX);
+    match(WHITESPACE_REGEX);
   }
   function comments(rules) {
     var c;
@@ -13099,19 +13098,19 @@ var inlineStyleParser = function(style2, options) {
   }
   function declaration() {
     var pos = position2();
-    var prop = match2(PROPERTY_REGEX);
+    var prop = match(PROPERTY_REGEX);
     if (!prop)
       return;
     comment();
-    if (!match2(COLON_REGEX))
+    if (!match(COLON_REGEX))
       return error("property missing ':'");
-    var val = match2(VALUE_REGEX);
+    var val = match(VALUE_REGEX);
     var ret = pos({
       type: TYPE_DECLARATION,
       property: trim(prop[0].replace(COMMENT_REGEX, EMPTY_STRING)),
       value: val ? trim(val[0].replace(COMMENT_REGEX, EMPTY_STRING)) : EMPTY_STRING
     });
-    match2(SEMICOLON_REGEX);
+    match(SEMICOLON_REGEX);
     return ret;
   }
   function declarations() {
@@ -13324,18 +13323,18 @@ function parseStyle(value, tagName2) {
   return result;
 }
 var convert_1 = convert$1;
-function convert$1(test2) {
-  if (typeof test2 === "string") {
-    return typeFactory(test2);
+function convert$1(test) {
+  if (typeof test === "string") {
+    return typeFactory(test);
   }
-  if (test2 === null || test2 === void 0) {
+  if (test === null || test === void 0) {
     return ok;
   }
-  if (typeof test2 === "object") {
-    return ("length" in test2 ? anyFactory : matchesFactory)(test2);
+  if (typeof test === "object") {
+    return ("length" in test ? anyFactory : matchesFactory)(test);
   }
-  if (typeof test2 === "function") {
-    return test2;
+  if (typeof test === "function") {
+    return test;
   }
   throw new Error("Expected function, string, or object as test");
 }
@@ -13348,12 +13347,12 @@ function convertAll(tests) {
   }
   return results;
 }
-function matchesFactory(test2) {
+function matchesFactory(test) {
   return matches2;
   function matches2(node) {
     var key;
-    for (key in test2) {
-      if (node[key] !== test2[key]) {
+    for (key in test) {
+      if (node[key] !== test[key]) {
         return false;
       }
     }
@@ -13374,10 +13373,10 @@ function anyFactory(tests) {
     return false;
   }
 }
-function typeFactory(test2) {
+function typeFactory(test) {
   return type;
   function type(node) {
-    return Boolean(node && node.type === test2);
+    return Boolean(node && node.type === test);
   }
 }
 function ok() {
@@ -13391,19 +13390,19 @@ var EXIT$1 = false;
 visitParents$1.CONTINUE = CONTINUE$1;
 visitParents$1.SKIP = SKIP$1;
 visitParents$1.EXIT = EXIT$1;
-function visitParents$1(tree, test2, visitor2, reverse) {
+function visitParents$1(tree, test, visitor2, reverse) {
   var is;
-  if (typeof test2 === "function" && typeof visitor2 !== "function") {
+  if (typeof test === "function" && typeof visitor2 !== "function") {
     reverse = visitor2;
-    visitor2 = test2;
-    test2 = null;
+    visitor2 = test;
+    test = null;
   }
-  is = convert(test2);
+  is = convert(test);
   one2(tree, null, []);
   function one2(node, index2, parents) {
     var result = [];
     var subresult;
-    if (!test2 || is(node, index2, parents[parents.length - 1] || null)) {
+    if (!test || is(node, index2, parents[parents.length - 1] || null)) {
       result = toResult(visitor2(node, parents));
       if (result[0] === EXIT$1) {
         return result;
@@ -13416,11 +13415,11 @@ function visitParents$1(tree, test2, visitor2, reverse) {
     return result;
   }
   function all2(children, parents) {
-    var min2 = -1;
+    var min = -1;
     var step = reverse ? -1 : 1;
-    var index2 = (reverse ? children.length : min2) + step;
+    var index2 = (reverse ? children.length : min) + step;
     var result;
-    while (index2 > min2 && index2 < children.length) {
+    while (index2 > min && index2 < children.length) {
       result = one2(children[index2], index2, parents);
       if (result[0] === EXIT$1) {
         return result;
@@ -13446,13 +13445,13 @@ var EXIT = visitParents.EXIT;
 visit$1.CONTINUE = CONTINUE;
 visit$1.SKIP = SKIP;
 visit$1.EXIT = EXIT;
-function visit$1(tree, test2, visitor2, reverse) {
-  if (typeof test2 === "function" && typeof visitor2 !== "function") {
+function visit$1(tree, test, visitor2, reverse) {
+  if (typeof test === "function" && typeof visitor2 !== "function") {
     reverse = visitor2;
-    visitor2 = test2;
-    test2 = null;
+    visitor2 = test;
+    test = null;
   }
-  visitParents(tree, test2, overload, reverse);
+  visitParents(tree, test, overload, reverse);
   function overload(node, parents) {
     var parent = parents[parents.length - 1];
     var index2 = parent ? parent.children.indexOf(node) : null;
@@ -13460,7 +13459,7 @@ function visit$1(tree, test2, visitor2, reverse) {
   }
 }
 var visit = unistUtilVisit;
-var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
 var hastCssPropertyMap = {
   align: "text-align",
   valign: "vertical-align",
@@ -13478,7 +13477,7 @@ function visitor(node) {
   var hastName;
   var cssName;
   for (hastName in hastCssPropertyMap) {
-    if (!hasOwnProperty$1.call(hastCssPropertyMap, hastName) || node.properties[hastName] === void 0) {
+    if (!hasOwnProperty.call(hastCssPropertyMap, hastName) || node.properties[hastName] === void 0) {
       continue;
     }
     cssName = hastCssPropertyMap[hastName];
@@ -13573,8 +13572,8 @@ function remarkExternalLinks(options = {}) {
           return;
         const protocol = ctx.url.slice(0, ctx.url.indexOf(":"));
         if (isAbsoluteUrl(ctx.url) && protocols.includes(protocol)) {
-          const data2 = node.data || (node.data = {});
-          const props2 = data2.hProperties || (data2.hProperties = {});
+          const data = node.data || (node.data = {});
+          const props2 = data.hProperties || (data.hProperties = {});
           if (target2 !== false) {
             props2.target = target2 || defaultTarget;
           }
@@ -13606,7 +13605,7 @@ const Link = {
       required: true
     }
   },
-  render(h, { data: data2, props: props2 }) {
+  render(h, { data, props: props2 }) {
     return h("a", {
       attrs: {
         href: props2.href,
@@ -13639,19 +13638,19 @@ const remarkAutolink = function({ autolink: autolink2, useMarkdown }) {
 };
 const urlRegex = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig;
 const parseUrl = (text2, linkComponent) => {
-  let match2 = urlRegex.exec(text2);
+  let match = urlRegex.exec(text2);
   const list2 = [];
   let start = 0;
-  while (match2 !== null) {
-    let href = match2[2];
+  while (match !== null) {
+    let href = match[2];
     let textAfter;
-    let textBefore = text2.substring(start, match2.index + match2[1].length);
+    let textBefore = text2.substring(start, match.index + match[1].length);
     if (href[0] === " ") {
       textBefore += href[0];
       href = href.substring(1).trim();
     }
     const lastChar = href[href.length - 1];
-    if (lastChar === "." || lastChar === "," || lastChar === ";" || match2[0][0] === "(" && lastChar === ")") {
+    if (lastChar === "." || lastChar === "," || lastChar === ";" || match[0][0] === "(" && lastChar === ")") {
       href = href.substring(0, href.length - 1);
       textAfter = lastChar;
     }
@@ -13660,8 +13659,8 @@ const parseUrl = (text2, linkComponent) => {
     if (textAfter) {
       list2.push(textAfter);
     }
-    start = match2.index + match2[0].length;
-    match2 = urlRegex.exec(text2);
+    start = match.index + match[0].length;
+    match = urlRegex.exec(text2);
   }
   list2.push(text2.substring(start));
   const joinedText = list2.map((item) => typeof item === "string" ? item : item.props.href).join("");
@@ -13710,12 +13709,12 @@ const prepareTextNode = ({ h, context }, text2) => {
   }
   return text2;
 };
-var RichText_vue_vue_type_style_index_0_scoped_true_lang = "";
-function normalizeComponent(scriptExports, render2, staticRenderFns2, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
+var RichText_vue_vue_type_style_index_0_scoped_f7debf78_lang = "";
+function normalizeComponent(scriptExports, render3, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
   var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
-  if (render2) {
-    options.render = render2;
-    options.staticRenderFns = staticRenderFns2;
+  if (render3) {
+    options.render = render3;
+    options.staticRenderFns = staticRenderFns;
     options._compiled = true;
   }
   if (functionalTemplate) {
@@ -13765,7 +13764,7 @@ function normalizeComponent(scriptExports, render2, staticRenderFns2, functional
     options
   };
 }
-const __vue2_script$2 = {
+const _sfc_main$2 = {
   name: "RichText",
   props: {
     text: {
@@ -13882,37 +13881,21 @@ const __vue2_script$2 = {
     return this.renderMarkdown(h);
   }
 };
-let __vue2_render, __vue2_staticRenderFns;
-const __cssModules$2 = {};
+const _sfc_render$2 = null;
+const _sfc_staticRenderFns$2 = null;
 var __component__$2 = /* @__PURE__ */ normalizeComponent(
-  __vue2_script$2,
-  __vue2_render,
-  __vue2_staticRenderFns,
+  _sfc_main$2,
+  _sfc_render$2,
+  _sfc_staticRenderFns$2,
   false,
-  __vue2_injectStyles$2,
-  "19454f93",
+  null,
+  "f7debf78",
   null,
   null
 );
-function __vue2_injectStyles$2(context) {
-  for (let o in __cssModules$2) {
-    this[o] = __cssModules$2[o];
-  }
-}
-var RichText = /* @__PURE__ */ function() {
-  return __component__$2.exports;
-}();
-var render$1 = function __render__() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("span", {
-    staticClass: "user"
-  }, [_vm._v(_vm._s(_vm.user))]);
-};
-var staticRenderFns$1 = [];
-var User_vue_vue_type_style_index_0_scoped_true_lang = "";
-const __vue2_script$1 = {
+var RichText = __component__$2.exports;
+var User_vue_vue_type_style_index_0_scoped_682574a6_lang = "";
+const _sfc_main$1 = {
   name: "User",
   props: {
     user: {
@@ -13921,1087 +13904,24 @@ const __vue2_script$1 = {
     }
   }
 };
-const __cssModules$1 = {};
+var _sfc_render$1 = function render() {
+  var _vm = this, _c = _vm._self._c;
+  return _c("span", { staticClass: "user" }, [_vm._v(_vm._s(_vm.user))]);
+};
+var _sfc_staticRenderFns$1 = [];
 var __component__$1 = /* @__PURE__ */ normalizeComponent(
-  __vue2_script$1,
-  render$1,
-  staticRenderFns$1,
+  _sfc_main$1,
+  _sfc_render$1,
+  _sfc_staticRenderFns$1,
   false,
-  __vue2_injectStyles$1,
-  "7e6cda65",
+  null,
+  "682574a6",
   null,
   null
 );
-function __vue2_injectStyles$1(context) {
-  for (let o in __cssModules$1) {
-    this[o] = __cssModules$1[o];
-  }
-}
-var User = /* @__PURE__ */ function() {
-  return __component__$1.exports;
-}();
-var check = function(it) {
-  return it && it.Math == Math && it;
-};
-var global$a = check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || check(typeof self == "object" && self) || check(typeof commonjsGlobal == "object" && commonjsGlobal) || function() {
-  return this;
-}() || Function("return this")();
-var objectGetOwnPropertyDescriptor = {};
-var fails$b = function(exec2) {
-  try {
-    return !!exec2();
-  } catch (error) {
-    return true;
-  }
-};
-var fails$a = fails$b;
-var descriptors = !fails$a(function() {
-  return Object.defineProperty({}, 1, { get: function() {
-    return 7;
-  } })[1] != 7;
-});
-var fails$9 = fails$b;
-var functionBindNative = !fails$9(function() {
-  var test2 = function() {
-  }.bind();
-  return typeof test2 != "function" || test2.hasOwnProperty("prototype");
-});
-var NATIVE_BIND$1 = functionBindNative;
-var call$4 = Function.prototype.call;
-var functionCall = NATIVE_BIND$1 ? call$4.bind(call$4) : function() {
-  return call$4.apply(call$4, arguments);
-};
-var objectPropertyIsEnumerable = {};
-var $propertyIsEnumerable = {}.propertyIsEnumerable;
-var getOwnPropertyDescriptor$1 = Object.getOwnPropertyDescriptor;
-var NASHORN_BUG = getOwnPropertyDescriptor$1 && !$propertyIsEnumerable.call({ 1: 2 }, 1);
-objectPropertyIsEnumerable.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
-  var descriptor = getOwnPropertyDescriptor$1(this, V);
-  return !!descriptor && descriptor.enumerable;
-} : $propertyIsEnumerable;
-var createPropertyDescriptor$3 = function(bitmap, value) {
-  return {
-    enumerable: !(bitmap & 1),
-    configurable: !(bitmap & 2),
-    writable: !(bitmap & 4),
-    value
-  };
-};
-var NATIVE_BIND = functionBindNative;
-var FunctionPrototype$1 = Function.prototype;
-var bind = FunctionPrototype$1.bind;
-var call$3 = FunctionPrototype$1.call;
-var uncurryThis$b = NATIVE_BIND && bind.bind(call$3, call$3);
-var functionUncurryThis = NATIVE_BIND ? function(fn) {
-  return fn && uncurryThis$b(fn);
-} : function(fn) {
-  return fn && function() {
-    return call$3.apply(fn, arguments);
-  };
-};
-var uncurryThis$a = functionUncurryThis;
-var toString$1 = uncurryThis$a({}.toString);
-var stringSlice = uncurryThis$a("".slice);
-var classofRaw$1 = function(it) {
-  return stringSlice(toString$1(it), 8, -1);
-};
-var uncurryThis$9 = functionUncurryThis;
-var fails$8 = fails$b;
-var classof$3 = classofRaw$1;
-var $Object$3 = Object;
-var split = uncurryThis$9("".split);
-var indexedObject = fails$8(function() {
-  return !$Object$3("z").propertyIsEnumerable(0);
-}) ? function(it) {
-  return classof$3(it) == "String" ? split(it, "") : $Object$3(it);
-} : $Object$3;
-var $TypeError$6 = TypeError;
-var requireObjectCoercible$2 = function(it) {
-  if (it == void 0)
-    throw $TypeError$6("Can't call method on " + it);
-  return it;
-};
-var IndexedObject = indexedObject;
-var requireObjectCoercible$1 = requireObjectCoercible$2;
-var toIndexedObject$4 = function(it) {
-  return IndexedObject(requireObjectCoercible$1(it));
-};
-var isCallable$c = function(argument) {
-  return typeof argument == "function";
-};
-var isCallable$b = isCallable$c;
-var isObject$8 = function(it) {
-  return typeof it == "object" ? it !== null : isCallable$b(it);
-};
-var global$9 = global$a;
-var isCallable$a = isCallable$c;
-var aFunction = function(argument) {
-  return isCallable$a(argument) ? argument : void 0;
-};
-var getBuiltIn$4 = function(namespace, method) {
-  return arguments.length < 2 ? aFunction(global$9[namespace]) : global$9[namespace] && global$9[namespace][method];
-};
-var uncurryThis$8 = functionUncurryThis;
-var objectIsPrototypeOf = uncurryThis$8({}.isPrototypeOf);
-var getBuiltIn$3 = getBuiltIn$4;
-var engineUserAgent = getBuiltIn$3("navigator", "userAgent") || "";
-var global$8 = global$a;
-var userAgent = engineUserAgent;
-var process = global$8.process;
-var Deno = global$8.Deno;
-var versions = process && process.versions || Deno && Deno.version;
-var v8 = versions && versions.v8;
-var match, version;
-if (v8) {
-  match = v8.split(".");
-  version = match[0] > 0 && match[0] < 4 ? 1 : +(match[0] + match[1]);
-}
-if (!version && userAgent) {
-  match = userAgent.match(/Edge\/(\d+)/);
-  if (!match || match[1] >= 74) {
-    match = userAgent.match(/Chrome\/(\d+)/);
-    if (match)
-      version = +match[1];
-  }
-}
-var engineV8Version = version;
-var V8_VERSION$2 = engineV8Version;
-var fails$7 = fails$b;
-var nativeSymbol = !!Object.getOwnPropertySymbols && !fails$7(function() {
-  var symbol = Symbol();
-  return !String(symbol) || !(Object(symbol) instanceof Symbol) || !Symbol.sham && V8_VERSION$2 && V8_VERSION$2 < 41;
-});
-var NATIVE_SYMBOL$1 = nativeSymbol;
-var useSymbolAsUid = NATIVE_SYMBOL$1 && !Symbol.sham && typeof Symbol.iterator == "symbol";
-var getBuiltIn$2 = getBuiltIn$4;
-var isCallable$9 = isCallable$c;
-var isPrototypeOf = objectIsPrototypeOf;
-var USE_SYMBOL_AS_UID$1 = useSymbolAsUid;
-var $Object$2 = Object;
-var isSymbol$2 = USE_SYMBOL_AS_UID$1 ? function(it) {
-  return typeof it == "symbol";
-} : function(it) {
-  var $Symbol = getBuiltIn$2("Symbol");
-  return isCallable$9($Symbol) && isPrototypeOf($Symbol.prototype, $Object$2(it));
-};
-var $String$1 = String;
-var tryToString$1 = function(argument) {
-  try {
-    return $String$1(argument);
-  } catch (error) {
-    return "Object";
-  }
-};
-var isCallable$8 = isCallable$c;
-var tryToString = tryToString$1;
-var $TypeError$5 = TypeError;
-var aCallable$1 = function(argument) {
-  if (isCallable$8(argument))
-    return argument;
-  throw $TypeError$5(tryToString(argument) + " is not a function");
-};
-var aCallable = aCallable$1;
-var getMethod$1 = function(V, P) {
-  var func = V[P];
-  return func == null ? void 0 : aCallable(func);
-};
-var call$2 = functionCall;
-var isCallable$7 = isCallable$c;
-var isObject$7 = isObject$8;
-var $TypeError$4 = TypeError;
-var ordinaryToPrimitive$1 = function(input, pref) {
-  var fn, val;
-  if (pref === "string" && isCallable$7(fn = input.toString) && !isObject$7(val = call$2(fn, input)))
-    return val;
-  if (isCallable$7(fn = input.valueOf) && !isObject$7(val = call$2(fn, input)))
-    return val;
-  if (pref !== "string" && isCallable$7(fn = input.toString) && !isObject$7(val = call$2(fn, input)))
-    return val;
-  throw $TypeError$4("Can't convert object to primitive value");
-};
-var shared$3 = { exports: {} };
-var global$7 = global$a;
-var defineProperty$1 = Object.defineProperty;
-var defineGlobalProperty$3 = function(key, value) {
-  try {
-    defineProperty$1(global$7, key, { value, configurable: true, writable: true });
-  } catch (error) {
-    global$7[key] = value;
-  }
-  return value;
-};
-var global$6 = global$a;
-var defineGlobalProperty$2 = defineGlobalProperty$3;
-var SHARED = "__core-js_shared__";
-var store$3 = global$6[SHARED] || defineGlobalProperty$2(SHARED, {});
-var sharedStore = store$3;
-var store$2 = sharedStore;
-(shared$3.exports = function(key, value) {
-  return store$2[key] || (store$2[key] = value !== void 0 ? value : {});
-})("versions", []).push({
-  version: "3.24.1",
-  mode: "global",
-  copyright: "\xA9 2014-2022 Denis Pushkarev (zloirock.ru)",
-  license: "https://github.com/zloirock/core-js/blob/v3.24.1/LICENSE",
-  source: "https://github.com/zloirock/core-js"
-});
-var requireObjectCoercible = requireObjectCoercible$2;
-var $Object$1 = Object;
-var toObject$2 = function(argument) {
-  return $Object$1(requireObjectCoercible(argument));
-};
-var uncurryThis$7 = functionUncurryThis;
-var toObject$1 = toObject$2;
-var hasOwnProperty = uncurryThis$7({}.hasOwnProperty);
-var hasOwnProperty_1 = Object.hasOwn || function hasOwn2(it, key) {
-  return hasOwnProperty(toObject$1(it), key);
-};
-var uncurryThis$6 = functionUncurryThis;
-var id = 0;
-var postfix = Math.random();
-var toString = uncurryThis$6(1 .toString);
-var uid$2 = function(key) {
-  return "Symbol(" + (key === void 0 ? "" : key) + ")_" + toString(++id + postfix, 36);
-};
-var global$5 = global$a;
-var shared$2 = shared$3.exports;
-var hasOwn$6 = hasOwnProperty_1;
-var uid$1 = uid$2;
-var NATIVE_SYMBOL = nativeSymbol;
-var USE_SYMBOL_AS_UID = useSymbolAsUid;
-var WellKnownSymbolsStore = shared$2("wks");
-var Symbol$1 = global$5.Symbol;
-var symbolFor = Symbol$1 && Symbol$1["for"];
-var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol$1 : Symbol$1 && Symbol$1.withoutSetter || uid$1;
-var wellKnownSymbol$7 = function(name) {
-  if (!hasOwn$6(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == "string")) {
-    var description = "Symbol." + name;
-    if (NATIVE_SYMBOL && hasOwn$6(Symbol$1, name)) {
-      WellKnownSymbolsStore[name] = Symbol$1[name];
-    } else if (USE_SYMBOL_AS_UID && symbolFor) {
-      WellKnownSymbolsStore[name] = symbolFor(description);
-    } else {
-      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
-    }
-  }
-  return WellKnownSymbolsStore[name];
-};
-var call$1 = functionCall;
-var isObject$6 = isObject$8;
-var isSymbol$1 = isSymbol$2;
-var getMethod = getMethod$1;
-var ordinaryToPrimitive = ordinaryToPrimitive$1;
-var wellKnownSymbol$6 = wellKnownSymbol$7;
-var $TypeError$3 = TypeError;
-var TO_PRIMITIVE = wellKnownSymbol$6("toPrimitive");
-var toPrimitive$1 = function(input, pref) {
-  if (!isObject$6(input) || isSymbol$1(input))
-    return input;
-  var exoticToPrim = getMethod(input, TO_PRIMITIVE);
-  var result;
-  if (exoticToPrim) {
-    if (pref === void 0)
-      pref = "default";
-    result = call$1(exoticToPrim, input, pref);
-    if (!isObject$6(result) || isSymbol$1(result))
-      return result;
-    throw $TypeError$3("Can't convert object to primitive value");
-  }
-  if (pref === void 0)
-    pref = "number";
-  return ordinaryToPrimitive(input, pref);
-};
-var toPrimitive = toPrimitive$1;
-var isSymbol = isSymbol$2;
-var toPropertyKey$3 = function(argument) {
-  var key = toPrimitive(argument, "string");
-  return isSymbol(key) ? key : key + "";
-};
-var global$4 = global$a;
-var isObject$5 = isObject$8;
-var document$1 = global$4.document;
-var EXISTS$1 = isObject$5(document$1) && isObject$5(document$1.createElement);
-var documentCreateElement = function(it) {
-  return EXISTS$1 ? document$1.createElement(it) : {};
-};
-var DESCRIPTORS$6 = descriptors;
-var fails$6 = fails$b;
-var createElement = documentCreateElement;
-var ie8DomDefine = !DESCRIPTORS$6 && !fails$6(function() {
-  return Object.defineProperty(createElement("div"), "a", {
-    get: function() {
-      return 7;
-    }
-  }).a != 7;
-});
-var DESCRIPTORS$5 = descriptors;
-var call = functionCall;
-var propertyIsEnumerableModule = objectPropertyIsEnumerable;
-var createPropertyDescriptor$2 = createPropertyDescriptor$3;
-var toIndexedObject$3 = toIndexedObject$4;
-var toPropertyKey$2 = toPropertyKey$3;
-var hasOwn$5 = hasOwnProperty_1;
-var IE8_DOM_DEFINE$1 = ie8DomDefine;
-var $getOwnPropertyDescriptor$1 = Object.getOwnPropertyDescriptor;
-objectGetOwnPropertyDescriptor.f = DESCRIPTORS$5 ? $getOwnPropertyDescriptor$1 : function getOwnPropertyDescriptor2(O, P) {
-  O = toIndexedObject$3(O);
-  P = toPropertyKey$2(P);
-  if (IE8_DOM_DEFINE$1)
-    try {
-      return $getOwnPropertyDescriptor$1(O, P);
-    } catch (error) {
-    }
-  if (hasOwn$5(O, P))
-    return createPropertyDescriptor$2(!call(propertyIsEnumerableModule.f, O, P), O[P]);
-};
-var objectDefineProperty = {};
-var DESCRIPTORS$4 = descriptors;
-var fails$5 = fails$b;
-var v8PrototypeDefineBug = DESCRIPTORS$4 && fails$5(function() {
-  return Object.defineProperty(function() {
-  }, "prototype", {
-    value: 42,
-    writable: false
-  }).prototype != 42;
-});
-var isObject$4 = isObject$8;
-var $String = String;
-var $TypeError$2 = TypeError;
-var anObject$2 = function(argument) {
-  if (isObject$4(argument))
-    return argument;
-  throw $TypeError$2($String(argument) + " is not an object");
-};
-var DESCRIPTORS$3 = descriptors;
-var IE8_DOM_DEFINE = ie8DomDefine;
-var V8_PROTOTYPE_DEFINE_BUG = v8PrototypeDefineBug;
-var anObject$1 = anObject$2;
-var toPropertyKey$1 = toPropertyKey$3;
-var $TypeError$1 = TypeError;
-var $defineProperty = Object.defineProperty;
-var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var ENUMERABLE = "enumerable";
-var CONFIGURABLE$1 = "configurable";
-var WRITABLE = "writable";
-objectDefineProperty.f = DESCRIPTORS$3 ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty2(O, P, Attributes) {
-  anObject$1(O);
-  P = toPropertyKey$1(P);
-  anObject$1(Attributes);
-  if (typeof O === "function" && P === "prototype" && "value" in Attributes && WRITABLE in Attributes && !Attributes[WRITABLE]) {
-    var current = $getOwnPropertyDescriptor(O, P);
-    if (current && current[WRITABLE]) {
-      O[P] = Attributes.value;
-      Attributes = {
-        configurable: CONFIGURABLE$1 in Attributes ? Attributes[CONFIGURABLE$1] : current[CONFIGURABLE$1],
-        enumerable: ENUMERABLE in Attributes ? Attributes[ENUMERABLE] : current[ENUMERABLE],
-        writable: false
-      };
-    }
-  }
-  return $defineProperty(O, P, Attributes);
-} : $defineProperty : function defineProperty3(O, P, Attributes) {
-  anObject$1(O);
-  P = toPropertyKey$1(P);
-  anObject$1(Attributes);
-  if (IE8_DOM_DEFINE)
-    try {
-      return $defineProperty(O, P, Attributes);
-    } catch (error) {
-    }
-  if ("get" in Attributes || "set" in Attributes)
-    throw $TypeError$1("Accessors not supported");
-  if ("value" in Attributes)
-    O[P] = Attributes.value;
-  return O;
-};
-var DESCRIPTORS$2 = descriptors;
-var definePropertyModule$3 = objectDefineProperty;
-var createPropertyDescriptor$1 = createPropertyDescriptor$3;
-var createNonEnumerableProperty$2 = DESCRIPTORS$2 ? function(object, key, value) {
-  return definePropertyModule$3.f(object, key, createPropertyDescriptor$1(1, value));
-} : function(object, key, value) {
-  object[key] = value;
-  return object;
-};
-var makeBuiltIn$2 = { exports: {} };
-var DESCRIPTORS$1 = descriptors;
-var hasOwn$4 = hasOwnProperty_1;
-var FunctionPrototype = Function.prototype;
-var getDescriptor = DESCRIPTORS$1 && Object.getOwnPropertyDescriptor;
-var EXISTS = hasOwn$4(FunctionPrototype, "name");
-var PROPER = EXISTS && function something() {
-}.name === "something";
-var CONFIGURABLE = EXISTS && (!DESCRIPTORS$1 || DESCRIPTORS$1 && getDescriptor(FunctionPrototype, "name").configurable);
-var functionName = {
-  EXISTS,
-  PROPER,
-  CONFIGURABLE
-};
-var uncurryThis$5 = functionUncurryThis;
-var isCallable$6 = isCallable$c;
-var store$1 = sharedStore;
-var functionToString = uncurryThis$5(Function.toString);
-if (!isCallable$6(store$1.inspectSource)) {
-  store$1.inspectSource = function(it) {
-    return functionToString(it);
-  };
-}
-var inspectSource$3 = store$1.inspectSource;
-var global$3 = global$a;
-var isCallable$5 = isCallable$c;
-var inspectSource$2 = inspectSource$3;
-var WeakMap$1 = global$3.WeakMap;
-var nativeWeakMap = isCallable$5(WeakMap$1) && /native code/.test(inspectSource$2(WeakMap$1));
-var shared$1 = shared$3.exports;
-var uid = uid$2;
-var keys = shared$1("keys");
-var sharedKey$1 = function(key) {
-  return keys[key] || (keys[key] = uid(key));
-};
-var hiddenKeys$3 = {};
-var NATIVE_WEAK_MAP = nativeWeakMap;
-var global$2 = global$a;
-var uncurryThis$4 = functionUncurryThis;
-var isObject$3 = isObject$8;
-var createNonEnumerableProperty$1 = createNonEnumerableProperty$2;
-var hasOwn$3 = hasOwnProperty_1;
-var shared = sharedStore;
-var sharedKey = sharedKey$1;
-var hiddenKeys$2 = hiddenKeys$3;
-var OBJECT_ALREADY_INITIALIZED = "Object already initialized";
-var TypeError$1 = global$2.TypeError;
-var WeakMap = global$2.WeakMap;
-var set, get, has;
-var enforce = function(it) {
-  return has(it) ? get(it) : set(it, {});
-};
-var getterFor = function(TYPE) {
-  return function(it) {
-    var state;
-    if (!isObject$3(it) || (state = get(it)).type !== TYPE) {
-      throw TypeError$1("Incompatible receiver, " + TYPE + " required");
-    }
-    return state;
-  };
-};
-if (NATIVE_WEAK_MAP || shared.state) {
-  var store = shared.state || (shared.state = new WeakMap());
-  var wmget = uncurryThis$4(store.get);
-  var wmhas = uncurryThis$4(store.has);
-  var wmset = uncurryThis$4(store.set);
-  set = function(it, metadata) {
-    if (wmhas(store, it))
-      throw new TypeError$1(OBJECT_ALREADY_INITIALIZED);
-    metadata.facade = it;
-    wmset(store, it, metadata);
-    return metadata;
-  };
-  get = function(it) {
-    return wmget(store, it) || {};
-  };
-  has = function(it) {
-    return wmhas(store, it);
-  };
-} else {
-  var STATE = sharedKey("state");
-  hiddenKeys$2[STATE] = true;
-  set = function(it, metadata) {
-    if (hasOwn$3(it, STATE))
-      throw new TypeError$1(OBJECT_ALREADY_INITIALIZED);
-    metadata.facade = it;
-    createNonEnumerableProperty$1(it, STATE, metadata);
-    return metadata;
-  };
-  get = function(it) {
-    return hasOwn$3(it, STATE) ? it[STATE] : {};
-  };
-  has = function(it) {
-    return hasOwn$3(it, STATE);
-  };
-}
-var internalState = {
-  set,
-  get,
-  has,
-  enforce,
-  getterFor
-};
-var fails$4 = fails$b;
-var isCallable$4 = isCallable$c;
-var hasOwn$2 = hasOwnProperty_1;
-var DESCRIPTORS = descriptors;
-var CONFIGURABLE_FUNCTION_NAME = functionName.CONFIGURABLE;
-var inspectSource$1 = inspectSource$3;
-var InternalStateModule = internalState;
-var enforceInternalState = InternalStateModule.enforce;
-var getInternalState = InternalStateModule.get;
-var defineProperty = Object.defineProperty;
-var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails$4(function() {
-  return defineProperty(function() {
-  }, "length", { value: 8 }).length !== 8;
-});
-var TEMPLATE = String(String).split("String");
-var makeBuiltIn$1 = makeBuiltIn$2.exports = function(value, name, options) {
-  if (String(name).slice(0, 7) === "Symbol(") {
-    name = "[" + String(name).replace(/^Symbol\(([^)]*)\)/, "$1") + "]";
-  }
-  if (options && options.getter)
-    name = "get " + name;
-  if (options && options.setter)
-    name = "set " + name;
-  if (!hasOwn$2(value, "name") || CONFIGURABLE_FUNCTION_NAME && value.name !== name) {
-    if (DESCRIPTORS)
-      defineProperty(value, "name", { value: name, configurable: true });
-    else
-      value.name = name;
-  }
-  if (CONFIGURABLE_LENGTH && options && hasOwn$2(options, "arity") && value.length !== options.arity) {
-    defineProperty(value, "length", { value: options.arity });
-  }
-  try {
-    if (options && hasOwn$2(options, "constructor") && options.constructor) {
-      if (DESCRIPTORS)
-        defineProperty(value, "prototype", { writable: false });
-    } else if (value.prototype)
-      value.prototype = void 0;
-  } catch (error) {
-  }
-  var state = enforceInternalState(value);
-  if (!hasOwn$2(state, "source")) {
-    state.source = TEMPLATE.join(typeof name == "string" ? name : "");
-  }
-  return value;
-};
-Function.prototype.toString = makeBuiltIn$1(function toString2() {
-  return isCallable$4(this) && getInternalState(this).source || inspectSource$1(this);
-}, "toString");
-var isCallable$3 = isCallable$c;
-var definePropertyModule$2 = objectDefineProperty;
-var makeBuiltIn = makeBuiltIn$2.exports;
-var defineGlobalProperty$1 = defineGlobalProperty$3;
-var defineBuiltIn$1 = function(O, key, value, options) {
-  if (!options)
-    options = {};
-  var simple = options.enumerable;
-  var name = options.name !== void 0 ? options.name : key;
-  if (isCallable$3(value))
-    makeBuiltIn(value, name, options);
-  if (options.global) {
-    if (simple)
-      O[key] = value;
-    else
-      defineGlobalProperty$1(key, value);
-  } else {
-    try {
-      if (!options.unsafe)
-        delete O[key];
-      else if (O[key])
-        simple = true;
-    } catch (error) {
-    }
-    if (simple)
-      O[key] = value;
-    else
-      definePropertyModule$2.f(O, key, {
-        value,
-        enumerable: false,
-        configurable: !options.nonConfigurable,
-        writable: !options.nonWritable
-      });
-  }
-  return O;
-};
-var objectGetOwnPropertyNames = {};
-var ceil = Math.ceil;
-var floor = Math.floor;
-var mathTrunc = Math.trunc || function trunc2(x) {
-  var n = +x;
-  return (n > 0 ? floor : ceil)(n);
-};
-var trunc = mathTrunc;
-var toIntegerOrInfinity$2 = function(argument) {
-  var number2 = +argument;
-  return number2 !== number2 || number2 === 0 ? 0 : trunc(number2);
-};
-var toIntegerOrInfinity$1 = toIntegerOrInfinity$2;
-var max$1 = Math.max;
-var min$1 = Math.min;
-var toAbsoluteIndex$2 = function(index2, length) {
-  var integer = toIntegerOrInfinity$1(index2);
-  return integer < 0 ? max$1(integer + length, 0) : min$1(integer, length);
-};
-var toIntegerOrInfinity = toIntegerOrInfinity$2;
-var min = Math.min;
-var toLength$1 = function(argument) {
-  return argument > 0 ? min(toIntegerOrInfinity(argument), 9007199254740991) : 0;
-};
-var toLength = toLength$1;
-var lengthOfArrayLike$3 = function(obj) {
-  return toLength(obj.length);
-};
-var toIndexedObject$2 = toIndexedObject$4;
-var toAbsoluteIndex$1 = toAbsoluteIndex$2;
-var lengthOfArrayLike$2 = lengthOfArrayLike$3;
-var createMethod = function(IS_INCLUDES) {
-  return function($this, el, fromIndex) {
-    var O = toIndexedObject$2($this);
-    var length = lengthOfArrayLike$2(O);
-    var index2 = toAbsoluteIndex$1(fromIndex, length);
-    var value;
-    if (IS_INCLUDES && el != el)
-      while (length > index2) {
-        value = O[index2++];
-        if (value != value)
-          return true;
-      }
-    else
-      for (; length > index2; index2++) {
-        if ((IS_INCLUDES || index2 in O) && O[index2] === el)
-          return IS_INCLUDES || index2 || 0;
-      }
-    return !IS_INCLUDES && -1;
-  };
-};
-var arrayIncludes = {
-  includes: createMethod(true),
-  indexOf: createMethod(false)
-};
-var uncurryThis$3 = functionUncurryThis;
-var hasOwn$1 = hasOwnProperty_1;
-var toIndexedObject$1 = toIndexedObject$4;
-var indexOf = arrayIncludes.indexOf;
-var hiddenKeys$1 = hiddenKeys$3;
-var push = uncurryThis$3([].push);
-var objectKeysInternal = function(object, names) {
-  var O = toIndexedObject$1(object);
-  var i = 0;
-  var result = [];
-  var key;
-  for (key in O)
-    !hasOwn$1(hiddenKeys$1, key) && hasOwn$1(O, key) && push(result, key);
-  while (names.length > i)
-    if (hasOwn$1(O, key = names[i++])) {
-      ~indexOf(result, key) || push(result, key);
-    }
-  return result;
-};
-var enumBugKeys$1 = [
-  "constructor",
-  "hasOwnProperty",
-  "isPrototypeOf",
-  "propertyIsEnumerable",
-  "toLocaleString",
-  "toString",
-  "valueOf"
-];
-var internalObjectKeys = objectKeysInternal;
-var enumBugKeys = enumBugKeys$1;
-var hiddenKeys = enumBugKeys.concat("length", "prototype");
-objectGetOwnPropertyNames.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
-  return internalObjectKeys(O, hiddenKeys);
-};
-var objectGetOwnPropertySymbols = {};
-objectGetOwnPropertySymbols.f = Object.getOwnPropertySymbols;
-var getBuiltIn$1 = getBuiltIn$4;
-var uncurryThis$2 = functionUncurryThis;
-var getOwnPropertyNamesModule = objectGetOwnPropertyNames;
-var getOwnPropertySymbolsModule = objectGetOwnPropertySymbols;
-var anObject = anObject$2;
-var concat = uncurryThis$2([].concat);
-var ownKeys$1 = getBuiltIn$1("Reflect", "ownKeys") || function ownKeys2(it) {
-  var keys2 = getOwnPropertyNamesModule.f(anObject(it));
-  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
-  return getOwnPropertySymbols ? concat(keys2, getOwnPropertySymbols(it)) : keys2;
-};
-var hasOwn = hasOwnProperty_1;
-var ownKeys = ownKeys$1;
-var getOwnPropertyDescriptorModule = objectGetOwnPropertyDescriptor;
-var definePropertyModule$1 = objectDefineProperty;
-var copyConstructorProperties$1 = function(target2, source, exceptions) {
-  var keys2 = ownKeys(source);
-  var defineProperty4 = definePropertyModule$1.f;
-  var getOwnPropertyDescriptor3 = getOwnPropertyDescriptorModule.f;
-  for (var i = 0; i < keys2.length; i++) {
-    var key = keys2[i];
-    if (!hasOwn(target2, key) && !(exceptions && hasOwn(exceptions, key))) {
-      defineProperty4(target2, key, getOwnPropertyDescriptor3(source, key));
-    }
-  }
-};
-var fails$3 = fails$b;
-var isCallable$2 = isCallable$c;
-var replacement = /#|\.prototype\./;
-var isForced$1 = function(feature, detection) {
-  var value = data[normalize(feature)];
-  return value == POLYFILL ? true : value == NATIVE ? false : isCallable$2(detection) ? fails$3(detection) : !!detection;
-};
-var normalize = isForced$1.normalize = function(string2) {
-  return String(string2).replace(replacement, ".").toLowerCase();
-};
-var data = isForced$1.data = {};
-var NATIVE = isForced$1.NATIVE = "N";
-var POLYFILL = isForced$1.POLYFILL = "P";
-var isForced_1 = isForced$1;
-var global$1 = global$a;
-var getOwnPropertyDescriptor = objectGetOwnPropertyDescriptor.f;
-var createNonEnumerableProperty = createNonEnumerableProperty$2;
-var defineBuiltIn = defineBuiltIn$1;
-var defineGlobalProperty = defineGlobalProperty$3;
-var copyConstructorProperties = copyConstructorProperties$1;
-var isForced = isForced_1;
-var _export = function(options, source) {
-  var TARGET = options.target;
-  var GLOBAL = options.global;
-  var STATIC = options.stat;
-  var FORCED2, target2, key, targetProperty, sourceProperty, descriptor;
-  if (GLOBAL) {
-    target2 = global$1;
-  } else if (STATIC) {
-    target2 = global$1[TARGET] || defineGlobalProperty(TARGET, {});
-  } else {
-    target2 = (global$1[TARGET] || {}).prototype;
-  }
-  if (target2)
-    for (key in source) {
-      sourceProperty = source[key];
-      if (options.dontCallGetSet) {
-        descriptor = getOwnPropertyDescriptor(target2, key);
-        targetProperty = descriptor && descriptor.value;
-      } else
-        targetProperty = target2[key];
-      FORCED2 = isForced(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
-      if (!FORCED2 && targetProperty !== void 0) {
-        if (typeof sourceProperty == typeof targetProperty)
-          continue;
-        copyConstructorProperties(sourceProperty, targetProperty);
-      }
-      if (options.sham || targetProperty && targetProperty.sham) {
-        createNonEnumerableProperty(sourceProperty, "sham", true);
-      }
-      defineBuiltIn(target2, key, sourceProperty, options);
-    }
-};
-var classof$2 = classofRaw$1;
-var isArray$3 = Array.isArray || function isArray3(argument) {
-  return classof$2(argument) == "Array";
-};
-var $TypeError = TypeError;
-var MAX_SAFE_INTEGER = 9007199254740991;
-var doesNotExceedSafeInteger$1 = function(it) {
-  if (it > MAX_SAFE_INTEGER)
-    throw $TypeError("Maximum allowed index exceeded");
-  return it;
-};
-var toPropertyKey = toPropertyKey$3;
-var definePropertyModule = objectDefineProperty;
-var createPropertyDescriptor = createPropertyDescriptor$3;
-var createProperty$2 = function(object, key, value) {
-  var propertyKey = toPropertyKey(key);
-  if (propertyKey in object)
-    definePropertyModule.f(object, propertyKey, createPropertyDescriptor(0, value));
-  else
-    object[propertyKey] = value;
-};
-var wellKnownSymbol$5 = wellKnownSymbol$7;
-var TO_STRING_TAG$1 = wellKnownSymbol$5("toStringTag");
-var test = {};
-test[TO_STRING_TAG$1] = "z";
-var toStringTagSupport = String(test) === "[object z]";
-var TO_STRING_TAG_SUPPORT = toStringTagSupport;
-var isCallable$1 = isCallable$c;
-var classofRaw = classofRaw$1;
-var wellKnownSymbol$4 = wellKnownSymbol$7;
-var TO_STRING_TAG = wellKnownSymbol$4("toStringTag");
-var $Object = Object;
-var CORRECT_ARGUMENTS = classofRaw(function() {
-  return arguments;
-}()) == "Arguments";
-var tryGet = function(it, key) {
-  try {
-    return it[key];
-  } catch (error) {
-  }
-};
-var classof$1 = TO_STRING_TAG_SUPPORT ? classofRaw : function(it) {
-  var O, tag, result;
-  return it === void 0 ? "Undefined" : it === null ? "Null" : typeof (tag = tryGet(O = $Object(it), TO_STRING_TAG)) == "string" ? tag : CORRECT_ARGUMENTS ? classofRaw(O) : (result = classofRaw(O)) == "Object" && isCallable$1(O.callee) ? "Arguments" : result;
-};
-var uncurryThis$1 = functionUncurryThis;
-var fails$2 = fails$b;
-var isCallable = isCallable$c;
-var classof = classof$1;
-var getBuiltIn = getBuiltIn$4;
-var inspectSource = inspectSource$3;
-var noop = function() {
-};
-var empty = [];
-var construct = getBuiltIn("Reflect", "construct");
-var constructorRegExp = /^\s*(?:class|function)\b/;
-var exec = uncurryThis$1(constructorRegExp.exec);
-var INCORRECT_TO_STRING = !constructorRegExp.exec(noop);
-var isConstructorModern = function isConstructor2(argument) {
-  if (!isCallable(argument))
-    return false;
-  try {
-    construct(noop, empty, argument);
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
-var isConstructorLegacy = function isConstructor3(argument) {
-  if (!isCallable(argument))
-    return false;
-  switch (classof(argument)) {
-    case "AsyncFunction":
-    case "GeneratorFunction":
-    case "AsyncGeneratorFunction":
-      return false;
-  }
-  try {
-    return INCORRECT_TO_STRING || !!exec(constructorRegExp, inspectSource(argument));
-  } catch (error) {
-    return true;
-  }
-};
-isConstructorLegacy.sham = true;
-var isConstructor$2 = !construct || fails$2(function() {
-  var called;
-  return isConstructorModern(isConstructorModern.call) || !isConstructorModern(Object) || !isConstructorModern(function() {
-    called = true;
-  }) || called;
-}) ? isConstructorLegacy : isConstructorModern;
-var isArray$2 = isArray$3;
-var isConstructor$1 = isConstructor$2;
-var isObject$2 = isObject$8;
-var wellKnownSymbol$3 = wellKnownSymbol$7;
-var SPECIES$2 = wellKnownSymbol$3("species");
-var $Array$1 = Array;
-var arraySpeciesConstructor$1 = function(originalArray) {
-  var C;
-  if (isArray$2(originalArray)) {
-    C = originalArray.constructor;
-    if (isConstructor$1(C) && (C === $Array$1 || isArray$2(C.prototype)))
-      C = void 0;
-    else if (isObject$2(C)) {
-      C = C[SPECIES$2];
-      if (C === null)
-        C = void 0;
-    }
-  }
-  return C === void 0 ? $Array$1 : C;
-};
-var arraySpeciesConstructor = arraySpeciesConstructor$1;
-var arraySpeciesCreate$1 = function(originalArray, length) {
-  return new (arraySpeciesConstructor(originalArray))(length === 0 ? 0 : length);
-};
-var fails$1 = fails$b;
-var wellKnownSymbol$2 = wellKnownSymbol$7;
-var V8_VERSION$1 = engineV8Version;
-var SPECIES$1 = wellKnownSymbol$2("species");
-var arrayMethodHasSpeciesSupport$2 = function(METHOD_NAME) {
-  return V8_VERSION$1 >= 51 || !fails$1(function() {
-    var array = [];
-    var constructor = array.constructor = {};
-    constructor[SPECIES$1] = function() {
-      return { foo: 1 };
-    };
-    return array[METHOD_NAME](Boolean).foo !== 1;
-  });
-};
-var $$1 = _export;
-var fails = fails$b;
-var isArray$1 = isArray$3;
-var isObject$1 = isObject$8;
-var toObject = toObject$2;
-var lengthOfArrayLike$1 = lengthOfArrayLike$3;
-var doesNotExceedSafeInteger = doesNotExceedSafeInteger$1;
-var createProperty$1 = createProperty$2;
-var arraySpeciesCreate = arraySpeciesCreate$1;
-var arrayMethodHasSpeciesSupport$1 = arrayMethodHasSpeciesSupport$2;
-var wellKnownSymbol$1 = wellKnownSymbol$7;
-var V8_VERSION = engineV8Version;
-var IS_CONCAT_SPREADABLE = wellKnownSymbol$1("isConcatSpreadable");
-var IS_CONCAT_SPREADABLE_SUPPORT = V8_VERSION >= 51 || !fails(function() {
-  var array = [];
-  array[IS_CONCAT_SPREADABLE] = false;
-  return array.concat()[0] !== array;
-});
-var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport$1("concat");
-var isConcatSpreadable = function(O) {
-  if (!isObject$1(O))
-    return false;
-  var spreadable = O[IS_CONCAT_SPREADABLE];
-  return spreadable !== void 0 ? !!spreadable : isArray$1(O);
-};
-var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-$$1({ target: "Array", proto: true, arity: 1, forced: FORCED }, {
-  concat: function concat2(arg) {
-    var O = toObject(this);
-    var A = arraySpeciesCreate(O, 0);
-    var n = 0;
-    var i, k, length, len, E;
-    for (i = -1, length = arguments.length; i < length; i++) {
-      E = i === -1 ? O : arguments[i];
-      if (isConcatSpreadable(E)) {
-        len = lengthOfArrayLike$1(E);
-        doesNotExceedSafeInteger(n + len);
-        for (k = 0; k < len; k++, n++)
-          if (k in E)
-            createProperty$1(A, n, E[k]);
-      } else {
-        doesNotExceedSafeInteger(n + 1);
-        createProperty$1(A, n++, E);
-      }
-    }
-    A.length = n;
-    return A;
-  }
-});
-var uncurryThis = functionUncurryThis;
-var arraySlice = uncurryThis([].slice);
-var $ = _export;
-var isArray = isArray$3;
-var isConstructor = isConstructor$2;
-var isObject = isObject$8;
-var toAbsoluteIndex = toAbsoluteIndex$2;
-var lengthOfArrayLike = lengthOfArrayLike$3;
-var toIndexedObject = toIndexedObject$4;
-var createProperty = createProperty$2;
-var wellKnownSymbol = wellKnownSymbol$7;
-var arrayMethodHasSpeciesSupport = arrayMethodHasSpeciesSupport$2;
-var un$Slice = arraySlice;
-var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("slice");
-var SPECIES = wellKnownSymbol("species");
-var $Array = Array;
-var max = Math.max;
-$({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
-  slice: function slice(start, end) {
-    var O = toIndexedObject(this);
-    var length = lengthOfArrayLike(O);
-    var k = toAbsoluteIndex(start, length);
-    var fin = toAbsoluteIndex(end === void 0 ? length : end, length);
-    var Constructor, result, n;
-    if (isArray(O)) {
-      Constructor = O.constructor;
-      if (isConstructor(Constructor) && (Constructor === $Array || isArray(Constructor.prototype))) {
-        Constructor = void 0;
-      } else if (isObject(Constructor)) {
-        Constructor = Constructor[SPECIES];
-        if (Constructor === null)
-          Constructor = void 0;
-      }
-      if (Constructor === $Array || Constructor === void 0) {
-        return un$Slice(O, k, fin);
-      }
-    }
-    result = new (Constructor === void 0 ? $Array : Constructor)(max(fin - k, 0));
-    for (n = 0; k < fin; k++, n++)
-      if (k in O)
-        createProperty(result, n, O[k]);
-    result.length = n;
-    return result;
-  }
-});
-var render = function __render__2() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", [_c("textarea", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.text,
-      expression: "text"
-    }],
-    domProps: {
-      "value": _vm.text
-    },
-    on: {
-      "input": function input($event) {
-        if ($event.target.composing)
-          return;
-        _vm.text = $event.target.value;
-      }
-    }
-  }), _c("p", [_c("label", {
-    attrs: {
-      "for": "autolink"
-    }
-  }, [_c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.autolink,
-      expression: "autolink"
-    }],
-    attrs: {
-      "id": "autolink",
-      "type": "checkbox"
-    },
-    domProps: {
-      "checked": Array.isArray(_vm.autolink) ? _vm._i(_vm.autolink, null) > -1 : _vm.autolink
-    },
-    on: {
-      "change": function change($event) {
-        var $$a = _vm.autolink, $$el = $event.target, $$c = $$el.checked ? true : false;
-        if (Array.isArray($$a)) {
-          var $$v = null, $$i = _vm._i($$a, $$v);
-          if ($$el.checked) {
-            $$i < 0 && (_vm.autolink = $$a.concat([$$v]));
-          } else {
-            $$i > -1 && (_vm.autolink = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
-          }
-        } else {
-          _vm.autolink = $$c;
-        }
-      }
-    }
-  }), _vm._v(" Autolink ")])]), _c("p", [_c("label", {
-    attrs: {
-      "for": "useMarkdown"
-    }
-  }, [_c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.useMarkdown,
-      expression: "useMarkdown"
-    }],
-    attrs: {
-      "id": "useMarkdown",
-      "type": "checkbox"
-    },
-    domProps: {
-      "checked": Array.isArray(_vm.useMarkdown) ? _vm._i(_vm.useMarkdown, null) > -1 : _vm.useMarkdown
-    },
-    on: {
-      "change": function change($event) {
-        var $$a = _vm.useMarkdown, $$el = $event.target, $$c = $$el.checked ? true : false;
-        if (Array.isArray($$a)) {
-          var $$v = null, $$i = _vm._i($$a, $$v);
-          if ($$el.checked) {
-            $$i < 0 && (_vm.useMarkdown = $$a.concat([$$v]));
-          } else {
-            $$i > -1 && (_vm.useMarkdown = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
-          }
-        } else {
-          _vm.useMarkdown = $$c;
-        }
-      }
-    }
-  }), _vm._v(" Use Markdown ")])]), _c("RichText", {
-    attrs: {
-      "text": _vm.text,
-      "autolink": _vm.autolink,
-      "arguments": _vm.args,
-      "use-markdown": _vm.useMarkdown
-    }
-  })], 1);
-};
-var staticRenderFns = [];
+var User = __component__$1.exports;
 var Playground_vue_vue_type_style_index_0_lang = "";
-const __vue2_script = {
+const _sfc_main = {
   name: "Playground",
   components: {
     RichText
@@ -15023,25 +13943,50 @@ const __vue2_script = {
     };
   }
 };
-const __cssModules = {};
+var _sfc_render = function render2() {
+  var _vm = this, _c = _vm._self._c;
+  return _c("div", [_c("textarea", { directives: [{ name: "model", rawName: "v-model", value: _vm.text, expression: "text" }], domProps: { "value": _vm.text }, on: { "input": function($event) {
+    if ($event.target.composing)
+      return;
+    _vm.text = $event.target.value;
+  } } }), _c("p", [_c("label", { attrs: { "for": "autolink" } }, [_c("input", { directives: [{ name: "model", rawName: "v-model", value: _vm.autolink, expression: "autolink" }], attrs: { "id": "autolink", "type": "checkbox" }, domProps: { "checked": Array.isArray(_vm.autolink) ? _vm._i(_vm.autolink, null) > -1 : _vm.autolink }, on: { "change": function($event) {
+    var $$a = _vm.autolink, $$el = $event.target, $$c = $$el.checked ? true : false;
+    if (Array.isArray($$a)) {
+      var $$v = null, $$i = _vm._i($$a, $$v);
+      if ($$el.checked) {
+        $$i < 0 && (_vm.autolink = $$a.concat([$$v]));
+      } else {
+        $$i > -1 && (_vm.autolink = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+      }
+    } else {
+      _vm.autolink = $$c;
+    }
+  } } }), _vm._v(" Autolink ")])]), _c("p", [_c("label", { attrs: { "for": "useMarkdown" } }, [_c("input", { directives: [{ name: "model", rawName: "v-model", value: _vm.useMarkdown, expression: "useMarkdown" }], attrs: { "id": "useMarkdown", "type": "checkbox" }, domProps: { "checked": Array.isArray(_vm.useMarkdown) ? _vm._i(_vm.useMarkdown, null) > -1 : _vm.useMarkdown }, on: { "change": function($event) {
+    var $$a = _vm.useMarkdown, $$el = $event.target, $$c = $$el.checked ? true : false;
+    if (Array.isArray($$a)) {
+      var $$v = null, $$i = _vm._i($$a, $$v);
+      if ($$el.checked) {
+        $$i < 0 && (_vm.useMarkdown = $$a.concat([$$v]));
+      } else {
+        $$i > -1 && (_vm.useMarkdown = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+      }
+    } else {
+      _vm.useMarkdown = $$c;
+    }
+  } } }), _vm._v(" Use Markdown ")])]), _c("RichText", { attrs: { "text": _vm.text, "autolink": _vm.autolink, "arguments": _vm.args, "use-markdown": _vm.useMarkdown } })], 1);
+};
+var _sfc_staticRenderFns = [];
 var __component__ = /* @__PURE__ */ normalizeComponent(
-  __vue2_script,
-  render,
-  staticRenderFns,
+  _sfc_main,
+  _sfc_render,
+  _sfc_staticRenderFns,
   false,
-  __vue2_injectStyles,
+  null,
   null,
   null,
   null
 );
-function __vue2_injectStyles(context) {
-  for (let o in __cssModules) {
-    this[o] = __cssModules[o];
-  }
-}
-var Playground = /* @__PURE__ */ function() {
-  return __component__.exports;
-}();
+var Playground = __component__.exports;
 document.getElementById("readme").innerHTML = html$3;
 const app = new Vue({
   render: (h) => h("div", [
