@@ -1,4 +1,4 @@
-const p = function polyfill() {
+(function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
     return;
@@ -38,8 +38,7 @@ const p = function polyfill() {
     const fetchOpts = getFetchOpts(link2);
     fetch(link2.href, fetchOpts);
   }
-};
-p();
+})();
 /*!
  * Vue.js v2.7.8
  * (c) 2014-2022 Evan You
@@ -2930,22 +2929,22 @@ function proxy(target2, sourceKey, key) {
   Object.defineProperty(target2, key, sharedPropertyDefinition);
 }
 function initState(vm) {
-  var opts2 = vm.$options;
-  if (opts2.props)
-    initProps$1(vm, opts2.props);
+  var opts = vm.$options;
+  if (opts.props)
+    initProps$1(vm, opts.props);
   initSetup(vm);
-  if (opts2.methods)
-    initMethods(vm, opts2.methods);
-  if (opts2.data) {
+  if (opts.methods)
+    initMethods(vm, opts.methods);
+  if (opts.data) {
     initData(vm);
   } else {
     var ob = observe(vm._data = {});
     ob && ob.vmCount++;
   }
-  if (opts2.computed)
-    initComputed$1(vm, opts2.computed);
-  if (opts2.watch && opts2.watch !== nativeWatch) {
-    initWatch(vm, opts2.watch);
+  if (opts.computed)
+    initComputed$1(vm, opts.computed);
+  if (opts.watch && opts.watch !== nativeWatch) {
+    initWatch(vm, opts.watch);
   }
 }
 function initProps$1(vm, propsOptions) {
@@ -3139,18 +3138,18 @@ function initMixin$1(Vue2) {
   };
 }
 function initInternalComponent(vm, options) {
-  var opts2 = vm.$options = Object.create(vm.constructor.options);
+  var opts = vm.$options = Object.create(vm.constructor.options);
   var parentVnode = options._parentVnode;
-  opts2.parent = options.parent;
-  opts2._parentVnode = parentVnode;
+  opts.parent = options.parent;
+  opts._parentVnode = parentVnode;
   var vnodeComponentOptions = parentVnode.componentOptions;
-  opts2.propsData = vnodeComponentOptions.propsData;
-  opts2._parentListeners = vnodeComponentOptions.listeners;
-  opts2._renderChildren = vnodeComponentOptions.children;
-  opts2._componentTag = vnodeComponentOptions.tag;
+  opts.propsData = vnodeComponentOptions.propsData;
+  opts._parentListeners = vnodeComponentOptions.listeners;
+  opts._renderChildren = vnodeComponentOptions.children;
+  opts._componentTag = vnodeComponentOptions.tag;
   if (options.render) {
-    opts2.render = options.render;
-    opts2.staticRenderFns = options.staticRenderFns;
+    opts.render = options.render;
+    opts.staticRenderFns = options.staticRenderFns;
   }
 }
 function resolveConstructorOptions(Ctor) {
@@ -3289,8 +3288,8 @@ function initAssetRegisters(Vue2) {
     };
   });
 }
-function _getComponentName(opts2) {
-  return opts2 && (getComponentName(opts2.Ctor.options) || opts2.tag);
+function _getComponentName(opts) {
+  return opts && (getComponentName(opts.Ctor.options) || opts.tag);
 }
 function matches(pattern, name) {
   if (isArray$1(pattern)) {
@@ -4312,8 +4311,8 @@ function callHook(dir, hook, vnode, oldVnode, isDestroy) {
 }
 var baseModules = [ref, directives];
 function updateAttrs(oldVnode, vnode) {
-  var opts2 = vnode.componentOptions;
-  if (isDef(opts2) && opts2.Ctor.options.inheritAttrs === false) {
+  var opts = vnode.componentOptions;
+  if (isDef(opts) && opts.Ctor.options.inheritAttrs === false) {
     return;
   }
   if (isUndef(oldVnode.data.attrs) && isUndef(vnode.data.attrs)) {
@@ -5580,7 +5579,7 @@ function bail(error) {
  * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
-var isBuffer$1 = function isBuffer2(obj) {
+var isBuffer$1 = function isBuffer(obj) {
   return obj != null && obj.constructor != null && typeof obj.constructor.isBuffer === "function" && obj.constructor.isBuffer(obj);
 };
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -5593,7 +5592,7 @@ var isArray = function isArray2(arr) {
   }
   return toStr.call(arr) === "[object Array]";
 };
-var isPlainObject$1 = function isPlainObject2(obj) {
+var isPlainObject$1 = function isPlainObject(obj) {
   if (!obj || toStr.call(obj) !== "[object Object]") {
     return false;
   }
@@ -5667,7 +5666,7 @@ var extend = function extend2() {
   }
   return target2;
 };
-function isPlainObject(value) {
+function isPlainObject2(value) {
   if (typeof value !== "object" || value === null) {
     return false;
   }
@@ -5759,7 +5758,7 @@ function wrap$1(middleware, callback) {
  * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
-var isBuffer = function isBuffer3(obj) {
+var isBuffer2 = function isBuffer3(obj) {
   return obj != null && obj.constructor != null && typeof obj.constructor.isBuffer === "function" && obj.constructor.isBuffer(obj);
 };
 function stringifyPosition(value) {
@@ -6110,7 +6109,7 @@ class VFile {
     let options;
     if (!value) {
       options = {};
-    } else if (typeof value === "string" || isBuffer(value)) {
+    } else if (typeof value === "string" || isBuffer2(value)) {
       options = { value };
     } else if (isUrl(value)) {
       options = { path: value };
@@ -6360,7 +6359,7 @@ function base() {
         }
       }
       if (entry) {
-        if (isPlainObject(entry[1]) && isPlainObject(value2)) {
+        if (isPlainObject2(entry[1]) && isPlainObject2(value2)) {
           value2 = extend(true, entry[1], value2);
         }
         entry[1] = value2;
@@ -6508,7 +6507,7 @@ function assertUnfrozen(name, frozen) {
   }
 }
 function assertNode(node) {
-  if (!isPlainObject(node) || typeof node.type !== "string") {
+  if (!isPlainObject2(node) || typeof node.type !== "string") {
     throw new TypeError("Expected node, got `" + node + "`");
   }
 }
@@ -10150,7 +10149,7 @@ const attentionMarkers = {
 const disable = {
   null: []
 };
-var defaultConstructs = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const defaultConstructs = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   document: document$1,
   contentInitial,
@@ -11929,7 +11928,7 @@ function toHast(tree, options) {
 const remarkRehype = function(destination, options) {
   return destination && "run" in destination ? bridge(destination, options) : mutate(destination || options);
 };
-var remark2rehype = remarkRehype;
+const remark2rehype = remarkRehype;
 function bridge(destination, options) {
   return (node, file, next) => {
     destination.run(toHast(node, options), file, (error) => {
@@ -11992,7 +11991,7 @@ const commaOrSpaceSeparated = increment();
 function increment() {
   return 2 ** ++powers;
 }
-var types = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const types = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   boolean,
   booleanish,
@@ -13522,7 +13521,7 @@ var hastCssPropertyMap = {
   height: "height",
   width: "width"
 };
-var hastUtilTableCellStyle = function tableCellStyle2(node) {
+var hastUtilTableCellStyle = function tableCellStyle(node) {
   visit(node, "element", visitor);
   return node;
 };
@@ -13552,7 +13551,7 @@ function appendStyle(node, property, value) {
   var nextStyle = prevStyle + property + ": " + value + ";";
   node.properties.style = nextStyle;
 }
-var tableCellStyle = hastUtilTableCellStyle;
+const tableCellStyle2 = hastUtilTableCellStyle;
 function whitespace(thing) {
   var value = thing && typeof thing === "object" && thing.type === "text" ? thing.value || "" : thing;
   return typeof value === "string" && value.replace(/[ \t\n\f\r]/g, "") === "";
@@ -13574,7 +13573,7 @@ function rehypeReact(options) {
   const createElement2 = options.createElement;
   Object.assign(this, { Compiler: compiler2 });
   function compiler2(node) {
-    let result = toH(h, tableCellStyle(node), options.prefix);
+    let result = toH(h, tableCellStyle2(node), options.prefix);
     if (node.type === "root") {
       result = result && typeof result === "object" && "type" in result && "props" in result && result.type === "div" && (node.children.length !== 1 || node.children[0].type !== "element") ? result.props.children : [result];
       return createElement2(options.Fragment || "div", {}, result);
@@ -13765,7 +13764,7 @@ const prepareTextNode = ({ h, context }, text2) => {
   }
   return text2;
 };
-var RichText_vue_vue_type_style_index_0_scoped_d7653ffe_lang = "";
+const RichText_vue_vue_type_style_index_0_scoped_d7653ffe_lang = "";
 function normalizeComponent(scriptExports, render3, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
   var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
   if (render3) {
@@ -13949,8 +13948,8 @@ var __component__$2 = /* @__PURE__ */ normalizeComponent(
   null,
   null
 );
-var RichText = __component__$2.exports;
-var UserBubble_vue_vue_type_style_index_0_scoped_aa533d85_lang = "";
+const RichText = __component__$2.exports;
+const UserBubble_vue_vue_type_style_index_0_scoped_aa533d85_lang = "";
 const _sfc_main$1 = {
   name: "UserBubble",
   props: {
@@ -13975,8 +13974,8 @@ var __component__$1 = /* @__PURE__ */ normalizeComponent(
   null,
   null
 );
-var UserBubble = __component__$1.exports;
-var DemoPlayground_vue_vue_type_style_index_0_lang = "";
+const UserBubble = __component__$1.exports;
+const DemoPlayground_vue_vue_type_style_index_0_lang = "";
 const _sfc_main = {
   name: "DemoPlayground",
   components: {
@@ -14044,7 +14043,7 @@ var __component__ = /* @__PURE__ */ normalizeComponent(
   null,
   null
 );
-var DemoPlayground = __component__.exports;
+const DemoPlayground = __component__.exports;
 document.getElementById("readme").innerHTML = html$3;
 const app = new Vue({
   render: (h) => h("div", [
