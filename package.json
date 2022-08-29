@@ -38,7 +38,7 @@
 	],
 	"dependencies": {
 		"clone": "^2.1.2",
-		"vue": "^2.7.8"
+		"vue": "^3.2.37"
 	},
 	"devDependencies": {
 		"@babel/eslint-parser": "^7.18.9",
@@ -80,7 +80,7 @@
 		"vue-template-compiler": "^2.7.8"
 	},
 	"peerDependencies": {
-		"vue": "^2.7.8"
+		"vue": "^3.2.37"
 	},
 	"engines": {
 		"node": ">=14.0.0",
