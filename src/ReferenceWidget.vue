@@ -118,7 +118,7 @@ export default {
 		-webkit-box-orient: vertical;
 	}
 
-	&--link a {
+	&--link {
 		color: var(--color-text-maxcontrast);
 	}
 }
