@@ -105,7 +105,7 @@ describe('Foo', () => {
 
 		expect(wrapper.text()).toEqual('Testwith a link to https://example.com \n go visit it')
 		expect(wrapper.find('a').attributes('href')).toEqual('https://example.com')
-		expect(wrapper.html()).toContain(`\n  go visit it</div>`)
+		expect(wrapper.html()).toContain(`\n    go visit it`)
 	})
 
 	it('properly inserts a link with brackets', async() => {
