@@ -10,7 +10,7 @@ export default defineConfig({
 	build: {
 		lib: {
 			entry: resolve(__dirname, 'src/package.js'),
-			name: '@juliushaertl/vue-richtext',
+			name: '@nextcloud/vue-richtext',
 			fileName: (_format) => 'index.js',
 			formats: ['es'],
 		},
@@ -24,7 +24,7 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			'@juliushaertl/vue-richtext': path.resolve(__dirname, './src/RichText.vue')
+			'@nextcloud/vue-richtext': path.resolve(__dirname, './src/RichText.vue')
 		},
 	},
 	test: {
