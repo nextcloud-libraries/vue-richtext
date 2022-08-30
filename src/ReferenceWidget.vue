@@ -4,11 +4,7 @@
 			<div ref="customWidget" />
 		</div>
 
-		<div v-else-if="noAccess" class="widget-access">
-			<p>You may not have access to this reference!</p>
-		</div>
-
-		<a v-else-if="reference && reference.openGraphObject && !hasCustomWidget" :href="reference.openGraphObject.link" class="widget-default">
+		<a v-else-if="!noAccess && reference && reference.openGraphObject && !hasCustomWidget" :href="reference.openGraphObject.link" class="widget-default">
 			<div v-if="reference.openGraphObject.thumb" class="widget-default--image" :style="{ 'backgroundImage': 'url(' + reference.openGraphObject.thumb + ')' }" />
 			<div class="widget-default--details">
 				<p class="widget-default--title">{{ reference.openGraphObject.name }}</p>
