@@ -23,7 +23,7 @@
 
 <script>
 import { unified } from 'unified'
-import References from './References.vue'
+import ReferenceList from './ReferenceList.vue'
 import markdown from 'remark-parse'
 import breaks from 'remark-breaks'
 import remark2rehype from 'remark-rehype'
@@ -36,7 +36,7 @@ import { remarkPlaceholder, prepareTextNode } from './placeholder.js'
 export default {
 	name: 'RichText',
 	components: {
-		References
+		ReferenceList
 	},
 	props: {
 		text: {
@@ -55,7 +55,8 @@ export default {
 		},
 		/** Provide data upfront to avoid extra http request */
 		references: {
-			type: Object
+			type: Object,
+			default: null
 		},
 		markdownCssClasses: {
 			type: Object,
@@ -118,7 +119,7 @@ export default {
 				h('div', {}, placeholders.flat()),
 				this.referenceLimit > 0
 					? h('div', { class: 'rich-text--reference-widget' }, [
-						h(References, { props: { text: this.text, referenceData: this.references } })
+						h(ReferenceList, { props: { text: this.text, referenceData: this.references } })
 					])
 					: null
 			])
@@ -178,7 +179,7 @@ export default {
 				renderedMarkdown,
 				this.referenceLimit > 0
 					? h('div', { class: 'rich-text--reference-widget' }, [
-						h(References, { props: { text: this.text, referenceData: this.references } })
+						h(ReferenceList, { props: { text: this.text, referenceData: this.references } })
 					])
 					: null
 			])

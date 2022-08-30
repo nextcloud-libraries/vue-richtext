@@ -19,17 +19,17 @@ const registerWidget = (id, callback) => {
 	}
 }
 
-const renderWidget = (id, richObjectData, el) => {
-	if (id === 'open-graph') {
+const renderWidget = (el, { richObjectType, richObject, accessible }) => {
+	if (richObjectType === 'open-graph') {
 		return
 	}
 
-	if (!window._vue_richtext_widgets[id]) {
-		console.error('Widget for id ' + id + ' not registered')
+	if (!window._vue_richtext_widgets[richObjectType]) {
+		console.error('Widget for rich object type ' + richObjectType + ' not registered')
 		return
 	}
 
-	window._vue_richtext_widgets[id].callback(richObjectData, el)
+	window._vue_richtext_widgets[richObjectType].callback(el, { richObjectType, richObject, accessible })
 }
 
 window._registerWidget = registerWidget

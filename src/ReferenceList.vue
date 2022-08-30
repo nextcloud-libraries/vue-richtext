@@ -1,5 +1,5 @@
 <template>
-	<div :class="{'icon-loading': loading }">
+	<div class="widgets--list" :class="{'icon-loading': loading }">
 		<div v-for="reference in displayedReferences" :key="reference.openGraphObject.id">
 			<ReferenceWidget :reference="reference" />
 		</div>
@@ -9,9 +9,9 @@
 import ReferenceWidget from './ReferenceWidget.vue'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-
+import { isWidgetRegistered } from './widgets.js'
 export default {
-	name: 'References',
+	name: 'ReferenceList',
 	components: { ReferenceWidget },
 	props: {
 		text: {
@@ -20,7 +20,7 @@ export default {
 		},
 		referenceData: {
 			type: Object,
-			default: null,
+			default: null
 		},
 		limit: {
 			type: Number,
@@ -41,7 +41,7 @@ export default {
 			return this.references ? Object.values(this.references).slice(0, this.limit) : null
 		},
 		hasCustomWidget() {
-			return (reference) => !!widgets[reference.richObjectType]
+			return (reference) => isWidgetRegistered(reference.richObjectType)
 		},
 		noAccess() {
 			return (reference) => reference && !reference.accessible
@@ -70,9 +70,15 @@ export default {
 				this.references = response.data.ocs.data.references
 				this.loading = false
 			}).catch((error) => {
+				console.error('Failed to extract references', error)
 				this.loading = false
 			})
 		}
 	}
 }
 </script>
+<style lang="scss" scoped>
+.widgets--list {
+	min-height: 44px;
+}
+</style>
