@@ -10,6 +10,8 @@ import ReferenceWidget from './ReferenceWidget.vue'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import { isWidgetRegistered } from './widgets.js'
+import { URL_PATTERN } from './helpers.js'
+
 export default {
 	name: 'ReferenceList',
 	components: { ReferenceWidget },
@@ -24,7 +26,7 @@ export default {
 		},
 		limit: {
 			type: Number,
-			default: 5
+			default: 1
 		}
 	},
 	data() {
@@ -34,11 +36,14 @@ export default {
 		}
 	},
 	computed: {
+		values() {
+			return this.references ? Object.values(this.references) : []
+		},
 		firstReference() {
-			return this.references ? Object.values(this.references)[0] : null
+			return this.values[0] ?? null
 		},
 		displayedReferences() {
-			return this.references ? Object.values(this.references).slice(0, this.limit) : null
+			return this.values.slice(0, this.limit)
 		},
 		hasCustomWidget() {
 			return (reference) => isWidgetRegistered(reference.richObjectType)
@@ -58,6 +63,11 @@ export default {
 			this.loading = true
 			if (this.referenceData) {
 				this.references = this.referenceData
+				this.loading = false
+				return
+			}
+
+			if (!URL_PATTERN.exec(this.text)) {
 				this.loading = false
 				return
 			}
