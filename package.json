@@ -40,7 +40,7 @@
 		"@nextcloud/axios": "^2.0.0",
 		"@nextcloud/router": "^2.0.0",
 		"clone": "^2.1.2",
-		"vue": "^2.7.8"
+		"vue": "^3.2.38"
 	},
 	"devDependencies": {
 		"@babel/eslint-parser": "^7.18.9",
@@ -82,7 +82,7 @@
 		"vue-template-compiler": "^2.7.8"
 	},
 	"peerDependencies": {
-		"vue": "^2.7.8"
+		"vue": "^3.2.38"
 	},
 	"engines": {
 		"node": ">=14.0.0",
