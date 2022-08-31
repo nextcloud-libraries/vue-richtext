@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 - Draft
+## 2.0.0
 
 ### Breaking changes
 
@@ -14,5 +14,6 @@ are considered unsupported:
 
 ### Enhancements
 
+- Link preview using the server references APP (Requires Nextcloud 25)
 - Plain text rendering is no longer using remark/rehype
 - Bundling with vite and exposing es modules
