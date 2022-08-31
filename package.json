@@ -1,15 +1,15 @@
 {
-	"name": "@juliushaertl/vue-richtext",
-	"version": "1.0.1",
+	"name": "@nextcloud/vue-richtext",
+	"version": "2.0.0-dev.2",
 	"description": "Vue component for rich content strings including markdown support.",
 	"keywords": [
 		"vuejs",
 		"components",
 		"markdown"
 	],
-	"homepage": "https://github.com/juliushaertl/vue-richtext",
-	"bugs": "https://github.com/juliushaertl/vue-richtext/issues",
-	"repository": "https://github.com/juliushaertl/vue-richtext",
+	"homepage": "https://github.com/nextcloud/vue-richtext",
+	"bugs": "https://github.com/nextcloud/vue-richtext/issues",
+	"repository": "https://github.com/nextcloud/vue-richtext",
 	"license": "AGPL-3.0",
 	"author": "Julius Härtl <jus@bitgrid.net>",
 	"module": "dist/index.js",
@@ -37,6 +37,8 @@
 		"extends @nextcloud/browserslist-config"
 	],
 	"dependencies": {
+		"@nextcloud/axios": "^2.0.0",
+		"@nextcloud/router": "^2.0.0",
 		"clone": "^2.1.2",
 		"vue": "^2.7.8"
 	},

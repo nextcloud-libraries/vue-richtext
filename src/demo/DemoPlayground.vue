@@ -23,7 +23,7 @@
 </template>
 <script>
 // eslint-disable-next-line node/no-missing-import
-import RichText from '@juliushaertl/vue-richtext'
+import RichText from '@nextcloud/vue-richtext'
 import UserBubble from './UserBubble.vue'
 
 export default {

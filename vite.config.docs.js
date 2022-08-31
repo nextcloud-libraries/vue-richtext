@@ -18,7 +18,7 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			'@juliushaertl/vue-richtext': path.resolve(__dirname, './src/RichText.vue')
+			'@nextcloud/vue-richtext': path.resolve(__dirname, './src/RichText.vue')
 		},
 	},
 })

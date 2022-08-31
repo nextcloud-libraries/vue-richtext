@@ -1,5 +1,6 @@
 import { visit, SKIP } from 'unist-util-visit'
 import { u } from 'unist-builder'
+import { URL_PATTERN_AUTOLINK } from './helpers.js'
 
 const Link = {
 	name: 'Link',
@@ -47,9 +48,8 @@ export const remarkAutolink = function({ autolink, useMarkdown }) {
 	}
 }
 
-const urlRegex = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig
 export const parseUrl = (text, linkComponent) => {
-	let match = urlRegex.exec(text)
+	let match = URL_PATTERN_AUTOLINK.exec(text)
 	const list = []
 	let start = 0
 	while (match !== null) {
@@ -71,7 +71,7 @@ export const parseUrl = (text, linkComponent) => {
 			list.push(textAfter)
 		}
 		start = match.index + match[0].length
-		match = urlRegex.exec(text)
+		match = URL_PATTERN_AUTOLINK.exec(text)
 	}
 	list.push(text.substring(start))
 	const joinedText = list.map((item) => typeof item === 'string' ? item : item.props.href).join('')
