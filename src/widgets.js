@@ -7,7 +7,7 @@ const isWidgetRegistered = (id) => {
 	return !!window._vue_richtext_widgets[id]
 }
 
-const registerWidget = (id, callback) => {
+const registerWidget = (id, callback, onDestroy = (el) => {}) => {
 	if (window._vue_richtext_widgets[id]) {
 		console.error('Widget for id ' + id + ' already registered')
 		return
@@ -15,7 +15,8 @@ const registerWidget = (id, callback) => {
 
 	window._vue_richtext_widgets[id] = {
 		id,
-		callback
+		callback,
+		onDestroy
 	}
 }
 
@@ -32,10 +33,23 @@ const renderWidget = (el, { richObjectType, richObject, accessible }) => {
 	window._vue_richtext_widgets[richObjectType].callback(el, { richObjectType, richObject, accessible })
 }
 
+const destroyWidget = (richObjectType, el) => {
+	if (richObjectType === 'open-graph') {
+		return
+	}
+
+	if (!window._vue_richtext_widgets[richObjectType]) {
+		return
+	}
+
+	window._vue_richtext_widgets[richObjectType].onDestroy(el)
+}
+
 window._registerWidget = registerWidget
 
 export {
 	registerWidget,
 	renderWidget,
+	destroyWidget,
 	isWidgetRegistered
 }

@@ -5,17 +5,17 @@
 		</div>
 
 		<a v-else-if="!noAccess && reference && reference.openGraphObject && !hasCustomWidget" :href="reference.openGraphObject.link" class="widget-default">
-			<div v-if="reference.openGraphObject.thumb" class="widget-default--image" :style="{ 'backgroundImage': 'url(' + reference.openGraphObject.thumb + ')' }" />
+			<img v-if="reference.openGraphObject.thumb" class="widget-default--image" :src="reference.openGraphObject.thumb">
 			<div class="widget-default--details">
 				<p class="widget-default--title">{{ reference.openGraphObject.name }}</p>
-				<p class="widget-default--description">{{ reference.openGraphObject.description }}</p>
+				<p class="widget-default--description" :style="descriptionStyle">{{ reference.openGraphObject.description }}</p>
 				<p class="widget-default--link">{{ reference.openGraphObject.link }}</p>
 			</div>
 		</a>
 	</div>
 </template>
 <script>
-import { renderWidget, isWidgetRegistered } from './widgets.js'
+import { renderWidget, isWidgetRegistered, destroyWidget } from './widgets.js'
 
 export default {
 	name: 'ReferenceWidget',
@@ -26,7 +26,9 @@ export default {
 		}
 	},
 	data() {
-		return {}
+		return {
+			compact: 3
+		}
 	},
 	computed: {
 		hasCustomWidget() {
@@ -34,10 +36,40 @@ export default {
 		},
 		noAccess() {
 			return this.reference && !this.reference.accessible
+		},
+		descriptionStyle() {
+			if (this.compact === 0) {
+				return {
+					display: 'none'
+				}
+			}
+
+			const lineClamp = this.compact < 4 ? this.compact : 3
+			return {
+				lineClamp,
+				webkitLineClamp: lineClamp
+			}
 		}
 	},
 	mounted() {
 		this.renderWidget()
+		this.observer = new ResizeObserver(entries => {
+			if (entries[0].contentRect.width < 450) {
+				this.compact = 0
+			} else if (entries[0].contentRect.width < 550) {
+				this.compact = 1
+			} else if (entries[0].contentRect.width < 650) {
+				this.compact = 2
+			} else {
+				this.compact = 3
+			}
+
+		})
+		this.observer.observe(this.$el)
+	},
+	beforeDestroy() {
+		this.observer.disconnect()
+		destroyWidget(this.reference.richObjectType, this.$el)
 	},
 	methods: {
 		renderWidget() {
@@ -60,8 +92,8 @@ export default {
 @mixin widget {
 	width: 100%;
 	margin: auto;
-	margin-bottom: 12px;
-	margin-top: 12px;
+	margin-bottom: calc(var(--default-grid-baseline, 4px) * 3);
+	margin-top: calc(var(--default-grid-baseline, 4px) * 3);
 	overflow: hidden;
 	border: 2px solid var(--color-border);
 	border-radius: var(--border-radius-large);
@@ -75,11 +107,31 @@ export default {
 
 .widget-access {
 	@include widget;
-	padding: 12px;
+	padding: calc(var(--default-grid-baseline, 4px) * 3);
 }
 
 .widget-default {
 	@include widget;
+
+	&--compact {
+		flex-direction: column;
+
+		.widget-default--image {
+			width: 100%;
+			height: 150px;
+		}
+
+		.widget-default--details {
+			width: 100%;
+			padding-top: calc(var(--default-grid-baseline, 4px) * 2);
+			padding-bottom: calc(var(--default-grid-baseline, 4px) * 2);
+		}
+
+		.widget-default--description {
+			display: none;
+		}
+
+	}
 
 	&--image {
 		width: 40%;
@@ -96,7 +148,7 @@ export default {
 	}
 
 	&--details {
-		padding: 12px;
+		padding: calc(var(--default-grid-baseline, 4px) * 3);
 		width: 60%;
 
 		p {
@@ -116,6 +168,9 @@ export default {
 
 	&--link {
 		color: var(--color-text-maxcontrast);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 }
 </style>

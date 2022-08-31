@@ -9,7 +9,6 @@
 import ReferenceWidget from './ReferenceWidget.vue'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import { isWidgetRegistered } from './widgets.js'
 import { URL_PATTERN } from './helpers.js'
 
 export default {
@@ -37,19 +36,15 @@ export default {
 	},
 	computed: {
 		values() {
-			return this.references ? Object.values(this.references) : []
+			return this.referenceData
+				? this.referenceData
+				: (this.references ? Object.values(this.references) : [])
 		},
 		firstReference() {
 			return this.values[0] ?? null
 		},
 		displayedReferences() {
 			return this.values.slice(0, this.limit)
-		},
-		hasCustomWidget() {
-			return (reference) => isWidgetRegistered(reference.richObjectType)
-		},
-		noAccess() {
-			return (reference) => reference && !reference.accessible
 		}
 	},
 	watch: {
@@ -62,12 +57,11 @@ export default {
 		fetch() {
 			this.loading = true
 			if (this.referenceData) {
-				this.references = this.referenceData
 				this.loading = false
 				return
 			}
 
-			if (!URL_PATTERN.exec(this.text)) {
+			if (!(new RegExp(URL_PATTERN).exec(this.text))) {
 				this.loading = false
 				return
 			}
@@ -88,7 +82,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.widgets--list {
+.widgets--list.icon-loading {
 	min-height: 44px;
 }
 </style>
