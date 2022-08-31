@@ -9,7 +9,7 @@
 			<div class="widget-default--details">
 				<p class="widget-default--title">{{ reference.openGraphObject.name }}</p>
 				<p class="widget-default--description" :style="descriptionStyle">{{ reference.openGraphObject.description }}</p>
-				<p class="widget-default--link">{{ reference.openGraphObject.link }}</p>
+				<p class="widget-default--link">{{ compactLink }}</p>
 			</div>
 		</a>
 	</div>
@@ -49,6 +49,20 @@ export default {
 				lineClamp,
 				webkitLineClamp: lineClamp
 			}
+		},
+		compactLink() {
+			const link = this.reference.openGraphObject.link
+			if (!link) {
+				return ''
+			}
+
+			if (link.startsWith('https://')) {
+				return link.substring(8)
+			}
+			if (link.startsWith('http://')) {
+				return link.substring(7)
+			}
+			return link
 		}
 	},
 	mounted() {
