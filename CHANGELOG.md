@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1
+
+### Fixes
+
+- Only underline links which are not components. (#778)
+
 ## 2.0.0
 
 ### Breaking changes
