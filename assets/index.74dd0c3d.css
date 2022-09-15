@@ -83,7 +83,7 @@
 }.widgets--list.icon-loading[data-v-0ae5d7dc] {
   min-height: 44px;
 }
-a[data-v-6a74c297] {
+a[data-v-a8ade67f]:not(.rich-text--component) {
 	text-decoration: underline;
 }
 

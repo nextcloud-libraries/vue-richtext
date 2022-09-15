@@ -8771,10 +8771,10 @@ var store$2 = sharedStore;
 (shared$4.exports = function(key, value) {
   return store$2[key] || (store$2[key] = value !== void 0 ? value : {});
 })("versions", []).push({
-  version: "3.25.0",
+  version: "3.25.1",
   mode: "global",
   copyright: "\xA9 2014-2022 Denis Pushkarev (zloirock.ru)",
-  license: "https://github.com/zloirock/core-js/blob/v3.25.0/LICENSE",
+  license: "https://github.com/zloirock/core-js/blob/v3.25.1/LICENSE",
   source: "https://github.com/zloirock/core-js"
 });
 var requireObjectCoercible$2 = requireObjectCoercible$4;
@@ -17260,7 +17260,7 @@ const prepareTextNode = ({ h, context }, text2) => {
   }
   return text2;
 };
-const RichText_vue_vue_type_style_index_0_scoped_6a74c297_lang = "";
+const RichText_vue_vue_type_style_index_0_scoped_a8ade67f_lang = "";
 const _sfc_main$2 = {
   name: "RichText",
   components: {
@@ -17407,7 +17407,7 @@ var __component__$2 = /* @__PURE__ */ normalizeComponent(
   _sfc_staticRenderFns$2,
   false,
   null,
-  "6a74c297",
+  "a8ade67f",
   null,
   null
 );
