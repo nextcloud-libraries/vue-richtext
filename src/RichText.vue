@@ -195,7 +195,7 @@ export default {
 }
 </script>
 <style scoped>
-a {
+a:not(.rich-text--component) {
 	text-decoration: underline;
 }
 </style>
