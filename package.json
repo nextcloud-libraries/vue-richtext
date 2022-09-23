@@ -38,8 +38,10 @@
 	],
 	"dependencies": {
 		"@nextcloud/axios": "^2.0.0",
+		"@nextcloud/browser-storage": "^0.1.1",
 		"@nextcloud/router": "^2.0.0",
 		"clone": "^2.1.2",
+		"js-sha1": "^0.6.0",
 		"vue": "^2.7.8"
 	},
 	"devDependencies": {

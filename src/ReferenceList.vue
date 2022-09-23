@@ -8,8 +8,34 @@
 <script>
 import ReferenceWidget from './ReferenceWidget.vue'
 import axios from '@nextcloud/axios'
+import { getBuilder } from '@nextcloud/browser-storage'
 import { generateOcsUrl } from '@nextcloud/router'
 import { URL_PATTERN } from './helpers.js'
+import sha1 from 'js-sha1'
+
+const browserStorage = getBuilder('vue-richtext').clearOnLogout().build()
+
+function getStorageKey(text, limit) {
+	return `references-${sha1(text)}-${limit}`
+}
+
+function getReferences(text, limit) {
+	const references = browserStorage.getItem(getStorageKey(text, limit))
+	if (references) {
+		const referenceObject = JSON.parse(references)
+		if (referenceObject.expiry > Date.now()) {
+			return referenceObject
+		}
+		browserStorage.removeItem(getStorageKey(text, limit))
+	}
+	return null
+}
+
+function setReferences(text, limit, references) {
+	const expiry = Date.now() + 3600 * 1000
+	const referenceJson = JSON.stringify({ ...references, expiry })
+	browserStorage.setItem(getStorageKey(text, limit), referenceJson)
+}
 
 export default {
 	name: 'ReferenceList',
@@ -66,12 +92,20 @@ export default {
 				return
 			}
 
+			const cachedReferences = getReferences(this.text, this.limit)
+			if (cachedReferences) {
+				this.references = cachedReferences
+				this.loading = false
+				return
+			}
+
 			axios.post(generateOcsUrl('references/extract', 2), {
 				text: this.text,
 				resolve: true,
 				limit: this.limit
 			}).then((response) => {
 				this.references = response.data.ocs.data.references
+				setReferences(this.text, this.limit, this.references)
 				this.loading = false
 			}).catch((error) => {
 				console.error('Failed to extract references', error)
