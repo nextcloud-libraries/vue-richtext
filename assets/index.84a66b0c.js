@@ -6587,7 +6587,7 @@ const destroyWidget = (richObjectType, el) => {
   window._vue_richtext_widgets[richObjectType].onDestroy(el);
 };
 window._registerWidget = registerWidget;
-const ReferenceWidget_vue_vue_type_style_index_0_scoped_868aadc8_lang = "";
+const ReferenceWidget_vue_vue_type_style_index_0_scoped_de8147ea_lang = "";
 function normalizeComponent(scriptExports, render5, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
   var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
   if (render5) {
@@ -6724,7 +6724,7 @@ const _sfc_main$4 = {
 };
 var _sfc_render$4 = function render() {
   var _vm = this, _c = _vm._self._c;
-  return _c("div", [_vm.reference && _vm.hasCustomWidget ? _c("div", { staticClass: "widget-custom" }, [_c("div", { ref: "customWidget" })]) : !_vm.noAccess && _vm.reference && _vm.reference.openGraphObject && !_vm.hasCustomWidget ? _c("a", { staticClass: "widget-default", attrs: { "href": _vm.reference.openGraphObject.link } }, [_vm.reference.openGraphObject.thumb ? _c("img", { staticClass: "widget-default--image", attrs: { "src": _vm.reference.openGraphObject.thumb } }) : _vm._e(), _c("div", { staticClass: "widget-default--details" }, [_c("p", { staticClass: "widget-default--title" }, [_vm._v(_vm._s(_vm.reference.openGraphObject.name))]), _c("p", { staticClass: "widget-default--description", style: _vm.descriptionStyle }, [_vm._v(_vm._s(_vm.reference.openGraphObject.description))]), _c("p", { staticClass: "widget-default--link" }, [_vm._v(_vm._s(_vm.compactLink))])])]) : _vm._e()]);
+  return _c("div", [_vm.reference && _vm.hasCustomWidget ? _c("div", { staticClass: "widget-custom" }, [_c("div", { ref: "customWidget" })]) : !_vm.noAccess && _vm.reference && _vm.reference.openGraphObject && !_vm.hasCustomWidget ? _c("a", { staticClass: "widget-default", attrs: { "href": _vm.reference.openGraphObject.link, "rel": "noopener noreferrer", "target": "_blank" } }, [_vm.reference.openGraphObject.thumb ? _c("img", { staticClass: "widget-default--image", attrs: { "src": _vm.reference.openGraphObject.thumb } }) : _vm._e(), _c("div", { staticClass: "widget-default--details" }, [_c("p", { staticClass: "widget-default--title" }, [_vm._v(_vm._s(_vm.reference.openGraphObject.name))]), _c("p", { staticClass: "widget-default--description", style: _vm.descriptionStyle }, [_vm._v(_vm._s(_vm.reference.openGraphObject.description))]), _c("p", { staticClass: "widget-default--link" }, [_vm._v(_vm._s(_vm.compactLink))])])]) : _vm._e()]);
 };
 var _sfc_staticRenderFns$4 = [];
 var __component__$4 = /* @__PURE__ */ normalizeComponent(
@@ -6733,7 +6733,7 @@ var __component__$4 = /* @__PURE__ */ normalizeComponent(
   _sfc_staticRenderFns$4,
   false,
   null,
-  "868aadc8",
+  "de8147ea",
   null,
   null
 );
@@ -8653,13 +8653,23 @@ var requireObjectCoercible$3 = requireObjectCoercible$4;
 var toIndexedObject$4 = function(it) {
   return IndexedObject(requireObjectCoercible$3(it));
 };
-var isCallable$d = function(argument) {
+var documentAll$2 = typeof document == "object" && document.all;
+var IS_HTMLDDA = typeof documentAll$2 == "undefined" && documentAll$2 !== void 0;
+var documentAll_1 = {
+  all: documentAll$2,
+  IS_HTMLDDA
+};
+var $documentAll$1 = documentAll_1;
+var documentAll$1 = $documentAll$1.all;
+var isCallable$d = $documentAll$1.IS_HTMLDDA ? function(argument) {
+  return typeof argument == "function" || argument === documentAll$1;
+} : function(argument) {
   return typeof argument == "function";
 };
 var isCallable$c = isCallable$d;
-var documentAll = typeof document == "object" && document.all;
-var SPECIAL_DOCUMENT_ALL = typeof documentAll == "undefined" && documentAll !== void 0;
-var isObject$5 = SPECIAL_DOCUMENT_ALL ? function(it) {
+var $documentAll = documentAll_1;
+var documentAll = $documentAll.all;
+var isObject$5 = $documentAll.IS_HTMLDDA ? function(it) {
   return typeof it == "object" ? it !== null : isCallable$c(it) || it === documentAll;
 } : function(it) {
   return typeof it == "object" ? it !== null : isCallable$c(it);
@@ -8771,10 +8781,10 @@ var store$2 = sharedStore;
 (shared$4.exports = function(key, value) {
   return store$2[key] || (store$2[key] = value !== void 0 ? value : {});
 })("versions", []).push({
-  version: "3.25.1",
+  version: "3.25.2",
   mode: "global",
   copyright: "\xA9 2014-2022 Denis Pushkarev (zloirock.ru)",
-  license: "https://github.com/zloirock/core-js/blob/v3.25.1/LICENSE",
+  license: "https://github.com/zloirock/core-js/blob/v3.25.2/LICENSE",
   source: "https://github.com/zloirock/core-js"
 });
 var requireObjectCoercible$2 = requireObjectCoercible$4;
