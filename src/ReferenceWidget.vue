@@ -4,7 +4,10 @@
 			<div ref="customWidget" />
 		</div>
 
-		<a v-else-if="!noAccess && reference && reference.openGraphObject && !hasCustomWidget" :href="reference.openGraphObject.link" class="widget-default">
+		<a v-else-if="!noAccess && reference && reference.openGraphObject && !hasCustomWidget" :href="reference.openGraphObject.link"
+			rel="noopener noreferrer"
+			target="_blank"
+			class="widget-default">
 			<img v-if="reference.openGraphObject.thumb" class="widget-default--image" :src="reference.openGraphObject.thumb">
 			<div class="widget-default--details">
 				<p class="widget-default--title">{{ reference.openGraphObject.name }}</p>
