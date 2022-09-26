@@ -66,16 +66,24 @@ export default {
 				return
 			}
 
-			axios.post(generateOcsUrl('references/extract', 2), {
-				text: this.text,
-				resolve: true,
-				limit: this.limit
-			}).then((response) => {
+			this.resolve().then((response) => {
 				this.references = response.data.ocs.data.references
 				this.loading = false
 			}).catch((error) => {
 				console.error('Failed to extract references', error)
 				this.loading = false
+			})
+		},
+		resolve() {
+			const match = (new RegExp(URL_PATTERN).exec(this.text))
+			if (this.limit === 1 && match) {
+				return axios.get(generateOcsUrl('references/resolve', 2) + `?reference=${encodeURIComponent(match[0])}`)
+			}
+
+			return axios.post(generateOcsUrl('references/extract', 2), {
+				text: this.text,
+				resolve: true,
+				limit: this.limit
 			})
 		}
 	}
