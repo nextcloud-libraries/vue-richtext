@@ -8781,10 +8781,10 @@ var store$2 = sharedStore;
 (shared$4.exports = function(key, value) {
   return store$2[key] || (store$2[key] = value !== void 0 ? value : {});
 })("versions", []).push({
-  version: "3.25.2",
+  version: "3.25.3",
   mode: "global",
   copyright: "\xA9 2014-2022 Denis Pushkarev (zloirock.ru)",
-  license: "https://github.com/zloirock/core-js/blob/v3.25.2/LICENSE",
+  license: "https://github.com/zloirock/core-js/blob/v3.25.3/LICENSE",
   source: "https://github.com/zloirock/core-js"
 });
 var requireObjectCoercible$2 = requireObjectCoercible$4;
@@ -9951,7 +9951,7 @@ const getRootUrl = () => OC.webroot;
 dist.getRootUrl = getRootUrl;
 const URL_PATTERN = /(\s|^)(https?:\/\/)?((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*)(\s|$)/ig;
 const URL_PATTERN_AUTOLINK = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig;
-const ReferenceList_vue_vue_type_style_index_0_scoped_0ae5d7dc_lang = "";
+const ReferenceList_vue_vue_type_style_index_0_scoped_462cd622_lang = "";
 const _sfc_main$3 = {
   name: "ReferenceList",
   components: { ReferenceWidget },
@@ -10004,16 +10004,23 @@ const _sfc_main$3 = {
         this.loading = false;
         return;
       }
-      cancelableClient.post(generateOcsUrl_1("references/extract", 2), {
-        text: this.text,
-        resolve: true,
-        limit: this.limit
-      }).then((response) => {
+      this.resolve().then((response) => {
         this.references = response.data.ocs.data.references;
         this.loading = false;
       }).catch((error) => {
         console.error("Failed to extract references", error);
         this.loading = false;
+      });
+    },
+    resolve() {
+      const match2 = new RegExp(URL_PATTERN).exec(this.text);
+      if (this.limit === 1 && match2) {
+        return cancelableClient.get(generateOcsUrl_1("references/resolve", 2) + `?reference=${encodeURIComponent(match2[0])}`);
+      }
+      return cancelableClient.post(generateOcsUrl_1("references/extract", 2), {
+        text: this.text,
+        resolve: true,
+        limit: this.limit
       });
     }
   }
@@ -10031,7 +10038,7 @@ var __component__$3 = /* @__PURE__ */ normalizeComponent(
   _sfc_staticRenderFns$3,
   false,
   null,
-  "0ae5d7dc",
+  "462cd622",
   null,
   null
 );
