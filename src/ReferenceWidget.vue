@@ -4,8 +4,7 @@
 			<div ref="customWidget" />
 		</div>
 
-		<a
-			v-else-if="!noAccess && reference && reference.openGraphObject && !hasCustomWidget"
+		<a v-else-if="!noAccess && reference && reference.openGraphObject && !hasCustomWidget"
 			:href="reference.openGraphObject.link"
 			rel="noopener noreferrer"
 			target="_blank"
