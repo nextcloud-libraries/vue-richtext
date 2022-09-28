@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.2 (2022-09-28)
+
+#### :rocket: Enhancement
+* [#793](https://github.com/nextcloud/vue-richtext/pull/793) Use endpoint to fetch one reference in a cachable way ([@juliushaertl](https://github.com/juliushaertl))
+
+#### :bug: Bug Fix
+* [#792](https://github.com/nextcloud/vue-richtext/pull/792) Open links in a new tab ([@nickvergessen](https://github.com/nickvergessen))
+
 ## 2.0.1
 
 ### Fixes
