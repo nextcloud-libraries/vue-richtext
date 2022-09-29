@@ -9949,7 +9949,7 @@ const generateFilePath = (app2, type, file) => {
 dist.generateFilePath = generateFilePath;
 const getRootUrl = () => OC.webroot;
 dist.getRootUrl = getRootUrl;
-const URL_PATTERN = /(\s|^)(https?:\/\/)?((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*)(\s|$)/ig;
+const URL_PATTERN = /(\s|^)(https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*)(\s|$)/ig;
 const URL_PATTERN_AUTOLINK = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig;
 const ReferenceList_vue_vue_type_style_index_0_scoped_462cd622_lang = "";
 const _sfc_main$3 = {
