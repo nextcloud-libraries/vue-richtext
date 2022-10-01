@@ -9951,7 +9951,7 @@ const getRootUrl = () => OC.webroot;
 dist.getRootUrl = getRootUrl;
 const URL_PATTERN = /(\s|^)(https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*)(\s|$)/ig;
 const URL_PATTERN_AUTOLINK = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig;
-const ReferenceList_vue_vue_type_style_index_0_scoped_462cd622_lang = "";
+const ReferenceList_vue_vue_type_style_index_0_scoped_5a4fd40e_lang = "";
 const _sfc_main$3 = {
   name: "ReferenceList",
   components: { ReferenceWidget },
@@ -10013,7 +10013,7 @@ const _sfc_main$3 = {
       });
     },
     resolve() {
-      const match2 = new RegExp(URL_PATTERN).exec(this.text);
+      const match2 = new RegExp(URL_PATTERN).exec(this.text.trim());
       if (this.limit === 1 && match2) {
         return cancelableClient.get(generateOcsUrl_1("references/resolve", 2) + `?reference=${encodeURIComponent(match2[0])}`);
       }
@@ -10038,7 +10038,7 @@ var __component__$3 = /* @__PURE__ */ normalizeComponent(
   _sfc_staticRenderFns$3,
   false,
   null,
-  "462cd622",
+  "5a4fd40e",
   null,
   null
 );
