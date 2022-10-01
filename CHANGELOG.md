@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.0.4 (2022-10-01)
+
+#### :bug: Bug Fix
+* [#805](https://github.com/nextcloud/vue-richtext/pull/805) Fix leading and trailing spaces on the URLs ([@nickvergessen](https://github.com/nickvergessen))
+
+## v2.0.3 (2022-09-29)
+
+#### :bug: Bug Fix
+* [#800](https://github.com/nextcloud/vue-richtext/pull/800) Limit URL matching to http(s) ([@nickvergessen](https://github.com/nickvergessen))
+
 ## 2.0.2 (2022-09-28)
 
 #### :rocket: Enhancement
