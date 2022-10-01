@@ -75,7 +75,7 @@ export default {
 			})
 		},
 		resolve() {
-			const match = (new RegExp(URL_PATTERN).exec(this.text))
+			const match = (new RegExp(URL_PATTERN).exec(this.text.trim()))
 			if (this.limit === 1 && match) {
 				return axios.get(generateOcsUrl('references/resolve', 2) + `?reference=${encodeURIComponent(match[0])}`)
 			}
