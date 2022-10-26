@@ -47,7 +47,7 @@ var _a;
   }
 })();
 /*!
- * Vue.js v2.7.8
+ * Vue.js v2.7.13
  * (c) 2014-2022 Evan You
  * Released under the MIT License.
  */
@@ -113,7 +113,12 @@ function makeMap(str, expectsLowerCase) {
 makeMap("slot,component", true);
 var isReservedAttribute = makeMap("key,ref,slot,slot-scope,is");
 function remove$2(arr, item) {
-  if (arr.length) {
+  var len = arr.length;
+  if (len) {
+    if (item === arr[len - 1]) {
+      arr.length = len - 1;
+      return;
+    }
     var index2 = arr.indexOf(item);
     if (index2 > -1) {
       return arr.splice(index2, 1);
@@ -155,7 +160,7 @@ function polyfillBind(fn, ctx) {
 function nativeBind(fn, ctx) {
   return fn.bind(ctx);
 }
-var bind$4 = Function.prototype.bind ? nativeBind : polyfillBind;
+var bind$3 = Function.prototype.bind ? nativeBind : polyfillBind;
 function toArray$1(list2, start) {
   start = start || 0;
   var i = list2.length - start;
@@ -450,8 +455,20 @@ function cloneVNode(vnode) {
   return cloned;
 }
 var uid$2$1 = 0;
+var pendingCleanupDeps = [];
+var cleanupDeps = function() {
+  for (var i = 0; i < pendingCleanupDeps.length; i++) {
+    var dep = pendingCleanupDeps[i];
+    dep.subs = dep.subs.filter(function(s) {
+      return s;
+    });
+    dep._pending = false;
+  }
+  pendingCleanupDeps.length = 0;
+};
 var Dep = function() {
   function Dep2() {
+    this._pending = false;
     this.id = uid$2$1++;
     this.subs = [];
   }
@@ -459,7 +476,11 @@ var Dep = function() {
     this.subs.push(sub);
   };
   Dep2.prototype.removeSub = function(sub) {
-    remove$2(this.subs, sub);
+    this.subs[this.subs.indexOf(sub)] = null;
+    if (!this._pending) {
+      this._pending = true;
+      pendingCleanupDeps.push(this);
+    }
   };
   Dep2.prototype.depend = function(info) {
     if (Dep2.target) {
@@ -467,9 +488,12 @@ var Dep = function() {
     }
   };
   Dep2.prototype.notify = function(info) {
-    var subs = this.subs.slice();
+    var subs = this.subs.filter(function(s) {
+      return s;
+    });
     for (var i = 0, l = subs.length; i < l; i++) {
-      subs[i].update();
+      var sub = subs[i];
+      sub.update();
     }
   };
   return Dep2;
@@ -522,6 +546,20 @@ methodsToPatch.forEach(function(method) {
     return result;
   });
 });
+var rawMap = /* @__PURE__ */ new WeakMap();
+function shallowReactive(target2) {
+  makeReactive(target2, true);
+  def(target2, "__v_isShallow", true);
+  return target2;
+}
+function makeReactive(target2, shallow) {
+  if (!isReadonly(target2)) {
+    observe(target2, shallow, isServerRendering());
+  }
+}
+function isReadonly(value) {
+  return !!(value && value.__v_isReadonly);
+}
 var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
 var NO_INIITIAL_VALUE = {};
 var shouldObserve = true;
@@ -578,16 +616,12 @@ var Observer = function() {
   return Observer2;
 }();
 function observe(value, shallow, ssrMockReactivity) {
-  if (!isObject$7(value) || isRef(value) || value instanceof VNode) {
-    return;
+  if (value && hasOwn$8(value, "__ob__") && value.__ob__ instanceof Observer) {
+    return value.__ob__;
   }
-  var ob;
-  if (hasOwn$8(value, "__ob__") && value.__ob__ instanceof Observer) {
-    ob = value.__ob__;
-  } else if (shouldObserve && (ssrMockReactivity || !isServerRendering()) && (isArray$2(value) || isPlainObject$3(value)) && Object.isExtensible(value) && !value.__v_skip) {
-    ob = new Observer(value, shallow, ssrMockReactivity);
+  if (shouldObserve && (ssrMockReactivity || !isServerRendering()) && (isArray$2(value) || isPlainObject$3(value)) && Object.isExtensible(value) && !value.__v_skip && !rawMap.has(value) && !isRef(value) && !(value instanceof VNode)) {
+    return new Observer(value, shallow, ssrMockReactivity);
   }
-  return ob;
 }
 function defineReactive(obj, key, val, customSetter, shallow, mock) {
   var dep = new Dep();
@@ -706,19 +740,6 @@ function dependArray(value) {
     }
   }
 }
-function shallowReactive(target2) {
-  makeReactive(target2, true);
-  def(target2, "__v_isShallow", true);
-  return target2;
-}
-function makeReactive(target2, shallow) {
-  if (!isReadonly(target2)) {
-    observe(target2, shallow, isServerRendering());
-  }
-}
-function isReadonly(value) {
-  return !!(value && value.__v_isReadonly);
-}
 function isRef(r) {
   return !!(r && r.__v_isRef === true);
 }
@@ -753,11 +774,12 @@ var EffectScope = function() {
     if (detached === void 0) {
       detached = false;
     }
+    this.detached = detached;
     this.active = true;
     this.effects = [];
     this.cleanups = [];
+    this.parent = activeEffectScope;
     if (!detached && activeEffectScope) {
-      this.parent = activeEffectScope;
       this.index = (activeEffectScope.scopes || (activeEffectScope.scopes = [])).push(this) - 1;
     }
   }
@@ -792,13 +814,14 @@ var EffectScope = function() {
           this.scopes[i].stop(true);
         }
       }
-      if (this.parent && !fromParent) {
+      if (!this.detached && this.parent && !fromParent) {
         var last = this.parent.scopes.pop();
         if (last && last !== this) {
           this.parent.scopes[this.index] = last;
           last.index = this.index;
         }
       }
+      this.parent = void 0;
       this.active = false;
     }
   };
@@ -1338,7 +1361,7 @@ function createSetupContext(vm) {
     get slots() {
       return initSlotsProxy(vm);
     },
-    emit: bind$4(vm.$emit, vm),
+    emit: bind$3(vm.$emit, vm),
     expose: function(exposed) {
       if (exposed) {
         Object.keys(exposed).forEach(function(key) {
@@ -1769,7 +1792,7 @@ function nextTick(cb, ctx) {
     });
   }
 }
-var version$1 = "2.7.8";
+var version$1 = "2.7.13";
 var seenObjects = new _Set();
 function traverse(val) {
   _traverse(val, seenObjects);
@@ -1779,7 +1802,7 @@ function traverse(val) {
 function _traverse(val, seen) {
   var i, keys3;
   var isA = isArray$2(val);
-  if (!isA && !isObject$7(val) || Object.isFrozen(val) || val instanceof VNode) {
+  if (!isA && !isObject$7(val) || val.__v_skip || Object.isFrozen(val) || val instanceof VNode) {
     return;
   }
   if (val.__ob__) {
@@ -1805,11 +1828,12 @@ function _traverse(val, seen) {
 var uid$1$1 = 0;
 var Watcher = function() {
   function Watcher2(vm, expOrFn, cb, options, isRenderWatcher) {
-    recordEffectScope(this, activeEffectScope || (vm ? vm._scope : void 0));
-    if (this.vm = vm) {
-      if (isRenderWatcher) {
-        vm._watcher = this;
-      }
+    recordEffectScope(
+      this,
+      activeEffectScope && !activeEffectScope._vm ? activeEffectScope : vm ? vm._scope : void 0
+    );
+    if ((this.vm = vm) && isRenderWatcher) {
+      vm._watcher = this;
     }
     if (options) {
       this.deep = !!options.deep;
@@ -2087,8 +2111,10 @@ function lifecycleMixin(Vue2) {
     if (vm.$el) {
       vm.$el.__vue__ = vm;
     }
-    if (vm.$vnode && vm.$parent && vm.$vnode === vm.$parent._vnode) {
-      vm.$parent.$el = vm.$el;
+    var wrapper = vm;
+    while (wrapper && wrapper.$vnode && wrapper.$parent && wrapper.$vnode === wrapper.$parent._vnode) {
+      wrapper.$parent.$el = wrapper.$el;
+      wrapper = wrapper.$parent;
     }
   };
   Vue2.prototype.$forceUpdate = function() {
@@ -2308,6 +2334,7 @@ function flushSchedulerQueue() {
   resetSchedulerState();
   callActivatedHooks(activatedQueue);
   callUpdatedHooks(updatedQueue);
+  cleanupDeps();
   if (devtools && config.devtools) {
     devtools.emit("flush");
   }
@@ -3057,7 +3084,7 @@ function createGetterInvoker(fn) {
 function initMethods(vm, methods) {
   vm.$options.props;
   for (var key in methods) {
-    vm[key] = typeof methods[key] !== "function" ? noop : bind$4(methods[key], vm);
+    vm[key] = typeof methods[key] !== "function" ? noop : bind$3(methods[key], vm);
   }
 }
 function initWatch(vm, watch) {
@@ -3122,6 +3149,7 @@ function initMixin$1(Vue2) {
     vm._isVue = true;
     vm.__v_skip = true;
     vm._scope = new EffectScope(true);
+    vm._scope._vm = true;
     if (options && options._isComponent) {
       initInternalComponent(vm, options);
     } else {
@@ -4297,7 +4325,15 @@ function normalizeDirectives(dirs, vm) {
     }
     res[getRawDirName(dir)] = dir;
     if (vm._setupState && vm._setupState.__sfc) {
-      dir.def = dir.def || resolveAsset(vm, "_setupState", "v-" + dir.name);
+      var setupDef = dir.def || resolveAsset(vm, "_setupState", "v-" + dir.name);
+      if (typeof setupDef === "function") {
+        dir.def = {
+          bind: setupDef,
+          update: setupDef
+        };
+      } else {
+        dir.def = setupDef;
+      }
     }
     dir.def = dir.def || resolveAsset(vm.$options, "directives", dir.name);
   }
@@ -6740,7 +6776,7 @@ var __component__$4 = /* @__PURE__ */ normalizeComponent(
 const ReferenceWidget = __component__$4.exports;
 var axios$2 = { exports: {} };
 var axios$1 = { exports: {} };
-var bind$3 = function bind(fn, thisArg) {
+var bind$2 = function bind(fn, thisArg) {
   return function wrap2() {
     var args = new Array(arguments.length);
     for (var i = 0; i < args.length; i++) {
@@ -6749,7 +6785,7 @@ var bind$3 = function bind(fn, thisArg) {
     return fn.apply(thisArg, args);
   };
 };
-var bind$2 = bind$3;
+var bind$1 = bind$2;
 var toString$7 = Object.prototype.toString;
 var kindOf = function(cache) {
   return function(thing) {
@@ -6862,7 +6898,7 @@ function merge$1() {
 function extend2(a, b, thisArg) {
   forEach(b, function assignValue(val, key) {
     if (thisArg && typeof val === "function") {
-      a[key] = bind$2(val, thisArg);
+      a[key] = bind$1(val, thisArg);
     } else {
       a[key] = val;
     }
@@ -8072,13 +8108,13 @@ function requireIsAxiosError() {
   return isAxiosError;
 }
 var utils = utils$b;
-var bind$1 = bind$3;
+var bind2 = bind$2;
 var Axios$1 = Axios_1;
 var mergeConfig2 = mergeConfig$2;
 var defaults = defaults_1;
 function createInstance(defaultConfig) {
   var context = new Axios$1(defaultConfig);
-  var instance = bind$1(Axios$1.prototype.request, context);
+  var instance = bind2(Axios$1.prototype.request, context);
   utils.extend(instance, Axios$1.prototype, context);
   utils.extend(instance, context);
   instance.create = function create3(instanceConfig) {
@@ -8545,16 +8581,6 @@ const head = document.getElementsByTagName("head")[0];
 getAttribute(head, "data-user");
 getAttribute(head, "data-user-displayname");
 typeof OC === "undefined" ? false : OC.isUserAdmin();
-const client = Axios.create({
-  headers: {
-    requesttoken: (_a = getRequestToken()) != null ? _a : ""
-  }
-});
-const cancelableClient = Object.assign(client, {
-  CancelToken: Axios.CancelToken,
-  isCancel: Axios.isCancel
-});
-onRequestTokenUpdate((token2) => client.defaults.headers.requesttoken = token2);
 var dist = {};
 var fails$d = function(exec2) {
   try {
@@ -8583,15 +8609,24 @@ var functionCall = NATIVE_BIND$1 ? call$7.bind(call$7) : function() {
 };
 var NATIVE_BIND = functionBindNative;
 var FunctionPrototype$1 = Function.prototype;
-var bind2 = FunctionPrototype$1.bind;
 var call$6 = FunctionPrototype$1.call;
-var uncurryThis$e = NATIVE_BIND && bind2.bind(call$6, call$6);
-var functionUncurryThis = NATIVE_BIND ? function(fn) {
-  return fn && uncurryThis$e(fn);
-} : function(fn) {
-  return fn && function() {
+var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype$1.bind.bind(call$6, call$6);
+var functionUncurryThisRaw = NATIVE_BIND ? uncurryThisWithBind : function(fn) {
+  return function() {
     return call$6.apply(fn, arguments);
   };
+};
+var uncurryThisRaw$1 = functionUncurryThisRaw;
+var toString$6 = uncurryThisRaw$1({}.toString);
+var stringSlice$4 = uncurryThisRaw$1("".slice);
+var classofRaw$2 = function(it) {
+  return stringSlice$4(toString$6(it), 8, -1);
+};
+var classofRaw$1 = classofRaw$2;
+var uncurryThisRaw = functionUncurryThisRaw;
+var functionUncurryThis = function(fn) {
+  if (classofRaw$1(fn) === "Function")
+    return uncurryThisRaw(fn);
 };
 var check = function(it) {
   return it && it.Math == Math && it;
@@ -8622,17 +8657,11 @@ var createPropertyDescriptor$2 = function(bitmap, value) {
     value
   };
 };
-var uncurryThis$d = functionUncurryThis;
-var toString$6 = uncurryThis$d({}.toString);
-var stringSlice$4 = uncurryThis$d("".slice);
-var classofRaw$1 = function(it) {
-  return stringSlice$4(toString$6(it), 8, -1);
-};
-var uncurryThis$c = functionUncurryThis;
+var uncurryThis$b = functionUncurryThis;
 var fails$a = fails$d;
-var classof$3 = classofRaw$1;
+var classof$3 = classofRaw$2;
 var $Object$3 = Object;
-var split = uncurryThis$c("".split);
+var split = uncurryThis$b("".split);
 var indexedObject = fails$a(function() {
   return !$Object$3("z").propertyIsEnumerable(0);
 }) ? function(it) {
@@ -8682,8 +8711,8 @@ var aFunction = function(argument) {
 var getBuiltIn$4 = function(namespace, method) {
   return arguments.length < 2 ? aFunction(global$c[namespace]) : global$c[namespace] && global$c[namespace][method];
 };
-var uncurryThis$b = functionUncurryThis;
-var objectIsPrototypeOf = uncurryThis$b({}.isPrototypeOf);
+var uncurryThis$a = functionUncurryThis;
+var objectIsPrototypeOf = uncurryThis$a({}.isPrototypeOf);
 var getBuiltIn$3 = getBuiltIn$4;
 var engineUserAgent = getBuiltIn$3("navigator", "userAgent") || "";
 var global$b = global$d;
@@ -8781,10 +8810,10 @@ var store$2 = sharedStore;
 (shared$4.exports = function(key, value) {
   return store$2[key] || (store$2[key] = value !== void 0 ? value : {});
 })("versions", []).push({
-  version: "3.25.3",
+  version: "3.26.0",
   mode: "global",
   copyright: "\xA9 2014-2022 Denis Pushkarev (zloirock.ru)",
-  license: "https://github.com/zloirock/core-js/blob/v3.25.3/LICENSE",
+  license: "https://github.com/zloirock/core-js/blob/v3.26.0/LICENSE",
   source: "https://github.com/zloirock/core-js"
 });
 var requireObjectCoercible$2 = requireObjectCoercible$4;
@@ -8792,16 +8821,16 @@ var $Object$1 = Object;
 var toObject$2 = function(argument) {
   return $Object$1(requireObjectCoercible$2(argument));
 };
-var uncurryThis$a = functionUncurryThis;
+var uncurryThis$9 = functionUncurryThis;
 var toObject$1 = toObject$2;
-var hasOwnProperty$2 = uncurryThis$a({}.hasOwnProperty);
+var hasOwnProperty$2 = uncurryThis$9({}.hasOwnProperty);
 var hasOwnProperty_1 = Object.hasOwn || function hasOwn(it, key) {
   return hasOwnProperty$2(toObject$1(it), key);
 };
-var uncurryThis$9 = functionUncurryThis;
+var uncurryThis$8 = functionUncurryThis;
 var id = 0;
 var postfix = Math.random();
-var toString$5 = uncurryThis$9(1 .toString);
+var toString$5 = uncurryThis$8(1 .toString);
 var uid$2 = function(key) {
   return "Symbol(" + (key === void 0 ? "" : key) + ")_" + toString$5(++id + postfix, 36);
 };
@@ -8979,10 +9008,10 @@ var functionName = {
   PROPER,
   CONFIGURABLE
 };
-var uncurryThis$8 = functionUncurryThis;
+var uncurryThis$7 = functionUncurryThis;
 var isCallable$7 = isCallable$d;
 var store$1 = sharedStore;
-var functionToString = uncurryThis$8(Function.toString);
+var functionToString = uncurryThis$7(Function.toString);
 if (!isCallable$7(store$1.inspectSource)) {
   store$1.inspectSource = function(it) {
     return functionToString(it);
@@ -8991,8 +9020,8 @@ if (!isCallable$7(store$1.inspectSource)) {
 var inspectSource$1 = store$1.inspectSource;
 var global$6 = global$d;
 var isCallable$6 = isCallable$d;
-var WeakMap$1 = global$6.WeakMap;
-var weakMapBasicDetection = isCallable$6(WeakMap$1) && /native code/.test(String(WeakMap$1));
+var WeakMap$2 = global$6.WeakMap;
+var weakMapBasicDetection = isCallable$6(WeakMap$2) && /native code/.test(String(WeakMap$2));
 var shared$2 = shared$4.exports;
 var uid = uid$2;
 var keys = shared$2("keys");
@@ -9002,7 +9031,6 @@ var sharedKey$2 = function(key) {
 var hiddenKeys$4 = {};
 var NATIVE_WEAK_MAP = weakMapBasicDetection;
 var global$5 = global$d;
-var uncurryThis$7 = functionUncurryThis;
 var isObject = isObject$5;
 var createNonEnumerableProperty$2 = createNonEnumerableProperty$3;
 var hasOwn$3 = hasOwnProperty_1;
@@ -9011,7 +9039,7 @@ var sharedKey$1 = sharedKey$2;
 var hiddenKeys$3 = hiddenKeys$4;
 var OBJECT_ALREADY_INITIALIZED = "Object already initialized";
 var TypeError$1 = global$5.TypeError;
-var WeakMap = global$5.WeakMap;
+var WeakMap$1 = global$5.WeakMap;
 var set, get, has;
 var enforce = function(it) {
   return has(it) ? get(it) : set(it, {});
@@ -9026,22 +9054,22 @@ var getterFor = function(TYPE) {
   };
 };
 if (NATIVE_WEAK_MAP || shared$1.state) {
-  var store = shared$1.state || (shared$1.state = new WeakMap());
-  var wmget = uncurryThis$7(store.get);
-  var wmhas = uncurryThis$7(store.has);
-  var wmset = uncurryThis$7(store.set);
+  var store = shared$1.state || (shared$1.state = new WeakMap$1());
+  store.get = store.get;
+  store.has = store.has;
+  store.set = store.set;
   set = function(it, metadata) {
-    if (wmhas(store, it))
+    if (store.has(it))
       throw TypeError$1(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
-    wmset(store, it, metadata);
+    store.set(it, metadata);
     return metadata;
   };
   get = function(it) {
-    return wmget(store, it) || {};
+    return store.get(it) || {};
   };
   has = function(it) {
-    return wmhas(store, it);
+    return store.has(it);
   };
 } else {
   var STATE = sharedKey$1("state");
@@ -9329,7 +9357,7 @@ test[TO_STRING_TAG$1] = "z";
 var toStringTagSupport = String(test) === "[object z]";
 var TO_STRING_TAG_SUPPORT = toStringTagSupport;
 var isCallable$2 = isCallable$d;
-var classofRaw = classofRaw$1;
+var classofRaw = classofRaw$2;
 var wellKnownSymbol$2 = wellKnownSymbol$5;
 var TO_STRING_TAG = wellKnownSymbol$2("toStringTag");
 var $Object = Object;
@@ -9728,7 +9756,7 @@ var getSubstitution$1 = function(matched, str, position2, captures, namedCapture
 var call$1 = functionCall;
 var anObject$1 = anObject$7;
 var isCallable$1 = isCallable$d;
-var classof = classofRaw$1;
+var classof = classofRaw$2;
 var regexpExec = regexpExec$2;
 var $TypeError = TypeError;
 var regexpExecAbstract = function(R, S) {
@@ -9854,7 +9882,7 @@ fixRegExpWellKnownSymbolLogic("replace", function(_, nativeReplace2, maybeCallNa
 Object.defineProperty(dist, "__esModule", {
   value: true
 });
-dist.getRootUrl = dist.generateFilePath = dist.imagePath = dist.generateUrl = generateOcsUrl_1 = dist.generateOcsUrl = dist.generateRemoteUrl = dist.linkTo = void 0;
+dist.getRootUrl = dist.generateFilePath = dist.imagePath = generateUrl_1 = dist.generateUrl = generateOcsUrl_1 = dist.generateOcsUrl = dist.generateRemoteUrl = dist.linkTo = void 0;
 const linkTo = (app2, file) => generateFilePath(app2, "", file);
 dist.linkTo = linkTo;
 const linkToRemoteBase = (service) => getRootUrl() + "/remote.php/" + service;
@@ -9897,7 +9925,7 @@ const generateUrl = (url, params, options) => {
   }
   return getRootUrl() + "/index.php" + _generateUrlPath(url, params, options);
 };
-dist.generateUrl = generateUrl;
+var generateUrl_1 = dist.generateUrl = generateUrl;
 const imagePath = (app2, file) => {
   if (file.indexOf(".") === -1) {
     return generateFilePath(app2, "img", file + ".svg");
@@ -9949,6 +9977,57 @@ const generateFilePath = (app2, type, file) => {
 dist.generateFilePath = generateFilePath;
 const getRootUrl = () => OC.webroot;
 dist.getRootUrl = getRootUrl;
+const RETRY_KEY = Symbol("csrf-retry");
+const onError$1 = (axios2) => async (error) => {
+  var _a2;
+  const { config: config2, response, request: { responseURL } } = error;
+  const { status } = response;
+  if (status === 412 && ((_a2 = response == null ? void 0 : response.data) == null ? void 0 : _a2.message) === "CSRF check failed" && config2[RETRY_KEY] === void 0) {
+    console.warn(`Request to ${responseURL} failed because of a CSRF mismatch. Fetching a new token`);
+    const { data: { token: token2 } } = await axios2.get(generateUrl_1("/csrftoken"));
+    console.debug(`New request token ${token2} fetched`);
+    axios2.defaults.headers.requesttoken = token2;
+    return axios2({
+      ...config2,
+      headers: {
+        ...config2.headers,
+        requesttoken: token2
+      },
+      [RETRY_KEY]: true
+    });
+  }
+  return Promise.reject(error);
+};
+const RETRY_DELAY_KEY = Symbol("retryDelay");
+const onError = (axios2) => async (error) => {
+  var _a2;
+  const { config: config2, response, request: { responseURL } } = error;
+  const { status, headers } = response;
+  if (status === 503 && headers["x-nextcloud-maintenance-mode"] === "1" && config2.retryIfMaintenanceMode && (!config2[RETRY_DELAY_KEY] || config2[RETRY_DELAY_KEY] <= 32)) {
+    const retryDelay = ((_a2 = config2[RETRY_DELAY_KEY]) != null ? _a2 : 1) * 2;
+    console.warn(`Request to ${responseURL} failed because of maintenance mode. Retrying in ${retryDelay}s`);
+    await new Promise((resolve, _) => {
+      setTimeout(resolve, retryDelay * 1e3);
+    });
+    return axios2({
+      ...config2,
+      [RETRY_DELAY_KEY]: retryDelay
+    });
+  }
+  return Promise.reject(error);
+};
+const client = Axios.create({
+  headers: {
+    requesttoken: (_a = getRequestToken()) != null ? _a : ""
+  }
+});
+const cancelableClient = Object.assign(client, {
+  CancelToken: Axios.CancelToken,
+  isCancel: Axios.isCancel
+});
+cancelableClient.interceptors.response.use((r) => r, onError$1(cancelableClient));
+cancelableClient.interceptors.response.use((r) => r, onError(cancelableClient));
+onRequestTokenUpdate((token2) => client.defaults.headers.requesttoken = token2);
 const URL_PATTERN = /(\s|^)(https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*)(\s|$)/ig;
 const URL_PATTERN_AUTOLINK = /(\s|\(|^)((https?:\/\/)((?:[-A-Z0-9+_]+\.)+[-A-Z]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(?=\s|\)|$)/ig;
 const ReferenceList_vue_vue_type_style_index_0_scoped_5a4fd40e_lang = "";
