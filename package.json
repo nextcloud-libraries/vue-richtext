@@ -38,9 +38,12 @@
 	],
 	"dependencies": {
 		"@nextcloud/axios": "^2.0.0",
+		"@nextcloud/initial-state": "^2.0.0",
 		"@nextcloud/router": "^2.0.0",
+		"@nextcloud/vue": "^7.5.0",
 		"clone": "^2.1.2",
-		"vue": "^2.7.8"
+		"vue": "^2.7.8",
+		"vue-material-design-icons": "^5.1.2"
 	},
 	"devDependencies": {
 		"@babel/eslint-parser": "^7.18.9",
