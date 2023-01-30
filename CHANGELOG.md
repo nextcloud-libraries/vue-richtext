@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.1.0-beta.1 (2023-01-30)
+
+#### :rocket: Enhancement
+* [#863](https://github.com/nextcloud/vue-richtext/pull/863) Implement reference picker ([@julien-nc](https://github.com/julien-nc))
+
+#### Committers: 1
+- Julien Veyssier ([@julien-nc](https://github.com/julien-nc))
+
 ## v2.0.4 (2022-10-01)
 
 #### :bug: Bug Fix
