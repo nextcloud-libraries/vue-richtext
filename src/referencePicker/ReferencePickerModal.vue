@@ -78,7 +78,6 @@ export default {
 			backButtonTitle: 'Back to provider selection',
 			closeButtonTitle: 'Close',
 			closeButtonLabel: 'Close link picker',
-
 		}
 	},
 	computed: {
