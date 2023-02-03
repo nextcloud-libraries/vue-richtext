@@ -18,9 +18,9 @@ var _a;
       if (mutation.type !== "childList") {
         continue;
       }
-      for (const node of mutation.addedNodes) {
-        if (node.tagName === "LINK" && node.rel === "modulepreload")
-          processPreload(node);
+      for (const node2 of mutation.addedNodes) {
+        if (node2.tagName === "LINK" && node2.rel === "modulepreload")
+          processPreload(node2);
       }
     }
   }).observe(document, { childList: true, subtree: true });
@@ -424,10 +424,10 @@ var createEmptyVNode = function(text2) {
   if (text2 === void 0) {
     text2 = "";
   }
-  var node = new VNode();
-  node.text = text2;
-  node.isComment = true;
-  return node;
+  var node2 = new VNode();
+  node2.text = text2;
+  node2.isComment = true;
+  return node2;
 };
 function createTextVNode(val) {
   return new VNode(void 0, void 0, void 0, String(val));
@@ -967,8 +967,8 @@ function simpleNormalizeChildren(children) {
 function normalizeChildren(children) {
   return isPrimitive(children) ? [createTextVNode(children)] : isArray$2(children) ? normalizeArrayChildren(children) : void 0;
 }
-function isTextNode(node) {
-  return isDef(node) && isDef(node.text) && isFalse(node.isComment);
+function isTextNode(node2) {
+  return isDef(node2) && isDef(node2.text) && isFalse(node2.isComment);
 }
 function normalizeArrayChildren(children, nestedIndex) {
   var res = [];
@@ -1147,10 +1147,10 @@ function markStatic(tree, key, isOnce) {
     markStaticNode(tree, key, isOnce);
   }
 }
-function markStaticNode(node, key, isOnce) {
-  node.isStatic = true;
-  node.key = key;
-  node.isOnce = isOnce;
+function markStaticNode(node2, key, isOnce) {
+  node2.isStatic = true;
+  node2.key = key;
+  node2.isOnce = isOnce;
 }
 function bindObjectListeners(data2, value) {
   if (value) {
@@ -1246,11 +1246,11 @@ function resolveSlots(children, context) {
   }
   return slots;
 }
-function isWhitespace(node) {
-  return node.isComment && !node.asyncFactory || node.text === " ";
+function isWhitespace(node2) {
+  return node2.isComment && !node2.asyncFactory || node2.text === " ";
 }
-function isAsyncPlaceholder(node) {
-  return node.isComment && node.asyncFactory;
+function isAsyncPlaceholder(node2) {
+  return node2.isComment && node2.asyncFactory;
 }
 function normalizeScopedSlots(ownerVm, scopedSlots, normalSlots, prevScopedSlots) {
   var res;
@@ -1480,10 +1480,10 @@ function ensureCtor(comp, base2) {
   return isObject$7(comp) ? base2.extend(comp) : comp;
 }
 function createAsyncPlaceholder(factory2, data2, context, children, tag) {
-  var node = createEmptyVNode();
-  node.asyncFactory = factory2;
-  node.asyncMeta = { data: data2, context, children, tag };
-  return node;
+  var node2 = createEmptyVNode();
+  node2.asyncFactory = factory2;
+  node2.asyncMeta = { data: data2, context, children, tag };
+  return node2;
 }
 function resolveAsyncComponent(factory2, baseCtor) {
   if (isTrue(factory2.error) && isDef(factory2.errorComp)) {
@@ -3655,26 +3655,26 @@ function createComment(text2) {
 function insertBefore(parentNode2, newNode, referenceNode) {
   parentNode2.insertBefore(newNode, referenceNode);
 }
-function removeChild(node, child) {
-  node.removeChild(child);
+function removeChild(node2, child) {
+  node2.removeChild(child);
 }
-function appendChild(node, child) {
-  node.appendChild(child);
+function appendChild(node2, child) {
+  node2.appendChild(child);
 }
-function parentNode(node) {
-  return node.parentNode;
+function parentNode(node2) {
+  return node2.parentNode;
 }
-function nextSibling(node) {
-  return node.nextSibling;
+function nextSibling(node2) {
+  return node2.nextSibling;
 }
-function tagName(node) {
-  return node.tagName;
+function tagName(node2) {
+  return node2.tagName;
 }
-function setTextContent(node, text2) {
-  node.textContent = text2;
+function setTextContent(node2, text2) {
+  node2.textContent = text2;
 }
-function setStyleScope(node, scopeId) {
-  node.setAttribute(scopeId, "");
+function setStyleScope(node2, scopeId) {
+  node2.setAttribute(scopeId, "");
 }
 var nodeOps = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -4061,10 +4061,10 @@ function createPatchFunction(backend) {
       removeVnodes(oldCh, oldStartIdx, oldEndIdx);
     }
   }
-  function findIdxInOld(node, oldCh, start, end) {
+  function findIdxInOld(node2, oldCh, start, end) {
     for (var i_5 = start; i_5 < end; i_5++) {
       var c = oldCh[i_5];
-      if (isDef(c) && sameVnode(node, c))
+      if (isDef(c) && sameVnode(node2, c))
         return i_5;
     }
   }
@@ -6451,19 +6451,19 @@ function base() {
     }
     return Parser(String(file), file);
   }
-  function stringify2(node, doc) {
+  function stringify2(node2, doc) {
     processor.freeze();
     const file = vfile(doc);
     const Compiler = processor.Compiler;
     assertCompiler("stringify", Compiler);
-    assertNode(node);
+    assertNode(node2);
     if (newable(Compiler, "compile")) {
-      return new Compiler(node, file).compile();
+      return new Compiler(node2, file).compile();
     }
-    return Compiler(node, file);
+    return Compiler(node2, file);
   }
-  function run(node, doc, callback) {
-    assertNode(node);
+  function run(node2, doc, callback) {
+    assertNode(node2);
     processor.freeze();
     if (!callback && typeof doc === "function") {
       callback = doc;
@@ -6474,9 +6474,9 @@ function base() {
     }
     executor(null, callback);
     function executor(resolve, reject) {
-      transformers.run(node, vfile(doc), done);
+      transformers.run(node2, vfile(doc), done);
       function done(error, tree, file) {
-        tree = tree || node;
+        tree = tree || node2;
         if (error) {
           reject(error);
         } else if (resolve) {
@@ -6487,10 +6487,10 @@ function base() {
       }
     }
   }
-  function runSync(node, file) {
+  function runSync(node2, file) {
     let result;
     let complete;
-    processor.run(node, file, done);
+    processor.run(node2, file, done);
     assertDone("runSync", "run", complete);
     return result;
     function done(error, tree) {
@@ -6579,9 +6579,9 @@ function assertUnfrozen(name, frozen) {
     );
   }
 }
-function assertNode(node) {
-  if (!isPlainObject$1(node) || typeof node.type !== "string") {
-    throw new TypeError("Expected node, got `" + node + "`");
+function assertNode(node2) {
+  if (!isPlainObject$1(node2) || typeof node2.type !== "string") {
+    throw new TypeError("Expected node, got `" + node2 + "`");
   }
 }
 function assertDone(name, asyncName, complete) {
@@ -10288,20 +10288,26 @@ var __component__$3 = /* @__PURE__ */ normalizeComponent(
   null
 );
 const ReferenceList = __component__$3.exports;
-function toString3(node, options) {
-  var { includeImageAlt = true } = options || {};
-  return one$1(node, includeImageAlt);
+function toString3(value, options) {
+  const includeImageAlt = (options || {}).includeImageAlt;
+  return one$1(
+    value,
+    typeof includeImageAlt === "boolean" ? includeImageAlt : true
+  );
 }
-function one$1(node, includeImageAlt) {
-  return node && typeof node === "object" && (node.value || (includeImageAlt ? node.alt : "") || "children" in node && all$1(node.children, includeImageAlt) || Array.isArray(node) && all$1(node, includeImageAlt)) || "";
+function one$1(value, includeImageAlt) {
+  return node(value) && ("value" in value && value.value || includeImageAlt && "alt" in value && value.alt || "children" in value && all$1(value.children, includeImageAlt)) || Array.isArray(value) && all$1(value, includeImageAlt) || "";
 }
 function all$1(values, includeImageAlt) {
-  var result = [];
-  var index2 = -1;
+  const result = [];
+  let index2 = -1;
   while (++index2 < values.length) {
     result[index2] = one$1(values[index2], includeImageAlt);
   }
   return result.join("");
+}
+function node(value) {
+  return Boolean(value && typeof value === "object");
 }
 function splice(list2, start, remove2, items) {
   const end = list2.length;
@@ -14348,15 +14354,15 @@ function compiler(options = {}) {
       children: []
     });
   }
-  function enter2(node, token2, errorHandler) {
+  function enter2(node2, token2, errorHandler) {
     const parent = this.stack[this.stack.length - 1];
-    parent.children.push(node);
-    this.stack.push(node);
+    parent.children.push(node2);
+    this.stack.push(node2);
     this.tokenStack.push([token2, errorHandler]);
-    node.position = {
+    node2.position = {
       start: point2(token2.start)
     };
-    return node;
+    return node2;
   }
   function closer(and) {
     return close;
@@ -14367,7 +14373,7 @@ function compiler(options = {}) {
     }
   }
   function exit2(token2, onExitError) {
-    const node = this.stack.pop();
+    const node2 = this.stack.pop();
     const open = this.tokenStack.pop();
     if (!open) {
       throw new Error(
@@ -14384,8 +14390,8 @@ function compiler(options = {}) {
         handler.call(this, token2, open[0]);
       }
     }
-    node.position.end = point2(token2.end);
-    return node;
+    node2.position.end = point2(token2.end);
+    return node2;
   }
   function resume() {
     return toString3(this.stack.pop());
@@ -14402,13 +14408,13 @@ function compiler(options = {}) {
   }
   function onexitcodefencedfenceinfo() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.lang = data3;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.lang = data3;
   }
   function onexitcodefencedfencemeta() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.meta = data3;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.meta = data3;
   }
   function onexitcodefencedfence() {
     if (getData2("flowCodeInside"))
@@ -14418,46 +14424,46 @@ function compiler(options = {}) {
   }
   function onexitcodefenced() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.value = data3.replace(/^(\r?\n|\r)|(\r?\n|\r)$/g, "");
+    const node2 = this.stack[this.stack.length - 1];
+    node2.value = data3.replace(/^(\r?\n|\r)|(\r?\n|\r)$/g, "");
     setData("flowCodeInside");
   }
   function onexitcodeindented() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.value = data3.replace(/(\r?\n|\r)$/g, "");
+    const node2 = this.stack[this.stack.length - 1];
+    node2.value = data3.replace(/(\r?\n|\r)$/g, "");
   }
   function onexitdefinitionlabelstring(token2) {
     const label = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.label = label;
-    node.identifier = normalizeIdentifier(
+    const node2 = this.stack[this.stack.length - 1];
+    node2.label = label;
+    node2.identifier = normalizeIdentifier(
       this.sliceSerialize(token2)
     ).toLowerCase();
   }
   function onexitdefinitiontitlestring() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.title = data3;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.title = data3;
   }
   function onexitdefinitiondestinationstring() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.url = data3;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.url = data3;
   }
   function onexitatxheadingsequence(token2) {
-    const node = this.stack[this.stack.length - 1];
-    if (!node.depth) {
+    const node2 = this.stack[this.stack.length - 1];
+    if (!node2.depth) {
       const depth = this.sliceSerialize(token2).length;
-      node.depth = depth;
+      node2.depth = depth;
     }
   }
   function onexitsetextheadingtext() {
     setData("setextHeadingSlurpLineEnding", true);
   }
   function onexitsetextheadinglinesequence(token2) {
-    const node = this.stack[this.stack.length - 1];
-    node.depth = this.sliceSerialize(token2).charCodeAt(0) === 61 ? 1 : 2;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.depth = this.sliceSerialize(token2).charCodeAt(0) === 61 ? 1 : 2;
   }
   function onexitsetextheading() {
     setData("setextHeadingSlurpLineEnding");
@@ -14497,18 +14503,18 @@ function compiler(options = {}) {
   }
   function onexithtmlflow() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.value = data3;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.value = data3;
   }
   function onexithtmltext() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.value = data3;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.value = data3;
   }
   function onexitcodetext() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.value = data3;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.value = data3;
   }
   function onexitlink() {
     const context = this.stack[this.stack.length - 1];
@@ -14545,23 +14551,23 @@ function compiler(options = {}) {
   function onexitlabel() {
     const fragment = this.stack[this.stack.length - 1];
     const value = this.resume();
-    const node = this.stack[this.stack.length - 1];
+    const node2 = this.stack[this.stack.length - 1];
     setData("inReference", true);
-    if (node.type === "link") {
-      node.children = fragment.children;
+    if (node2.type === "link") {
+      node2.children = fragment.children;
     } else {
-      node.alt = value;
+      node2.alt = value;
     }
   }
   function onexitresourcedestinationstring() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.url = data3;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.url = data3;
   }
   function onexitresourcetitlestring() {
     const data3 = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.title = data3;
+    const node2 = this.stack[this.stack.length - 1];
+    node2.title = data3;
   }
   function onexitresource() {
     setData("inReference");
@@ -14571,9 +14577,9 @@ function compiler(options = {}) {
   }
   function onexitreferencestring(token2) {
     const label = this.resume();
-    const node = this.stack[this.stack.length - 1];
-    node.label = label;
-    node.identifier = normalizeIdentifier(
+    const node2 = this.stack[this.stack.length - 1];
+    node2.label = label;
+    node2.identifier = normalizeIdentifier(
       this.sliceSerialize(token2)
     ).toLowerCase();
     setData("referenceType", "full");
@@ -14600,13 +14606,13 @@ function compiler(options = {}) {
   }
   function onexitautolinkprotocol(token2) {
     onexitdata.call(this, token2);
-    const node = this.stack[this.stack.length - 1];
-    node.url = this.sliceSerialize(token2);
+    const node2 = this.stack[this.stack.length - 1];
+    node2.url = this.sliceSerialize(token2);
   }
   function onexitautolinkemail(token2) {
     onexitdata.call(this, token2);
-    const node = this.stack[this.stack.length - 1];
-    node.url = "mailto:" + this.sliceSerialize(token2);
+    const node2 = this.stack[this.stack.length - 1];
+    node2.url = "mailto:" + this.sliceSerialize(token2);
   }
   function blockQuote2() {
     return {
@@ -14814,10 +14820,10 @@ function anyFactory$1(tests) {
 }
 function propsFactory(check2) {
   return castFactory(all3);
-  function all3(node) {
+  function all3(node2) {
     let key;
     for (key in check2) {
-      if (node[key] !== check2[key])
+      if (node2[key] !== check2[key])
         return false;
     }
     return true;
@@ -14825,8 +14831,8 @@ function propsFactory(check2) {
 }
 function typeFactory$1(check2) {
   return castFactory(type);
-  function type(node) {
-    return node && node.type === check2;
+  function type(node2) {
+    return node2 && node2.type === check2;
   }
 }
 function castFactory(check2) {
@@ -14853,8 +14859,8 @@ const visitParents$2 = function(tree, test2, visitor2, reverse) {
   const is = convert$2(test2);
   const step = reverse ? -1 : 1;
   factory2(tree, null, [])();
-  function factory2(node, index2, parents) {
-    const value = typeof node === "object" && node !== null ? node : {};
+  function factory2(node2, index2, parents) {
+    const value = typeof node2 === "object" && node2 !== null ? node2 : {};
     let name;
     if (typeof value.type === "string") {
       name = typeof value.tagName === "string" ? value.tagName : typeof value.name === "string" ? value.name : void 0;
@@ -14868,17 +14874,17 @@ const visitParents$2 = function(tree, test2, visitor2, reverse) {
       let subresult;
       let offset;
       let grandparents;
-      if (!test2 || is(node, index2, parents[parents.length - 1] || null)) {
-        result = toResult$1(visitor2(node, parents));
+      if (!test2 || is(node2, index2, parents[parents.length - 1] || null)) {
+        result = toResult$1(visitor2(node2, parents));
         if (result[0] === EXIT$2) {
           return result;
         }
       }
-      if (node.children && result[0] !== SKIP$2) {
-        offset = (reverse ? node.children.length : -1) + step;
-        grandparents = parents.concat(node);
-        while (offset > -1 && offset < node.children.length) {
-          subresult = factory2(node.children[offset], offset, grandparents)();
+      if (node2.children && result[0] !== SKIP$2) {
+        offset = (reverse ? node2.children.length : -1) + step;
+        grandparents = parents.concat(node2);
+        while (offset > -1 && offset < node2.children.length) {
+          subresult = factory2(node2.children[offset], offset, grandparents)();
           if (subresult[0] === EXIT$2) {
             return subresult;
           }
@@ -14905,11 +14911,11 @@ const visit$2 = function(tree, test2, visitor2, reverse) {
     test2 = null;
   }
   visitParents$2(tree, test2, overload, reverse);
-  function overload(node, parents) {
+  function overload(node2, parents) {
     const parent = parents[parents.length - 1];
     return visitor2(
-      node,
-      parent ? parent.children.indexOf(node) : null,
+      node2,
+      parent ? parent.children.indexOf(node2) : null,
       parent
     );
   }
@@ -14917,23 +14923,23 @@ const visit$2 = function(tree, test2, visitor2, reverse) {
 const find$1 = /[\t ]*(?:\r?\n|\r)/g;
 function remarkBreaks() {
   return (tree) => {
-    visit$2(tree, "text", (node, index2, parent) => {
+    visit$2(tree, "text", (node2, index2, parent) => {
       const result = [];
       let start = 0;
       find$1.lastIndex = 0;
-      let match2 = find$1.exec(node.value);
+      let match2 = find$1.exec(node2.value);
       while (match2) {
         const position2 = match2.index;
         if (start !== position2) {
-          result.push({ type: "text", value: node.value.slice(start, position2) });
+          result.push({ type: "text", value: node2.value.slice(start, position2) });
         }
         result.push({ type: "break" });
         start = position2 + match2[0].length;
-        match2 = find$1.exec(node.value);
+        match2 = find$1.exec(node2.value);
       }
       if (result.length > 0 && parent && typeof index2 === "number") {
-        if (start < node.value.length) {
-          result.push({ type: "text", value: node.value.slice(start) });
+        if (start < node2.value.length) {
+          result.push({ type: "text", value: node2.value.slice(start) });
         }
         parent.children.splice(index2, 1, ...result);
         return index2 + result.length;
@@ -14942,32 +14948,32 @@ function remarkBreaks() {
   };
 }
 const u = function(type, props2, value) {
-  const node = { type: String(type) };
+  const node2 = { type: String(type) };
   if ((value === void 0 || value === null) && (typeof props2 === "string" || Array.isArray(props2))) {
     value = props2;
   } else {
-    Object.assign(node, props2);
+    Object.assign(node2, props2);
   }
   if (Array.isArray(value)) {
-    node.children = value;
+    node2.children = value;
   } else if (value !== void 0 && value !== null) {
-    node.value = String(value);
+    node2.value = String(value);
   }
-  return node;
+  return node2;
 };
 const own$5 = {}.hasOwnProperty;
-function unknown(h, node) {
-  const data2 = node.data || {};
-  if ("value" in node && !(own$5.call(data2, "hName") || own$5.call(data2, "hProperties") || own$5.call(data2, "hChildren"))) {
-    return h.augment(node, u("text", node.value));
+function unknown(h, node2) {
+  const data2 = node2.data || {};
+  if ("value" in node2 && !(own$5.call(data2, "hName") || own$5.call(data2, "hProperties") || own$5.call(data2, "hChildren"))) {
+    return h.augment(node2, u("text", node2.value));
   }
-  return h(node, "div", all2(h, node));
+  return h(node2, "div", all2(h, node2));
 }
-function one(h, node, parent) {
-  const type = node && node.type;
+function one(h, node2, parent) {
+  const type = node2 && node2.type;
   let fn;
   if (!type) {
-    throw new Error("Expected node, got `" + node + "`");
+    throw new Error("Expected node, got `" + node2 + "`");
   }
   if (own$5.call(h.handlers, type)) {
     fn = h.handlers[type];
@@ -14976,10 +14982,10 @@ function one(h, node, parent) {
   } else {
     fn = h.unknownHandler;
   }
-  return (typeof fn === "function" ? fn : unknown)(h, node, parent);
+  return (typeof fn === "function" ? fn : unknown)(h, node2, parent);
 }
-function returnNode(h, node) {
-  return "children" in node ? { ...node, children: all2(h, node) } : node;
+function returnNode(h, node2) {
+  return "children" in node2 ? { ...node2, children: all2(h, node2) } : node2;
 }
 function all2(h, parent) {
   const values = [];
@@ -15014,8 +15020,8 @@ const pointStart = point("start");
 const pointEnd = point("end");
 function point(type) {
   return point2;
-  function point2(node) {
-    const point3 = node && node.position && node.position[type] || {};
+  function point2(node2) {
+    const point3 = node2 && node2.position && node2.position[type] || {};
     return {
       line: point3.line || null,
       column: point3.column || null,
@@ -15023,16 +15029,16 @@ function point(type) {
     };
   }
 }
-function generated(node) {
-  return !node || !node.position || !node.position.start || !node.position.start.line || !node.position.start.column || !node.position.end || !node.position.end.line || !node.position.end.column;
+function generated(node2) {
+  return !node2 || !node2.position || !node2.position.start || !node2.position.start.line || !node2.position.start.column || !node2.position.end || !node2.position.end.line || !node2.position.end.column;
 }
 const own$4 = {}.hasOwnProperty;
-function definitions(node) {
+function definitions(node2) {
   const cache = /* @__PURE__ */ Object.create(null);
-  if (!node || !node.type) {
+  if (!node2 || !node2.type) {
     throw new Error("mdast-util-definitions expected node");
   }
-  visit$2(node, "definition", (definition3) => {
+  visit$2(node2, "definition", (definition3) => {
     const id2 = clean(definition3.identifier);
     if (id2 && !own$4.call(cache, id2)) {
       cache[id2] = definition3;
@@ -15206,33 +15212,33 @@ function footer(h) {
     ]
   };
 }
-function blockquote(h, node) {
-  return h(node, "blockquote", wrap(all2(h, node), true));
+function blockquote(h, node2) {
+  return h(node2, "blockquote", wrap(all2(h, node2), true));
 }
-function hardBreak(h, node) {
-  return [h(node, "br"), u("text", "\n")];
+function hardBreak(h, node2) {
+  return [h(node2, "br"), u("text", "\n")];
 }
-function code(h, node) {
-  const value = node.value ? node.value + "\n" : "";
-  const lang = node.lang && node.lang.match(/^[^ \t]+(?=[ \t]|$)/);
+function code(h, node2) {
+  const value = node2.value ? node2.value + "\n" : "";
+  const lang = node2.lang && node2.lang.match(/^[^ \t]+(?=[ \t]|$)/);
   const props2 = {};
   if (lang) {
     props2.className = ["language-" + lang];
   }
-  const code2 = h(node, "code", props2, [u("text", value)]);
-  if (node.meta) {
-    code2.data = { meta: node.meta };
+  const code2 = h(node2, "code", props2, [u("text", value)]);
+  if (node2.meta) {
+    code2.data = { meta: node2.meta };
   }
-  return h(node.position, "pre", [code2]);
+  return h(node2.position, "pre", [code2]);
 }
-function strikethrough(h, node) {
-  return h(node, "del", all2(h, node));
+function strikethrough(h, node2) {
+  return h(node2, "del", all2(h, node2));
 }
-function emphasis(h, node) {
-  return h(node, "em", all2(h, node));
+function emphasis(h, node2) {
+  return h(node2, "em", all2(h, node2));
 }
-function footnoteReference(h, node) {
-  const id2 = String(node.identifier);
+function footnoteReference(h, node2) {
+  const id2 = String(node2.identifier);
   const safeId = sanitizeUri(id2.toLowerCase());
   const index2 = h.footnoteOrder.indexOf(id2);
   let counter;
@@ -15245,9 +15251,9 @@ function footnoteReference(h, node) {
     counter = index2 + 1;
   }
   const reuseCounter = h.footnoteCounts[id2];
-  return h(node, "sup", [
+  return h(node2, "sup", [
     h(
-      node.position,
+      node2.position,
       "a",
       {
         href: "#" + h.clobberPrefix + "fn-" + safeId,
@@ -15259,7 +15265,7 @@ function footnoteReference(h, node) {
     )
   ]);
 }
-function footnote(h, node) {
+function footnote(h, node2) {
   const footnoteById = h.footnoteById;
   let no2 = 1;
   while (no2 in footnoteById)
@@ -15268,20 +15274,20 @@ function footnote(h, node) {
   footnoteById[identifier] = {
     type: "footnoteDefinition",
     identifier,
-    children: [{ type: "paragraph", children: node.children }],
-    position: node.position
+    children: [{ type: "paragraph", children: node2.children }],
+    position: node2.position
   };
   return footnoteReference(h, {
     type: "footnoteReference",
     identifier,
-    position: node.position
+    position: node2.position
   });
 }
-function heading(h, node) {
-  return h(node, "h" + node.depth, all2(h, node));
+function heading(h, node2) {
+  return h(node2, "h" + node2.depth, all2(h, node2));
 }
-function html$2(h, node) {
-  return h.dangerous ? h.augment(node, u("raw", node.value)) : null;
+function html$2(h, node2) {
+  return h.dangerous ? h.augment(node2, u("raw", node2.value)) : null;
 }
 var encodeCache = {};
 function getEncodeCache(exclude) {
@@ -15345,18 +15351,18 @@ function encode(string2, exclude, keepEscaped) {
 encode.defaultChars = ";/?:@&=+$,-_.!~*'()#";
 encode.componentChars = "-_.!~*'()";
 var encode_1 = encode;
-function revert(h, node) {
-  const subtype = node.referenceType;
+function revert(h, node2) {
+  const subtype = node2.referenceType;
   let suffix = "]";
   if (subtype === "collapsed") {
     suffix += "[]";
   } else if (subtype === "full") {
-    suffix += "[" + (node.label || node.identifier) + "]";
+    suffix += "[" + (node2.label || node2.identifier) + "]";
   }
-  if (node.type === "imageReference") {
-    return u("text", "![" + node.alt + suffix);
+  if (node2.type === "imageReference") {
+    return u("text", "![" + node2.alt + suffix);
   }
-  const contents = all2(h, node);
+  const contents = all2(h, node2);
   const head2 = contents[0];
   if (head2 && head2.type === "text") {
     head2.value = "[" + head2.value;
@@ -15371,51 +15377,51 @@ function revert(h, node) {
   }
   return contents;
 }
-function imageReference(h, node) {
-  const def2 = h.definition(node.identifier);
+function imageReference(h, node2) {
+  const def2 = h.definition(node2.identifier);
   if (!def2) {
-    return revert(h, node);
+    return revert(h, node2);
   }
-  const props2 = { src: encode_1(def2.url || ""), alt: node.alt };
+  const props2 = { src: encode_1(def2.url || ""), alt: node2.alt };
   if (def2.title !== null && def2.title !== void 0) {
     props2.title = def2.title;
   }
-  return h(node, "img", props2);
+  return h(node2, "img", props2);
 }
-function image(h, node) {
-  const props2 = { src: encode_1(node.url), alt: node.alt };
-  if (node.title !== null && node.title !== void 0) {
-    props2.title = node.title;
+function image(h, node2) {
+  const props2 = { src: encode_1(node2.url), alt: node2.alt };
+  if (node2.title !== null && node2.title !== void 0) {
+    props2.title = node2.title;
   }
-  return h(node, "img", props2);
+  return h(node2, "img", props2);
 }
-function inlineCode(h, node) {
-  return h(node, "code", [u("text", node.value.replace(/\r?\n|\r/g, " "))]);
+function inlineCode(h, node2) {
+  return h(node2, "code", [u("text", node2.value.replace(/\r?\n|\r/g, " "))]);
 }
-function linkReference(h, node) {
-  const def2 = h.definition(node.identifier);
+function linkReference(h, node2) {
+  const def2 = h.definition(node2.identifier);
   if (!def2) {
-    return revert(h, node);
+    return revert(h, node2);
   }
   const props2 = { href: encode_1(def2.url || "") };
   if (def2.title !== null && def2.title !== void 0) {
     props2.title = def2.title;
   }
-  return h(node, "a", props2, all2(h, node));
+  return h(node2, "a", props2, all2(h, node2));
 }
-function link(h, node) {
-  const props2 = { href: encode_1(node.url) };
-  if (node.title !== null && node.title !== void 0) {
-    props2.title = node.title;
+function link(h, node2) {
+  const props2 = { href: encode_1(node2.url) };
+  if (node2.title !== null && node2.title !== void 0) {
+    props2.title = node2.title;
   }
-  return h(node, "a", props2, all2(h, node));
+  return h(node2, "a", props2, all2(h, node2));
 }
-function listItem(h, node, parent) {
-  const result = all2(h, node);
-  const loose = parent ? listLoose(parent) : listItemLoose(node);
+function listItem(h, node2, parent) {
+  const result = all2(h, node2);
+  const loose = parent ? listLoose(parent) : listItemLoose(node2);
   const props2 = {};
   const wrapped = [];
-  if (typeof node.checked === "boolean") {
+  if (typeof node2.checked === "boolean") {
     let paragraph2;
     if (result[0] && result[0].type === "element" && result[0].tagName === "p") {
       paragraph2 = result[0];
@@ -15429,7 +15435,7 @@ function listItem(h, node, parent) {
     paragraph2.children.unshift(
       h(null, "input", {
         type: "checkbox",
-        checked: node.checked,
+        checked: node2.checked,
         disabled: true
       })
     );
@@ -15451,28 +15457,28 @@ function listItem(h, node, parent) {
   if (tail && (loose || !("tagName" in tail) || tail.tagName !== "p")) {
     wrapped.push(u("text", "\n"));
   }
-  return h(node, "li", props2, wrapped);
+  return h(node2, "li", props2, wrapped);
 }
-function listLoose(node) {
-  let loose = node.spread;
-  const children = node.children;
+function listLoose(node2) {
+  let loose = node2.spread;
+  const children = node2.children;
   let index2 = -1;
   while (!loose && ++index2 < children.length) {
     loose = listItemLoose(children[index2]);
   }
   return Boolean(loose);
 }
-function listItemLoose(node) {
-  const spread2 = node.spread;
-  return spread2 === void 0 || spread2 === null ? node.children.length > 1 : spread2;
+function listItemLoose(node2) {
+  const spread2 = node2.spread;
+  return spread2 === void 0 || spread2 === null ? node2.children.length > 1 : spread2;
 }
-function list(h, node) {
+function list(h, node2) {
   const props2 = {};
-  const name = node.ordered ? "ol" : "ul";
-  const items = all2(h, node);
+  const name = node2.ordered ? "ol" : "ul";
+  const items = all2(h, node2);
   let index2 = -1;
-  if (typeof node.start === "number" && node.start !== 1) {
-    props2.start = node.start;
+  if (typeof node2.start === "number" && node2.start !== 1) {
+    props2.start = node2.start;
   }
   while (++index2 < items.length) {
     const item = items[index2];
@@ -15481,28 +15487,28 @@ function list(h, node) {
       break;
     }
   }
-  return h(node, name, props2, wrap(items, true));
+  return h(node2, name, props2, wrap(items, true));
 }
-function paragraph(h, node) {
-  return h(node, "p", all2(h, node));
+function paragraph(h, node2) {
+  return h(node2, "p", all2(h, node2));
 }
-function root$1(h, node) {
-  return h.augment(node, u("root", wrap(all2(h, node))));
+function root$1(h, node2) {
+  return h.augment(node2, u("root", wrap(all2(h, node2))));
 }
-function strong(h, node) {
-  return h(node, "strong", all2(h, node));
+function strong(h, node2) {
+  return h(node2, "strong", all2(h, node2));
 }
-function table(h, node) {
-  const rows = node.children;
+function table(h, node2) {
+  const rows = node2.children;
   let index2 = -1;
-  const align = node.align || [];
+  const align = node2.align || [];
   const result = [];
   while (++index2 < rows.length) {
     const row = rows[index2].children;
     const name = index2 === 0 ? "th" : "td";
     const out = [];
     let cellIndex = -1;
-    const length = node.align ? align.length : row.length;
+    const length = node2.align ? align.length : row.length;
     while (++cellIndex < length) {
       const cell = row[cellIndex];
       out.push(
@@ -15512,7 +15518,7 @@ function table(h, node) {
     result[index2] = h(rows[index2], "tr", wrap(out, true));
   }
   return h(
-    node,
+    node2,
     "table",
     wrap(
       [h(result[0].position, "thead", wrap([result[0]], true))].concat(
@@ -15567,11 +15573,11 @@ function trimLine(value, start, end) {
   }
   return endIndex > startIndex ? value.slice(startIndex, endIndex) : "";
 }
-function text$1(h, node) {
-  return h.augment(node, u("text", trimLines(String(node.value))));
+function text$1(h, node2) {
+  return h.augment(node2, u("text", trimLines(String(node2.value))));
 }
-function thematicBreak(h, node) {
-  return h(node, "hr");
+function thematicBreak(h, node2) {
+  return h(node2, "hr");
 }
 const handlers = {
   blockquote,
@@ -15662,12 +15668,12 @@ function factory(tree, options) {
     }
     return right;
   }
-  function h(node, tagName2, props2, children) {
+  function h(node2, tagName2, props2, children) {
     if (Array.isArray(props2)) {
       children = props2;
       props2 = {};
     }
-    return augment(node, {
+    return augment(node2, {
       type: "element",
       tagName: tagName2,
       properties: props2 || {},
@@ -15677,26 +15683,26 @@ function factory(tree, options) {
 }
 function toHast(tree, options) {
   const h = factory(tree, options);
-  const node = one(h, tree, null);
+  const node2 = one(h, tree, null);
   const foot = footer(h);
   if (foot) {
-    node.children.push(u("text", "\n"), foot);
+    node2.children.push(u("text", "\n"), foot);
   }
-  return Array.isArray(node) ? { type: "root", children: node } : node;
+  return Array.isArray(node2) ? { type: "root", children: node2 } : node2;
 }
 const remarkRehype = function(destination, options) {
   return destination && "run" in destination ? bridge(destination, options) : mutate(destination || options);
 };
 const remark2rehype = remarkRehype;
 function bridge(destination, options) {
-  return (node, file, next) => {
-    destination.run(toHast(node, options), file, (error) => {
+  return (node2, file, next) => {
+    destination.run(toHast(node2, options), file, (error) => {
       next(error);
     });
   };
 }
 function mutate(options) {
-  return (node) => toHast(node, options);
+  return (node2) => toHast(node2, options);
 }
 class Schema {
   constructor(property, normal, space2) {
@@ -16839,10 +16845,10 @@ var inlineStyleParser = function(style2, options) {
   }
   function position2() {
     var start = { line: lineno, column };
-    return function(node) {
-      node.position = new Position(start);
+    return function(node2) {
+      node2.position = new Position(start);
       whitespace2();
-      return node;
+      return node2;
     };
   }
   function Position(start) {
@@ -16992,7 +16998,7 @@ function toH(h, tree, options) {
   const v = vue(h);
   const vd = vdom(h);
   let prefix;
-  let node;
+  let node2;
   if (typeof options === "string" || typeof options === "boolean") {
     prefix = options;
     options = {};
@@ -17002,20 +17008,20 @@ function toH(h, tree, options) {
     prefix = options.prefix;
   }
   if (root(tree)) {
-    node = tree.children.length === 1 && element(tree.children[0]) ? tree.children[0] : {
+    node2 = tree.children.length === 1 && element(tree.children[0]) ? tree.children[0] : {
       type: "element",
       tagName: "div",
       properties: {},
       children: tree.children
     };
   } else if (element(tree)) {
-    node = tree;
+    node2 = tree;
   } else {
     throw new Error(
       "Expected root or element, not `" + (tree && tree.type || tree) + "`"
     );
   }
-  return transform(h, node, {
+  return transform(h, node2, {
     schema: options.space === "svg" ? svg : html,
     prefix: prefix === void 0 || prefix === null ? r || v || vd ? "h-" : null : typeof prefix === "string" ? prefix : prefix ? "h-" : null,
     key: 0,
@@ -17025,10 +17031,10 @@ function toH(h, tree, options) {
     hyperscript: hyperscript(h)
   });
 }
-function transform(h, node, ctx) {
+function transform(h, node2, ctx) {
   const parentSchema = ctx.schema;
   let schema = parentSchema;
-  let name = node.tagName;
+  let name = node2.tagName;
   const attributes = {};
   const nodes = [];
   let index2 = -1;
@@ -17037,9 +17043,9 @@ function transform(h, node, ctx) {
     schema = svg;
     ctx.schema = schema;
   }
-  for (key in node.properties) {
-    if (node.properties && own$1.call(node.properties, key)) {
-      addAttribute(attributes, key, node.properties[key], ctx, name);
+  for (key in node2.properties) {
+    if (node2.properties && own$1.call(node2.properties, key)) {
+      addAttribute(attributes, key, node2.properties[key], ctx, name);
     }
   }
   if (ctx.vdom) {
@@ -17053,9 +17059,9 @@ function transform(h, node, ctx) {
     ctx.key++;
     attributes.key = ctx.prefix + ctx.key;
   }
-  if (node.children) {
-    while (++index2 < node.children.length) {
-      const value = node.children[index2];
+  if (node2.children) {
+    while (++index2 < node2.children.length) {
+      const value = node2.children[index2];
       if (element(value)) {
         nodes.push(transform(h, value, ctx));
       } else if (text(value)) {
@@ -17064,7 +17070,7 @@ function transform(h, node, ctx) {
     }
   }
   ctx.schema = parentSchema;
-  return nodes.length > 0 ? h.call(node, name, attributes, nodes) : h.call(node, name, attributes);
+  return nodes.length > 0 ? h.call(node2, name, attributes, nodes) : h.call(node2, name, attributes);
 }
 function addAttribute(props2, prop, value, ctx, name) {
   const info = find(ctx.schema, prop);
@@ -17103,21 +17109,21 @@ function addAttribute(props2, prop, value, ctx, name) {
   }
 }
 function react(h) {
-  const node = h("div", {});
+  const node2 = h("div", {});
   return Boolean(
-    node && ("_owner" in node || "_store" in node) && (node.key === void 0 || node.key === null)
+    node2 && ("_owner" in node2 || "_store" in node2) && (node2.key === void 0 || node2.key === null)
   );
 }
 function hyperscript(h) {
   return "context" in h && "cleanup" in h;
 }
 function vdom(h) {
-  const node = h("div", {});
-  return node.type === "VirtualNode";
+  const node2 = h("div", {});
+  return node2.type === "VirtualNode";
 }
 function vue(h) {
-  const node = h("div", {});
-  return Boolean(node && node.context && node.context._isVue);
+  const node2 = h("div", {});
+  return Boolean(node2 && node2.context && node2.context._isVue);
 }
 function parseStyle(value, tagName2) {
   const result = {};
@@ -17163,10 +17169,10 @@ function convertAll(tests) {
 }
 function matchesFactory(test2) {
   return matches2;
-  function matches2(node) {
+  function matches2(node2) {
     var key;
     for (key in test2) {
-      if (node[key] !== test2[key]) {
+      if (node2[key] !== test2[key]) {
         return false;
       }
     }
@@ -17189,8 +17195,8 @@ function anyFactory(tests) {
 }
 function typeFactory(test2) {
   return type;
-  function type(node) {
-    return Boolean(node && node.type === test2);
+  function type(node2) {
+    return Boolean(node2 && node2.type === test2);
   }
 }
 function ok() {
@@ -17213,17 +17219,17 @@ function visitParents$1(tree, test2, visitor2, reverse) {
   }
   is = convert(test2);
   one2(tree, null, []);
-  function one2(node, index2, parents) {
+  function one2(node2, index2, parents) {
     var result = [];
     var subresult;
-    if (!test2 || is(node, index2, parents[parents.length - 1] || null)) {
-      result = toResult(visitor2(node, parents));
+    if (!test2 || is(node2, index2, parents[parents.length - 1] || null)) {
+      result = toResult(visitor2(node2, parents));
       if (result[0] === EXIT$1) {
         return result;
       }
     }
-    if (node.children && result[0] !== SKIP$1) {
-      subresult = toResult(all3(node.children, parents.concat(node)));
+    if (node2.children && result[0] !== SKIP$1) {
+      subresult = toResult(all3(node2.children, parents.concat(node2)));
       return subresult[0] === EXIT$1 ? subresult : result;
     }
     return result;
@@ -17266,10 +17272,10 @@ function visit$1(tree, test2, visitor2, reverse) {
     test2 = null;
   }
   visitParents(tree, test2, overload, reverse);
-  function overload(node, parents) {
+  function overload(node2, parents) {
     var parent = parents[parents.length - 1];
-    var index2 = parent ? parent.children.indexOf(node) : null;
-    return visitor2(node, index2, parent);
+    var index2 = parent ? parent.children.indexOf(node2) : null;
+    return visitor2(node2, index2, parent);
   }
 }
 var visit = unistUtilVisit;
@@ -17280,27 +17286,27 @@ var hastCssPropertyMap = {
   height: "height",
   width: "width"
 };
-var hastUtilTableCellStyle = function tableCellStyle(node) {
-  visit(node, "element", visitor);
-  return node;
+var hastUtilTableCellStyle = function tableCellStyle(node2) {
+  visit(node2, "element", visitor);
+  return node2;
 };
-function visitor(node) {
-  if (node.tagName !== "tr" && node.tagName !== "td" && node.tagName !== "th") {
+function visitor(node2) {
+  if (node2.tagName !== "tr" && node2.tagName !== "td" && node2.tagName !== "th") {
     return;
   }
   var hastName;
   var cssName;
   for (hastName in hastCssPropertyMap) {
-    if (!hasOwnProperty.call(hastCssPropertyMap, hastName) || node.properties[hastName] === void 0) {
+    if (!hasOwnProperty.call(hastCssPropertyMap, hastName) || node2.properties[hastName] === void 0) {
       continue;
     }
     cssName = hastCssPropertyMap[hastName];
-    appendStyle(node, cssName, node.properties[hastName]);
-    delete node.properties[hastName];
+    appendStyle(node2, cssName, node2.properties[hastName]);
+    delete node2.properties[hastName];
   }
 }
-function appendStyle(node, property, value) {
-  var prevStyle = (node.properties.style || "").trim();
+function appendStyle(node2, property, value) {
+  var prevStyle = (node2.properties.style || "").trim();
   if (prevStyle && !/;\s*/.test(prevStyle)) {
     prevStyle += ";";
   }
@@ -17308,7 +17314,7 @@ function appendStyle(node, property, value) {
     prevStyle += " ";
   }
   var nextStyle = prevStyle + property + ": " + value + ";";
-  node.properties.style = nextStyle;
+  node2.properties.style = nextStyle;
 }
 const tableCellStyle2 = hastUtilTableCellStyle;
 function whitespace(thing) {
@@ -17323,10 +17329,10 @@ function rehypeReact(options) {
   }
   const createElement2 = options.createElement;
   Object.assign(this, { Compiler: compiler2 });
-  function compiler2(node) {
-    let result = toH(h, tableCellStyle2(node), options.prefix);
-    if (node.type === "root") {
-      result = result && typeof result === "object" && "type" in result && "props" in result && result.type === "div" && (node.children.length !== 1 || node.children[0].type !== "element") ? result.props.children : [result];
+  function compiler2(node2) {
+    let result = toH(h, tableCellStyle2(node2), options.prefix);
+    if (node2.type === "root") {
+      result = result && typeof result === "object" && "type" in result && "props" in result && result.type === "div" && (node2.children.length !== 1 || node2.children[0].type !== "element") ? result.props.children : [result];
       return createElement2(options.Fragment || "div", {}, result);
     }
     return result;
@@ -17371,14 +17377,14 @@ function remarkExternalLinks(options = {}) {
   const contentProperties = options.contentProperties || {};
   return (tree) => {
     const definition2 = definitions(tree);
-    visit$2(tree, (node) => {
-      if (node.type === "link" || node.type === "linkReference") {
-        const ctx = node.type === "link" ? node : definition2(node.identifier);
+    visit$2(tree, (node2) => {
+      if (node2.type === "link" || node2.type === "linkReference") {
+        const ctx = node2.type === "link" ? node2 : definition2(node2.identifier);
         if (!ctx)
           return;
         const protocol = ctx.url.slice(0, ctx.url.indexOf(":"));
         if (isAbsoluteUrl(ctx.url) && protocols.includes(protocol)) {
-          const data2 = node.data || (node.data = {});
+          const data2 = node2.data || (node2.data = {});
           const props2 = data2.hProperties || (data2.hProperties = {});
           if (target2 !== false) {
             props2.target = target2 || defaultTarget;
@@ -17387,7 +17393,7 @@ function remarkExternalLinks(options = {}) {
             props2.rel = (rel || defaultRel).concat();
           }
           if (content2) {
-            node.children.push({
+            node2.children.push({
               type: "fragment",
               children: [],
               data: {
@@ -17427,8 +17433,8 @@ const remarkAutolink = function({ autolink: autolink2, useMarkdown }) {
     if (!useMarkdown || !autolink2) {
       return;
     }
-    visit$2(tree, (node) => node.type === "text", (node, index2, parent) => {
-      let parsed = parseUrl(node.value);
+    visit$2(tree, (node2) => node2.type === "text", (node2, index2, parent) => {
+      let parsed = parseUrl(node2.value);
       parsed = parsed.map((n) => {
         if (typeof n === "string") {
           return u("text", n);
@@ -17477,9 +17483,9 @@ const parseUrl = (text2, linkComponent) => {
 };
 const remarkPlaceholder = function() {
   return function(ast) {
-    visit$2(ast, (node) => node.type === "text", visitor2);
-    function visitor2(node, index2, parent) {
-      const placeholders = node.value.split(/(\{[a-z\-_.0-9]+\})/ig).map((entry, index3, list2) => {
+    visit$2(ast, (node2) => node2.type === "text", visitor2);
+    function visitor2(node2, index2, parent) {
+      const placeholders = node2.value.split(/(\{[a-z\-_.0-9]+\})/ig).map((entry, index3, list2) => {
         const matches2 = entry.match(/^\{([a-z\-_.0-9]+)\}$/i);
         if (!matches2) {
           return u("text", entry);
@@ -17489,10 +17495,10 @@ const remarkPlaceholder = function() {
           tagName: `#${component}`
         });
       });
-      node = u("element", { tagName: "span" }, [
+      node2 = u("element", { tagName: "span" }, [
         ...placeholders
       ]);
-      parent.children[index2] = node;
+      parent.children[index2] = node2;
     }
   };
 };
@@ -17610,8 +17616,8 @@ const _sfc_main$2 = {
         rel: ["noopener noreferrer"]
       }).use(remarkBreaks).use(remark2rehype, {
         handlers: {
-          component(toHast2, node) {
-            return toHast2(node, node.component, { value: node.value });
+          component(toHast2, node2) {
+            return toHast2(node2, node2.component, { value: node2.value });
           }
         }
       }).use(remarkPlaceholder).use(rehypeReact, {
