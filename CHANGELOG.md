@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.1.0-beta.2 (2023-02-03)
+## v2.1.0-beta.3 (2023-02-03)
 
 #### :rocket: Enhancement
 * [#892](https://github.com/nextcloud/vue-richtext/pull/892) Make getLinkWithPicker simpler ([@julien-nc](https://github.com/julien-nc))
