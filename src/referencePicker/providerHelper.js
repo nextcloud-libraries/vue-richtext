@@ -26,6 +26,9 @@ if (!window._vue_richtext_reference_provider_timestamps) {
  * @returns {Object} The provider object
  */
 export function getProvider(providerId) {
+	if (providerId === 'any-link') {
+		return anyLinkProvider
+	}
 	return getProviders().find(p => p.id === providerId)
 }
 
