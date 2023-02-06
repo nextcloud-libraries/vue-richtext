@@ -4,8 +4,10 @@ import axios from '@nextcloud/axios'
 
 import { isCustomPickerElementRegistered } from './customPickerElements.js'
 
+export const anyLinkProviderId = 'any-link'
+
 const anyLinkProvider = {
-	id: 'any-link',
+	id: anyLinkProviderId,
 	// TODO translate
 	title: 'Any link',
 	icon_url: imagePath('core', 'filetypes/link.svg'),
@@ -26,6 +28,9 @@ if (!window._vue_richtext_reference_provider_timestamps) {
  * @returns {Object} The provider object
  */
 export function getProvider(providerId) {
+	if (providerId === anyLinkProviderId) {
+		return anyLinkProvider
+	}
 	return getProviders().find(p => p.id === providerId)
 }
 
