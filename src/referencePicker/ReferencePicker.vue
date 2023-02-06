@@ -153,9 +153,9 @@ export default {
 		deselectProvider() {
 			this.selectedProvider = null
 			this.$emit('provider-selected', null)
-			this.$nextTick(() => {
+			setTimeout(() => {
 				this.$refs['provider-list']?.focus()
-			})
+			}, 300)
 		},
 	},
 }
