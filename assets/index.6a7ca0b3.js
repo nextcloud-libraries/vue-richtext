@@ -5845,15 +5845,15 @@ function stringifyPosition(value) {
     return position(value);
   }
   if ("line" in value || "column" in value) {
-    return point$1(value);
+    return point$2(value);
   }
   return "";
 }
-function point$1(point2) {
+function point$2(point2) {
   return index(point2 && point2.line) + ":" + index(point2 && point2.column);
 }
 function position(pos) {
-  return point$1(pos && pos.start) + "-" + point$1(pos && pos.end);
+  return point$2(pos && pos.start) + "-" + point$2(pos && pos.end);
 }
 function index(value) {
   return value && typeof value === "number" ? value : 1;
@@ -8519,7 +8519,7 @@ class ProxyBus {
     this.bus = bus2;
   }
   getVersion() {
-    return "3.0.0";
+    return "3.0.2";
   }
   subscribe(name, handler) {
     this.bus.subscribe(name, handler);
@@ -8536,7 +8536,7 @@ class SimpleBus {
     __publicField(this, "handlers", /* @__PURE__ */ new Map());
   }
   getVersion() {
-    return "3.0.0";
+    return "3.0.2";
   }
   subscribe(name, handler) {
     this.handlers.set(name, (this.handlers.get(name) || []).concat(handler));
@@ -14068,113 +14068,105 @@ const fromMarkdown = function(value, encoding, options) {
     )
   );
 };
-function compiler(options = {}) {
-  const config2 = configure(
-    {
-      transforms: [],
-      canContainEols: [
-        "emphasis",
-        "fragment",
-        "heading",
-        "paragraph",
-        "strong"
-      ],
-      enter: {
-        autolink: opener(link2),
-        autolinkProtocol: onenterdata,
-        autolinkEmail: onenterdata,
-        atxHeading: opener(heading2),
-        blockQuote: opener(blockQuote2),
-        characterEscape: onenterdata,
-        characterReference: onenterdata,
-        codeFenced: opener(codeFlow),
-        codeFencedFenceInfo: buffer,
-        codeFencedFenceMeta: buffer,
-        codeIndented: opener(codeFlow, buffer),
-        codeText: opener(codeText2, buffer),
-        codeTextData: onenterdata,
-        data: onenterdata,
-        codeFlowValue: onenterdata,
-        definition: opener(definition2),
-        definitionDestinationString: buffer,
-        definitionLabelString: buffer,
-        definitionTitleString: buffer,
-        emphasis: opener(emphasis2),
-        hardBreakEscape: opener(hardBreak2),
-        hardBreakTrailing: opener(hardBreak2),
-        htmlFlow: opener(html2, buffer),
-        htmlFlowData: onenterdata,
-        htmlText: opener(html2, buffer),
-        htmlTextData: onenterdata,
-        image: opener(image2),
-        label: buffer,
-        link: opener(link2),
-        listItem: opener(listItem2),
-        listItemValue: onenterlistitemvalue,
-        listOrdered: opener(list2, onenterlistordered),
-        listUnordered: opener(list2),
-        paragraph: opener(paragraph2),
-        reference: onenterreference,
-        referenceString: buffer,
-        resourceDestinationString: buffer,
-        resourceTitleString: buffer,
-        setextHeading: opener(heading2),
-        strong: opener(strong2),
-        thematicBreak: opener(thematicBreak2)
-      },
-      exit: {
-        atxHeading: closer(),
-        atxHeadingSequence: onexitatxheadingsequence,
-        autolink: closer(),
-        autolinkEmail: onexitautolinkemail,
-        autolinkProtocol: onexitautolinkprotocol,
-        blockQuote: closer(),
-        characterEscapeValue: onexitdata,
-        characterReferenceMarkerHexadecimal: onexitcharacterreferencemarker,
-        characterReferenceMarkerNumeric: onexitcharacterreferencemarker,
-        characterReferenceValue: onexitcharacterreferencevalue,
-        codeFenced: closer(onexitcodefenced),
-        codeFencedFence: onexitcodefencedfence,
-        codeFencedFenceInfo: onexitcodefencedfenceinfo,
-        codeFencedFenceMeta: onexitcodefencedfencemeta,
-        codeFlowValue: onexitdata,
-        codeIndented: closer(onexitcodeindented),
-        codeText: closer(onexitcodetext),
-        codeTextData: onexitdata,
-        data: onexitdata,
-        definition: closer(),
-        definitionDestinationString: onexitdefinitiondestinationstring,
-        definitionLabelString: onexitdefinitionlabelstring,
-        definitionTitleString: onexitdefinitiontitlestring,
-        emphasis: closer(),
-        hardBreakEscape: closer(onexithardbreak),
-        hardBreakTrailing: closer(onexithardbreak),
-        htmlFlow: closer(onexithtmlflow),
-        htmlFlowData: onexitdata,
-        htmlText: closer(onexithtmltext),
-        htmlTextData: onexitdata,
-        image: closer(onexitimage),
-        label: onexitlabel,
-        labelText: onexitlabeltext,
-        lineEnding: onexitlineending,
-        link: closer(onexitlink),
-        listItem: closer(),
-        listOrdered: closer(),
-        listUnordered: closer(),
-        paragraph: closer(),
-        referenceString: onexitreferencestring,
-        resourceDestinationString: onexitresourcedestinationstring,
-        resourceTitleString: onexitresourcetitlestring,
-        resource: onexitresource,
-        setextHeading: closer(onexitsetextheading),
-        setextHeadingLineSequence: onexitsetextheadinglinesequence,
-        setextHeadingText: onexitsetextheadingtext,
-        strong: closer(),
-        thematicBreak: closer()
-      }
+function compiler(options) {
+  const config2 = {
+    transforms: [],
+    canContainEols: ["emphasis", "fragment", "heading", "paragraph", "strong"],
+    enter: {
+      autolink: opener(link2),
+      autolinkProtocol: onenterdata,
+      autolinkEmail: onenterdata,
+      atxHeading: opener(heading2),
+      blockQuote: opener(blockQuote2),
+      characterEscape: onenterdata,
+      characterReference: onenterdata,
+      codeFenced: opener(codeFlow),
+      codeFencedFenceInfo: buffer,
+      codeFencedFenceMeta: buffer,
+      codeIndented: opener(codeFlow, buffer),
+      codeText: opener(codeText2, buffer),
+      codeTextData: onenterdata,
+      data: onenterdata,
+      codeFlowValue: onenterdata,
+      definition: opener(definition2),
+      definitionDestinationString: buffer,
+      definitionLabelString: buffer,
+      definitionTitleString: buffer,
+      emphasis: opener(emphasis2),
+      hardBreakEscape: opener(hardBreak2),
+      hardBreakTrailing: opener(hardBreak2),
+      htmlFlow: opener(html2, buffer),
+      htmlFlowData: onenterdata,
+      htmlText: opener(html2, buffer),
+      htmlTextData: onenterdata,
+      image: opener(image2),
+      label: buffer,
+      link: opener(link2),
+      listItem: opener(listItem2),
+      listItemValue: onenterlistitemvalue,
+      listOrdered: opener(list2, onenterlistordered),
+      listUnordered: opener(list2),
+      paragraph: opener(paragraph2),
+      reference: onenterreference,
+      referenceString: buffer,
+      resourceDestinationString: buffer,
+      resourceTitleString: buffer,
+      setextHeading: opener(heading2),
+      strong: opener(strong2),
+      thematicBreak: opener(thematicBreak2)
     },
-    options.mdastExtensions || []
-  );
+    exit: {
+      atxHeading: closer(),
+      atxHeadingSequence: onexitatxheadingsequence,
+      autolink: closer(),
+      autolinkEmail: onexitautolinkemail,
+      autolinkProtocol: onexitautolinkprotocol,
+      blockQuote: closer(),
+      characterEscapeValue: onexitdata,
+      characterReferenceMarkerHexadecimal: onexitcharacterreferencemarker,
+      characterReferenceMarkerNumeric: onexitcharacterreferencemarker,
+      characterReferenceValue: onexitcharacterreferencevalue,
+      codeFenced: closer(onexitcodefenced),
+      codeFencedFence: onexitcodefencedfence,
+      codeFencedFenceInfo: onexitcodefencedfenceinfo,
+      codeFencedFenceMeta: onexitcodefencedfencemeta,
+      codeFlowValue: onexitdata,
+      codeIndented: closer(onexitcodeindented),
+      codeText: closer(onexitcodetext),
+      codeTextData: onexitdata,
+      data: onexitdata,
+      definition: closer(),
+      definitionDestinationString: onexitdefinitiondestinationstring,
+      definitionLabelString: onexitdefinitionlabelstring,
+      definitionTitleString: onexitdefinitiontitlestring,
+      emphasis: closer(),
+      hardBreakEscape: closer(onexithardbreak),
+      hardBreakTrailing: closer(onexithardbreak),
+      htmlFlow: closer(onexithtmlflow),
+      htmlFlowData: onexitdata,
+      htmlText: closer(onexithtmltext),
+      htmlTextData: onexitdata,
+      image: closer(onexitimage),
+      label: onexitlabel,
+      labelText: onexitlabeltext,
+      lineEnding: onexitlineending,
+      link: closer(onexitlink),
+      listItem: closer(),
+      listOrdered: closer(),
+      listUnordered: closer(),
+      paragraph: closer(),
+      referenceString: onexitreferencestring,
+      resourceDestinationString: onexitresourcedestinationstring,
+      resourceTitleString: onexitresourcetitlestring,
+      resource: onexitresource,
+      setextHeading: closer(onexitsetextheading),
+      setextHeadingLineSequence: onexitsetextheadinglinesequence,
+      setextHeadingText: onexitsetextheadingtext,
+      strong: closer(),
+      thematicBreak: closer()
+    }
+  };
+  configure(config2, (options || {}).mdastExtensions || []);
   const data2 = {};
   return compile;
   function compile(events2) {
@@ -14182,12 +14174,9 @@ function compiler(options = {}) {
       type: "root",
       children: []
     };
-    const stack = [tree];
-    const tokenStack = [];
-    const listStack = [];
     const context = {
-      stack,
-      tokenStack,
+      stack: [tree],
+      tokenStack: [],
       config: config2,
       enter: enter2,
       exit: exit2,
@@ -14196,6 +14185,7 @@ function compiler(options = {}) {
       setData,
       getData: getData2
     };
+    const listStack = [];
     let index2 = -1;
     while (++index2 < events2.length) {
       if (events2[index2][1].type === "listOrdered" || events2[index2][1].type === "listUnordered") {
@@ -14222,20 +14212,20 @@ function compiler(options = {}) {
         );
       }
     }
-    if (tokenStack.length > 0) {
-      const tail = tokenStack[tokenStack.length - 1];
+    if (context.tokenStack.length > 0) {
+      const tail = context.tokenStack[context.tokenStack.length - 1];
       const handler = tail[1] || defaultOnError;
       handler.call(context, void 0, tail[0]);
     }
     tree.position = {
-      start: point2(
+      start: point$1(
         events2.length > 0 ? events2[0][1].start : {
           line: 1,
           column: 1,
           offset: 0
         }
       ),
-      end: point2(
+      end: point$1(
         events2.length > 0 ? events2[events2.length - 2][1].end : {
           line: 1,
           column: 1,
@@ -14333,13 +14323,6 @@ function compiler(options = {}) {
   function getData2(key) {
     return data2[key];
   }
-  function point2(d) {
-    return {
-      line: d.line,
-      column: d.column,
-      offset: d.offset
-    };
-  }
   function opener(create3, and) {
     return open;
     function open(token2) {
@@ -14360,7 +14343,7 @@ function compiler(options = {}) {
     this.stack.push(node2);
     this.tokenStack.push([token2, errorHandler]);
     node2.position = {
-      start: point2(token2.start)
+      start: point$1(token2.start)
     };
     return node2;
   }
@@ -14390,7 +14373,7 @@ function compiler(options = {}) {
         handler.call(this, token2, open[0]);
       }
     }
-    node2.position.end = point2(token2.end);
+    node2.position.end = point$1(token2.end);
     return node2;
   }
   function resume() {
@@ -14469,27 +14452,27 @@ function compiler(options = {}) {
     setData("setextHeadingSlurpLineEnding");
   }
   function onenterdata(token2) {
-    const parent = this.stack[this.stack.length - 1];
-    let tail = parent.children[parent.children.length - 1];
+    const node2 = this.stack[this.stack.length - 1];
+    let tail = node2.children[node2.children.length - 1];
     if (!tail || tail.type !== "text") {
       tail = text2();
       tail.position = {
-        start: point2(token2.start)
+        start: point$1(token2.start)
       };
-      parent.children.push(tail);
+      node2.children.push(tail);
     }
     this.stack.push(tail);
   }
   function onexitdata(token2) {
     const tail = this.stack.pop();
     tail.value += this.sliceSerialize(token2);
-    tail.position.end = point2(token2.end);
+    tail.position.end = point$1(token2.end);
   }
   function onexitlineending(token2) {
     const context = this.stack[this.stack.length - 1];
     if (getData2("atHardBreak")) {
       const tail = context.children[context.children.length - 1];
-      tail.position.end = point2(token2.end);
+      tail.position.end = point$1(token2.end);
       setData("atHardBreak");
       return;
     }
@@ -14517,34 +14500,36 @@ function compiler(options = {}) {
     node2.value = data3;
   }
   function onexitlink() {
-    const context = this.stack[this.stack.length - 1];
+    const node2 = this.stack[this.stack.length - 1];
     if (getData2("inReference")) {
-      context.type += "Reference";
-      context.referenceType = getData2("referenceType") || "shortcut";
-      delete context.url;
-      delete context.title;
+      const referenceType = getData2("referenceType") || "shortcut";
+      node2.type += "Reference";
+      node2.referenceType = referenceType;
+      delete node2.url;
+      delete node2.title;
     } else {
-      delete context.identifier;
-      delete context.label;
+      delete node2.identifier;
+      delete node2.label;
     }
     setData("referenceType");
   }
   function onexitimage() {
-    const context = this.stack[this.stack.length - 1];
+    const node2 = this.stack[this.stack.length - 1];
     if (getData2("inReference")) {
-      context.type += "Reference";
-      context.referenceType = getData2("referenceType") || "shortcut";
-      delete context.url;
-      delete context.title;
+      const referenceType = getData2("referenceType") || "shortcut";
+      node2.type += "Reference";
+      node2.referenceType = referenceType;
+      delete node2.url;
+      delete node2.title;
     } else {
-      delete context.identifier;
-      delete context.label;
+      delete node2.identifier;
+      delete node2.label;
     }
     setData("referenceType");
   }
   function onexitlabeltext(token2) {
-    const ancestor = this.stack[this.stack.length - 2];
     const string2 = this.sliceSerialize(token2);
+    const ancestor = this.stack[this.stack.length - 2];
     ancestor.label = decodeString(string2);
     ancestor.identifier = normalizeIdentifier(string2).toLowerCase();
   }
@@ -14554,7 +14539,8 @@ function compiler(options = {}) {
     const node2 = this.stack[this.stack.length - 1];
     setData("inReference", true);
     if (node2.type === "link") {
-      node2.children = fragment.children;
+      const children = fragment.children;
+      node2.children = children;
     } else {
       node2.alt = value;
     }
@@ -14598,11 +14584,12 @@ function compiler(options = {}) {
       );
       setData("characterReferenceType");
     } else {
-      value = decodeNamedCharacterReference(data3);
+      const result = decodeNamedCharacterReference(data3);
+      value = result;
     }
     const tail = this.stack.pop();
     tail.value += value;
-    tail.position.end = point2(token2.end);
+    tail.position.end = point$1(token2.end);
   }
   function onexitautolinkprotocol(token2) {
     onexitdata.call(this, token2);
@@ -14724,6 +14711,13 @@ function compiler(options = {}) {
     };
   }
 }
+function point$1(d) {
+  return {
+    line: d.line,
+    column: d.column,
+    offset: d.offset
+  };
+}
 function configure(combined, extensions) {
   let index2 = -1;
   while (++index2 < extensions.length) {
@@ -14734,21 +14728,25 @@ function configure(combined, extensions) {
       extension(combined, value);
     }
   }
-  return combined;
 }
 function extension(combined, extension2) {
   let key;
   for (key in extension2) {
     if (own$6.call(extension2, key)) {
-      const list2 = key === "canContainEols" || key === "transforms";
-      const maybe = own$6.call(combined, key) ? combined[key] : void 0;
-      const left = maybe || (combined[key] = list2 ? [] : {});
-      const right = extension2[key];
-      if (right) {
-        if (list2) {
-          combined[key] = [...left, ...right];
-        } else {
-          Object.assign(left, right);
+      if (key === "canContainEols") {
+        const right = extension2[key];
+        if (right) {
+          combined[key].push(...right);
+        }
+      } else if (key === "transforms") {
+        const right = extension2[key];
+        if (right) {
+          combined[key].push(...right);
+        }
+      } else if (key === "enter" || key === "exit") {
+        const right = extension2[key];
+        if (right) {
+          Object.assign(combined[key], right);
         }
       }
     }
