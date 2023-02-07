@@ -1,5 +1,8 @@
 <template>
-	<div class="reference-picker" :style="pickerWrapperStyle">
+	<div class="reference-picker"
+		:style="pickerWrapperStyle"
+		tabindex="-1"
+		@keydown.stop.prevent.esc="onEscapePressed">
 		<ProviderList v-if="mode === MODES.providerList"
 			ref="provider-list"
 			@select-provider="onProviderSelected"
@@ -108,17 +111,10 @@ export default {
 			}
 		}
 
-		document.addEventListener('keyup', this.onKeypress)
 	},
 	beforeDestroy() {
-		document.removeEventListener('keyup', this.onKeypress)
 	},
 	methods: {
-		onKeypress(e) {
-			if (e.key === 'Escape') {
-				this.onEscapePressed()
-			}
-		},
 		onEscapePressed() {
 			if (this.selectedProvider !== null) {
 				this.deselectProvider()
@@ -157,9 +153,9 @@ export default {
 		deselectProvider() {
 			this.selectedProvider = null
 			this.$emit('provider-selected', null)
-			this.$nextTick(() => {
+			setTimeout(() => {
 				this.$refs['provider-list']?.focus()
-			})
+			}, 300)
 		},
 	},
 }

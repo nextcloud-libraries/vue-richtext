@@ -4,7 +4,8 @@
 		:can-close="false"
 		class="reference-picker-modal"
 		@close="onCancel">
-		<div class="reference-picker-modal--content">
+		<div ref="modal_content"
+			class="reference-picker-modal--content">
 			<NcButton v-if="showBackButton"
 				:aria-label="backButtonTitle"
 				:title="backButtonTitle"
@@ -42,6 +43,7 @@ import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 
 import { NcModal, NcButton } from '@nextcloud/vue'
+import { emit } from '@nextcloud/event-bus'
 
 import ReferencePicker from './ReferencePicker.vue'
 import { isCustomPickerElementRegistered } from './customPickerElements.js'
@@ -70,6 +72,13 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		/**
+		 * If true, add the modal content to the Viewer trap elements via the event-bus
+		 */
+		isInsideViewer: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -78,7 +87,6 @@ export default {
 			backButtonTitle: 'Back to provider selection',
 			closeButtonTitle: 'Close',
 			closeButtonLabel: 'Close link picker',
-
 		}
 	},
 	computed: {
@@ -101,6 +109,12 @@ export default {
 				? this.selectedProvider.title
 				: 'Link picker'
 		},
+	},
+	mounted() {
+		if (this.isInsideViewer) {
+			const elem = this.$refs.modal_content
+			emit('viewer:trapElements:changed', elem)
+		}
 	},
 	methods: {
 		onCancel() {
