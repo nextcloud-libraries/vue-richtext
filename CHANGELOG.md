@@ -1,5 +1,14 @@
 # Changelog
 
+## v2.1.0-beta.4 (2023-02-07)
+
+#### :bug: Bug Fix
+* [#896](https://github.com/nextcloud/vue-richtext/pull/896) fix getProvider not getting the 'any-link' fallback provider ([@julien-nc](https://github.com/julien-nc))
+* [#897](https://github.com/nextcloud/vue-richtext/pull/897) fix the focus trap issue (after escape is pressed) when the link picker is displayed in the Viewer ([@julien-nc](https://github.com/julien-nc))
+
+#### Committers: 1
+- Julien Veyssier ([@julien-nc](https://github.com/julien-nc))
+
 ## v2.1.0-beta.3 (2023-02-03)
 
 #### :rocket: Enhancement
