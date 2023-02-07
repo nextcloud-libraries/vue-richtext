@@ -1,6 +1,6 @@
 {
 	"name": "@nextcloud/vue-richtext",
-	"version": "2.1.0-beta.3",
+	"version": "2.1.0-beta.4",
 	"description": "Vue component for rich content strings including markdown support.",
 	"keywords": [
 		"vuejs",
