@@ -38,15 +38,19 @@ export default {
 				this.$refs.domElement.innerHTML = ''
 			}
 
-			this.renderResult = renderCustomPickerElement(this.$refs.domElement, { providerId: this.provider.id, accessible: false })
-			if (this.renderResult.object?._isVue && this.renderResult.object?.$on) {
-				this.renderResult.object.$on('submit', this.onSubmit)
-				this.renderResult.object.$on('cancel', this.onCancel)
-			}
-			this.renderResult.element.addEventListener('submit', (e) => {
-				this.onSubmit(e.detail)
+			const renderFunctionResult = renderCustomPickerElement(this.$refs.domElement, { providerId: this.provider.id, accessible: false })
+			// this works whether renderCustomPickerElement returns a promise or a value
+			Promise.resolve(renderFunctionResult).then(result => {
+				this.renderResult = result
+				if (this.renderResult.object?._isVue && this.renderResult.object?.$on) {
+					this.renderResult.object.$on('submit', this.onSubmit)
+					this.renderResult.object.$on('cancel', this.onCancel)
+				}
+				this.renderResult.element.addEventListener('submit', (e) => {
+					this.onSubmit(e.detail)
+				})
+				this.renderResult.element.addEventListener('cancel', this.onCancel)
 			})
-			this.renderResult.element.addEventListener('cancel', this.onCancel)
 		},
 		onSubmit(value) {
 			this.$emit('submit', value)
