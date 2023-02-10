@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.1.0-beta.5 (2023-02-10)
+
+#### :rocket: Enhancement
+* [#904](https://github.com/nextcloud/vue-richtext/pull/904) Allow async renderCustomPickerElement ([@julien-nc](https://github.com/julien-nc))
+
+#### Committers: 1
+- Julien Veyssier ([@julien-nc](https://github.com/julien-nc))
+
 ## v2.1.0-beta.4 (2023-02-07)
 
 #### :bug: Bug Fix
