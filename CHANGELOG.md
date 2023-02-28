@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.1.0-beta.6 (2023-02-28)
+
+#### :bug: Bug Fix
+* [#920](https://github.com/nextcloud/vue-richtext/pull/920) Fix circular dependency with nc/vue ([@julien-nc](https://github.com/julien-nc))
+
+#### Committers: 1
+- Julien Veyssier ([@julien-nc](https://github.com/julien-nc))
+
 ## v2.1.0-beta.5 (2023-02-10)
 
 #### :rocket: Enhancement
