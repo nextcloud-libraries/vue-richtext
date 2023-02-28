@@ -15,7 +15,7 @@ export default defineConfig({
 			formats: ['es'],
 		},
 		rollupOptions: {
-			external: Object.keys(dependencies),
+			external: Object.keys(dependencies).filter(e => e !== '@nextcloud/vue'),
 			output: {
 				globals: { vue: 'Vue' }
 			},
