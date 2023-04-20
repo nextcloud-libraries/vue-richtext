@@ -107,7 +107,7 @@ export default {
 		modalTitle() {
 			return this.isProviderSelected
 				? this.selectedProvider.title
-				: 'Link picker'
+				: t('Smart picker')
 		},
 	},
 	mounted() {
