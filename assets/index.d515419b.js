@@ -8602,9 +8602,9 @@ var dist = {};
 var check = function(it) {
   return it && it.Math == Math && it;
 };
-var global$d = check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || check(typeof self == "object" && self) || check(typeof commonjsGlobal == "object" && commonjsGlobal) || function() {
+var global$e = check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || check(typeof self == "object" && self) || check(typeof commonjsGlobal == "object" && commonjsGlobal) || function() {
   return this;
-}() || Function("return this")();
+}() || commonjsGlobal || Function("return this")();
 var objectGetOwnPropertyDescriptor = {};
 var fails$g = function(exec2) {
   try {
@@ -8707,21 +8707,21 @@ var isObject$5 = $documentAll.IS_HTMLDDA ? function(it) {
 } : function(it) {
   return typeof it == "object" ? it !== null : isCallable$c(it);
 };
-var global$c = global$d;
+var global$d = global$e;
 var isCallable$b = isCallable$d;
 var aFunction = function(argument) {
   return isCallable$b(argument) ? argument : void 0;
 };
 var getBuiltIn$3 = function(namespace, method) {
-  return arguments.length < 2 ? aFunction(global$c[namespace]) : global$c[namespace] && global$c[namespace][method];
+  return arguments.length < 2 ? aFunction(global$d[namespace]) : global$d[namespace] && global$d[namespace][method];
 };
 var uncurryThis$e = functionUncurryThis;
 var objectIsPrototypeOf = uncurryThis$e({}.isPrototypeOf);
 var engineUserAgent = typeof navigator != "undefined" && String(navigator.userAgent) || "";
-var global$b = global$d;
+var global$c = global$e;
 var userAgent = engineUserAgent;
-var process$1 = global$b.process;
-var Deno = global$b.Deno;
+var process$1 = global$c.process;
+var Deno = global$c.Deno;
 var versions = process$1 && process$1.versions || Deno && Deno.version;
 var v8 = versions && versions.v8;
 var match, version;
@@ -8740,9 +8740,11 @@ if (!version && userAgent) {
 var engineV8Version = version;
 var V8_VERSION = engineV8Version;
 var fails$c = fails$g;
+var global$b = global$e;
+var $String$4 = global$b.String;
 var symbolConstructorDetection = !!Object.getOwnPropertySymbols && !fails$c(function() {
   var symbol = Symbol();
-  return !String(symbol) || !(Object(symbol) instanceof Symbol) || !Symbol.sham && V8_VERSION && V8_VERSION < 41;
+  return !$String$4(symbol) || !(Object(symbol) instanceof Symbol) || !Symbol.sham && V8_VERSION && V8_VERSION < 41;
 });
 var NATIVE_SYMBOL$1 = symbolConstructorDetection;
 var useSymbolAsUid = NATIVE_SYMBOL$1 && !Symbol.sham && typeof Symbol.iterator == "symbol";
@@ -8794,7 +8796,7 @@ var ordinaryToPrimitive$1 = function(input, pref) {
   throw $TypeError$4("Can't convert object to primitive value");
 };
 var shared$4 = { exports: {} };
-var global$a = global$d;
+var global$a = global$e;
 var defineProperty$3 = Object.defineProperty;
 var defineGlobalProperty$3 = function(key, value) {
   try {
@@ -8804,7 +8806,7 @@ var defineGlobalProperty$3 = function(key, value) {
   }
   return value;
 };
-var global$9 = global$d;
+var global$9 = global$e;
 var defineGlobalProperty$2 = defineGlobalProperty$3;
 var SHARED = "__core-js_shared__";
 var store$3 = global$9[SHARED] || defineGlobalProperty$2(SHARED, {});
@@ -8813,10 +8815,10 @@ var store$2 = sharedStore;
 (shared$4.exports = function(key, value) {
   return store$2[key] || (store$2[key] = value !== void 0 ? value : {});
 })("versions", []).push({
-  version: "3.29.0",
+  version: "3.30.2",
   mode: "global",
   copyright: "\xA9 2014-2023 Denis Pushkarev (zloirock.ru)",
-  license: "https://github.com/zloirock/core-js/blob/v3.29.0/LICENSE",
+  license: "https://github.com/zloirock/core-js/blob/v3.30.2/LICENSE",
   source: "https://github.com/zloirock/core-js"
 });
 var requireObjectCoercible$2 = requireObjectCoercible$4;
@@ -8837,7 +8839,7 @@ var toString$6 = uncurryThis$c(1 .toString);
 var uid$2 = function(key) {
   return "Symbol(" + (key === void 0 ? "" : key) + ")_" + toString$6(++id + postfix, 36);
 };
-var global$8 = global$d;
+var global$8 = global$e;
 var shared$3 = shared$4.exports;
 var hasOwn$7 = hasOwnProperty_1;
 var uid$1 = uid$2;
@@ -8883,7 +8885,7 @@ var toPropertyKey$2 = function(argument) {
   var key = toPrimitive(argument, "string");
   return isSymbol(key) ? key : key + "";
 };
-var global$7 = global$d;
+var global$7 = global$e;
 var isObject$2 = isObject$5;
 var document$3 = global$7.document;
 var EXISTS$1 = isObject$2(document$3) && isObject$2(document$3.createElement);
@@ -9013,7 +9015,7 @@ if (!isCallable$7(store$1.inspectSource)) {
   };
 }
 var inspectSource$1 = store$1.inspectSource;
-var global$6 = global$d;
+var global$6 = global$e;
 var isCallable$6 = isCallable$d;
 var WeakMap$1 = global$6.WeakMap;
 var weakMapBasicDetection = isCallable$6(WeakMap$1) && /native code/.test(String(WeakMap$1));
@@ -9025,7 +9027,7 @@ var sharedKey$2 = function(key) {
 };
 var hiddenKeys$4 = {};
 var NATIVE_WEAK_MAP = weakMapBasicDetection;
-var global$5 = global$d;
+var global$5 = global$e;
 var isObject = isObject$5;
 var createNonEnumerableProperty$2 = createNonEnumerableProperty$3;
 var hasOwn$4 = hasOwnProperty_1;
@@ -9311,7 +9313,7 @@ var data = isForced$1.data = {};
 var NATIVE = isForced$1.NATIVE = "N";
 var POLYFILL = isForced$1.POLYFILL = "P";
 var isForced_1 = isForced$1;
-var global$4 = global$d;
+var global$4 = global$e;
 var getOwnPropertyDescriptor2 = objectGetOwnPropertyDescriptor.f;
 var createNonEnumerableProperty$1 = createNonEnumerableProperty$3;
 var defineBuiltIn$3 = defineBuiltIn$4;
@@ -9472,7 +9474,7 @@ var regexpFlags$1 = function() {
   return result;
 };
 var fails$6 = fails$g;
-var global$3 = global$d;
+var global$3 = global$e;
 var $RegExp$2 = global$3.RegExp;
 var UNSUPPORTED_Y$1 = fails$6(function() {
   var re2 = $RegExp$2("a", "y");
@@ -9574,14 +9576,14 @@ var objectCreate = Object.create || function create(O, Properties) {
   return Properties === void 0 ? result : definePropertiesModule.f(result, Properties);
 };
 var fails$5 = fails$g;
-var global$2 = global$d;
+var global$2 = global$e;
 var $RegExp$1 = global$2.RegExp;
 var regexpUnsupportedDotAll = fails$5(function() {
   var re2 = $RegExp$1(".", "s");
   return !(re2.dotAll && re2.exec("\n") && re2.flags === "s");
 });
 var fails$4 = fails$g;
-var global$1 = global$d;
+var global$1 = global$e;
 var $RegExp = global$1.RegExp;
 var regexpUnsupportedNcg = fails$4(function() {
   var re2 = $RegExp("(?<a>b)", "g");
@@ -10288,21 +10290,35 @@ var __component__$3 = /* @__PURE__ */ normalizeComponent(
   null
 );
 const ReferenceList = __component__$3.exports;
+const emptyOptions = {};
 function toString3(value, options) {
-  const includeImageAlt = (options || {}).includeImageAlt;
-  return one$1(
-    value,
-    typeof includeImageAlt === "boolean" ? includeImageAlt : true
-  );
+  const settings = options || emptyOptions;
+  const includeImageAlt = typeof settings.includeImageAlt === "boolean" ? settings.includeImageAlt : true;
+  const includeHtml = typeof settings.includeHtml === "boolean" ? settings.includeHtml : true;
+  return one$1(value, includeImageAlt, includeHtml);
 }
-function one$1(value, includeImageAlt) {
-  return node(value) && ("value" in value && value.value || includeImageAlt && "alt" in value && value.alt || "children" in value && all$1(value.children, includeImageAlt)) || Array.isArray(value) && all$1(value, includeImageAlt) || "";
+function one$1(value, includeImageAlt, includeHtml) {
+  if (node(value)) {
+    if ("value" in value) {
+      return value.type === "html" && !includeHtml ? "" : value.value;
+    }
+    if (includeImageAlt && "alt" in value && value.alt) {
+      return value.alt;
+    }
+    if ("children" in value) {
+      return all$1(value.children, includeImageAlt, includeHtml);
+    }
+  }
+  if (Array.isArray(value)) {
+    return all$1(value, includeImageAlt, includeHtml);
+  }
+  return "";
 }
-function all$1(values, includeImageAlt) {
+function all$1(values, includeImageAlt, includeHtml) {
   const result = [];
   let index2 = -1;
   while (++index2 < values.length) {
-    result[index2] = one$1(values[index2], includeImageAlt);
+    result[index2] = one$1(values[index2], includeImageAlt, includeHtml);
   }
   return result.join("");
 }
@@ -17326,9 +17342,14 @@ function rehypeReact(options) {
     throw new TypeError("createElement is not a function");
   }
   const createElement2 = options.createElement;
+  const fixTableCellAlign = options.fixTableCellAlign !== false;
   Object.assign(this, { Compiler: compiler2 });
   function compiler2(node2) {
-    let result = toH(h, tableCellStyle2(node2), options.prefix);
+    let result = toH(
+      h,
+      fixTableCellAlign ? tableCellStyle2(node2) : node2,
+      options.prefix
+    );
     if (node2.type === "root") {
       result = result && typeof result === "object" && "type" in result && "props" in result && result.type === "div" && (node2.children.length !== 1 || node2.children[0].type !== "element") ? result.props.children : [result];
       return createElement2(options.Fragment || "div", {}, result);
