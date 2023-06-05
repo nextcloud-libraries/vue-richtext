@@ -329,13 +329,13 @@ var nativeWatch = {}.watch;
 var supportsPassive = false;
 if (inBrowser) {
   try {
-    var opts$1 = {};
-    Object.defineProperty(opts$1, "passive", {
+    var opts = {};
+    Object.defineProperty(opts, "passive", {
       get: function() {
         supportsPassive = true;
       }
     });
-    window.addEventListener("test-passive", null, opts$1);
+    window.addEventListener("test-passive", null, opts);
   } catch (e) {
   }
 }
@@ -2980,22 +2980,22 @@ function proxy(target2, sourceKey, key) {
   Object.defineProperty(target2, key, sharedPropertyDefinition);
 }
 function initState(vm) {
-  var opts2 = vm.$options;
-  if (opts2.props)
-    initProps$1(vm, opts2.props);
+  var opts = vm.$options;
+  if (opts.props)
+    initProps$1(vm, opts.props);
   initSetup(vm);
-  if (opts2.methods)
-    initMethods(vm, opts2.methods);
-  if (opts2.data) {
+  if (opts.methods)
+    initMethods(vm, opts.methods);
+  if (opts.data) {
     initData(vm);
   } else {
     var ob = observe(vm._data = {});
     ob && ob.vmCount++;
   }
-  if (opts2.computed)
-    initComputed$1(vm, opts2.computed);
-  if (opts2.watch && opts2.watch !== nativeWatch) {
-    initWatch(vm, opts2.watch);
+  if (opts.computed)
+    initComputed$1(vm, opts.computed);
+  if (opts.watch && opts.watch !== nativeWatch) {
+    initWatch(vm, opts.watch);
   }
 }
 function initProps$1(vm, propsOptions) {
@@ -3190,18 +3190,18 @@ function initMixin$1(Vue2) {
   };
 }
 function initInternalComponent(vm, options) {
-  var opts2 = vm.$options = Object.create(vm.constructor.options);
+  var opts = vm.$options = Object.create(vm.constructor.options);
   var parentVnode = options._parentVnode;
-  opts2.parent = options.parent;
-  opts2._parentVnode = parentVnode;
+  opts.parent = options.parent;
+  opts._parentVnode = parentVnode;
   var vnodeComponentOptions = parentVnode.componentOptions;
-  opts2.propsData = vnodeComponentOptions.propsData;
-  opts2._parentListeners = vnodeComponentOptions.listeners;
-  opts2._renderChildren = vnodeComponentOptions.children;
-  opts2._componentTag = vnodeComponentOptions.tag;
+  opts.propsData = vnodeComponentOptions.propsData;
+  opts._parentListeners = vnodeComponentOptions.listeners;
+  opts._renderChildren = vnodeComponentOptions.children;
+  opts._componentTag = vnodeComponentOptions.tag;
   if (options.render) {
-    opts2.render = options.render;
-    opts2.staticRenderFns = options.staticRenderFns;
+    opts.render = options.render;
+    opts.staticRenderFns = options.staticRenderFns;
   }
 }
 function resolveConstructorOptions(Ctor) {
@@ -3340,8 +3340,8 @@ function initAssetRegisters(Vue2) {
     };
   });
 }
-function _getComponentName(opts2) {
-  return opts2 && (getComponentName(opts2.Ctor.options) || opts2.tag);
+function _getComponentName(opts) {
+  return opts && (getComponentName(opts.Ctor.options) || opts.tag);
 }
 function matches(pattern, name) {
   if (isArray$2(pattern)) {
@@ -4371,8 +4371,8 @@ function callHook(dir, hook, vnode, oldVnode, isDestroy) {
 }
 var baseModules = [ref, directives];
 function updateAttrs(oldVnode, vnode) {
-  var opts2 = vnode.componentOptions;
-  if (isDef(opts2) && opts2.Ctor.options.inheritAttrs === false) {
+  var opts = vnode.componentOptions;
+  if (isDef(opts) && opts.Ctor.options.inheritAttrs === false) {
     return;
   }
   if (isUndef(oldVnode.data.attrs) && isUndef(vnode.data.attrs)) {
@@ -6303,7 +6303,7 @@ function assertPath(path2, name) {
   }
 }
 const unified = base().freeze();
-const own$7 = {}.hasOwnProperty;
+const own$8 = {}.hasOwnProperty;
 function base() {
   const transformers = trough();
   const attachers = [];
@@ -6339,7 +6339,7 @@ function base() {
         namespace[key] = value;
         return processor;
       }
-      return own$7.call(namespace, key) && namespace[key] || null;
+      return own$8.call(namespace, key) && namespace[key] || null;
     }
     if (key) {
       assertUnfrozen("data", frozen);
@@ -6556,7 +6556,7 @@ function newable(value, name) {
 function keys$1(value) {
   let key;
   for (key in value) {
-    if (own$7.call(value, key)) {
+    if (own$8.call(value, key)) {
       return true;
     }
   }
@@ -7857,7 +7857,7 @@ validators$1.transitional = function transitional2(validator2, version2, message
   function formatMessage(opt, desc) {
     return "[Axios v" + VERSION + "] Transitional option '" + opt + "'" + desc + (message ? ". " + message : "");
   }
-  return function(value, opt, opts2) {
+  return function(value, opt, opts) {
     if (validator2 === false) {
       throw new AxiosError(
         formatMessage(opt, " has been removed" + (version2 ? " in " + version2 : "")),
@@ -7873,7 +7873,7 @@ validators$1.transitional = function transitional2(validator2, version2, message
         )
       );
     }
-    return validator2 ? validator2(value, opt, opts2) : true;
+    return validator2 ? validator2(value, opt, opts) : true;
   };
 };
 function assertOptions(options, schema, allowUnknown) {
@@ -8159,20 +8159,32 @@ axios$1.exports.default = axios;
   module.exports = axios$1.exports;
 })(axios$2);
 const Axios = /* @__PURE__ */ getDefaultExportFromCjs(axios$2.exports);
-const SEMVER_SPEC_VERSION = "2.0.0";
-const MAX_LENGTH$2 = 256;
-const MAX_SAFE_INTEGER$1 = Number.MAX_SAFE_INTEGER || 9007199254740991;
-const MAX_SAFE_COMPONENT_LENGTH = 16;
-var constants = {
-  SEMVER_SPEC_VERSION,
-  MAX_LENGTH: MAX_LENGTH$2,
-  MAX_SAFE_INTEGER: MAX_SAFE_INTEGER$1,
-  MAX_SAFE_COMPONENT_LENGTH
-};
-var re$2 = { exports: {} };
 const debug$1 = typeof process === "object" && process.env && {}.NODE_DEBUG && /\bsemver\b/i.test({}.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
 };
 var debug_1 = debug$1;
+const SEMVER_SPEC_VERSION = "2.0.0";
+const MAX_LENGTH$1 = 256;
+const MAX_SAFE_INTEGER$1 = Number.MAX_SAFE_INTEGER || 9007199254740991;
+const MAX_SAFE_COMPONENT_LENGTH = 16;
+const RELEASE_TYPES = [
+  "major",
+  "premajor",
+  "minor",
+  "preminor",
+  "patch",
+  "prepatch",
+  "prerelease"
+];
+var constants = {
+  MAX_LENGTH: MAX_LENGTH$1,
+  MAX_SAFE_COMPONENT_LENGTH,
+  MAX_SAFE_INTEGER: MAX_SAFE_INTEGER$1,
+  RELEASE_TYPES,
+  SEMVER_SPEC_VERSION,
+  FLAG_INCLUDE_PRERELEASE: 1,
+  FLAG_LOOSE: 2
+};
+var re$1 = { exports: {} };
 (function(module, exports) {
   const { MAX_SAFE_COMPONENT_LENGTH: MAX_SAFE_COMPONENT_LENGTH2 } = constants;
   const debug2 = debug_1;
@@ -8231,13 +8243,19 @@ var debug_1 = debug$1;
   createToken("STAR", "(<|>)?=?\\s*\\*");
   createToken("GTE0", "^\\s*>=\\s*0\\.0\\.0\\s*$");
   createToken("GTE0PRE", "^\\s*>=\\s*0\\.0\\.0-0\\s*$");
-})(re$2, re$2.exports);
-const opts = ["includePrerelease", "loose", "rtl"];
-const parseOptions$2 = (options) => !options ? {} : typeof options !== "object" ? { loose: true } : opts.filter((k) => options[k]).reduce((o, k) => {
-  o[k] = true;
-  return o;
-}, {});
-var parseOptions_1 = parseOptions$2;
+})(re$1, re$1.exports);
+const looseOption = Object.freeze({ loose: true });
+const emptyOpts = Object.freeze({});
+const parseOptions$1 = (options) => {
+  if (!options) {
+    return emptyOpts;
+  }
+  if (typeof options !== "object") {
+    return looseOption;
+  }
+  return options;
+};
+var parseOptions_1 = parseOptions$1;
 const numeric = /^[0-9]+$/;
 const compareIdentifiers$1 = (a, b) => {
   const anum = numeric.test(a);
@@ -8254,13 +8272,13 @@ var identifiers = {
   rcompareIdentifiers
 };
 const debug = debug_1;
-const { MAX_LENGTH: MAX_LENGTH$1, MAX_SAFE_INTEGER } = constants;
-const { re: re$1, t: t$1 } = re$2.exports;
-const parseOptions$1 = parseOptions_1;
+const { MAX_LENGTH, MAX_SAFE_INTEGER } = constants;
+const { re, t } = re$1.exports;
+const parseOptions = parseOptions_1;
 const { compareIdentifiers } = identifiers;
 class SemVer$2 {
   constructor(version2, options) {
-    options = parseOptions$1(options);
+    options = parseOptions(options);
     if (version2 instanceof SemVer$2) {
       if (version2.loose === !!options.loose && version2.includePrerelease === !!options.includePrerelease) {
         return version2;
@@ -8268,18 +8286,18 @@ class SemVer$2 {
         version2 = version2.version;
       }
     } else if (typeof version2 !== "string") {
-      throw new TypeError(`Invalid Version: ${version2}`);
+      throw new TypeError(`Invalid version. Must be a string. Got type "${typeof version2}".`);
     }
-    if (version2.length > MAX_LENGTH$1) {
+    if (version2.length > MAX_LENGTH) {
       throw new TypeError(
-        `version is longer than ${MAX_LENGTH$1} characters`
+        `version is longer than ${MAX_LENGTH} characters`
       );
     }
     debug("SemVer", version2, options);
     this.options = options;
     this.loose = !!options.loose;
     this.includePrerelease = !!options.includePrerelease;
-    const m = version2.trim().match(options.loose ? re$1[t$1.LOOSE] : re$1[t$1.FULL]);
+    const m = version2.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL]);
     if (!m) {
       throw new TypeError(`Invalid Version: ${version2}`);
     }
@@ -8392,31 +8410,31 @@ class SemVer$2 {
       }
     } while (++i);
   }
-  inc(release, identifier) {
+  inc(release, identifier, identifierBase) {
     switch (release) {
       case "premajor":
         this.prerelease.length = 0;
         this.patch = 0;
         this.minor = 0;
         this.major++;
-        this.inc("pre", identifier);
+        this.inc("pre", identifier, identifierBase);
         break;
       case "preminor":
         this.prerelease.length = 0;
         this.patch = 0;
         this.minor++;
-        this.inc("pre", identifier);
+        this.inc("pre", identifier, identifierBase);
         break;
       case "prepatch":
         this.prerelease.length = 0;
-        this.inc("patch", identifier);
-        this.inc("pre", identifier);
+        this.inc("patch", identifier, identifierBase);
+        this.inc("pre", identifier, identifierBase);
         break;
       case "prerelease":
         if (this.prerelease.length === 0) {
-          this.inc("patch", identifier);
+          this.inc("patch", identifier, identifierBase);
         }
-        this.inc("pre", identifier);
+        this.inc("pre", identifier, identifierBase);
         break;
       case "major":
         if (this.minor !== 0 || this.patch !== 0 || this.prerelease.length === 0) {
@@ -8439,9 +8457,13 @@ class SemVer$2 {
         }
         this.prerelease = [];
         break;
-      case "pre":
+      case "pre": {
+        const base2 = Number(identifierBase) ? 1 : 0;
+        if (!identifier && identifierBase === false) {
+          throw new Error("invalid increment argument: identifier is empty");
+        }
         if (this.prerelease.length === 0) {
-          this.prerelease = [0];
+          this.prerelease = [base2];
         } else {
           let i = this.prerelease.length;
           while (--i >= 0) {
@@ -8451,19 +8473,27 @@ class SemVer$2 {
             }
           }
           if (i === -1) {
-            this.prerelease.push(0);
+            if (identifier === this.prerelease.join(".") && identifierBase === false) {
+              throw new Error("invalid increment argument: identifier already exists");
+            }
+            this.prerelease.push(base2);
           }
         }
         if (identifier) {
+          let prerelease = [identifier, base2];
+          if (identifierBase === false) {
+            prerelease = [identifier];
+          }
           if (compareIdentifiers(this.prerelease[0], identifier) === 0) {
             if (isNaN(this.prerelease[1])) {
-              this.prerelease = [identifier, 0];
+              this.prerelease = prerelease;
             }
           } else {
-            this.prerelease = [identifier, 0];
+            this.prerelease = prerelease;
           }
         }
         break;
+      }
       default:
         throw new Error(`invalid increment argument: ${release}`);
     }
@@ -8473,29 +8503,18 @@ class SemVer$2 {
   }
 }
 var semver = SemVer$2;
-const { MAX_LENGTH } = constants;
-const { re, t } = re$2.exports;
 const SemVer$1 = semver;
-const parseOptions = parseOptions_1;
-const parse$4 = (version2, options) => {
-  options = parseOptions(options);
+const parse$4 = (version2, options, throwErrors = false) => {
   if (version2 instanceof SemVer$1) {
     return version2;
-  }
-  if (typeof version2 !== "string") {
-    return null;
-  }
-  if (version2.length > MAX_LENGTH) {
-    return null;
-  }
-  const r = options.loose ? re[t.LOOSE] : re[t.FULL];
-  if (!r.test(version2)) {
-    return null;
   }
   try {
     return new SemVer$1(version2, options);
   } catch (er) {
-    return null;
+    if (!throwErrors) {
+      return null;
+    }
+    throw er;
   }
 };
 var parse_1 = parse$4;
@@ -8519,7 +8538,7 @@ class ProxyBus {
     this.bus = bus2;
   }
   getVersion() {
-    return "3.0.2";
+    return "3.1.0";
   }
   subscribe(name, handler) {
     this.bus.subscribe(name, handler);
@@ -8536,7 +8555,7 @@ class SimpleBus {
     __publicField(this, "handlers", /* @__PURE__ */ new Map());
   }
   getVersion() {
-    return "3.0.2";
+    return "3.1.0";
   }
   subscribe(name, handler) {
     this.handlers.set(name, (this.handlers.get(name) || []).concat(handler));
@@ -8554,20 +8573,31 @@ class SimpleBus {
     });
   }
 }
+let bus = null;
 function getBus() {
+  if (bus !== null) {
+    return bus;
+  }
+  if (typeof window === "undefined") {
+    return new Proxy({}, {
+      get: () => {
+        return () => console.error("Window not available, EventBus can not be established!");
+      }
+    });
+  }
   if (typeof window.OC !== "undefined" && window.OC._eventBus && typeof window._nc_event_bus === "undefined") {
     console.warn("found old event bus instance at OC._eventBus. Update your version!");
     window._nc_event_bus = window.OC._eventBus;
   }
-  if (typeof window._nc_event_bus !== "undefined") {
-    return new ProxyBus(window._nc_event_bus);
+  if (typeof (window == null ? void 0 : window._nc_event_bus) !== "undefined") {
+    bus = new ProxyBus(window._nc_event_bus);
   } else {
-    return window._nc_event_bus = new SimpleBus();
+    bus = window._nc_event_bus = new SimpleBus();
   }
+  return bus;
 }
-const bus = getBus();
 function subscribe(name, handler) {
-  bus.subscribe(name, handler);
+  getBus().subscribe(name, handler);
 }
 const tokenElement = document.getElementsByTagName("head")[0];
 let token = tokenElement ? tokenElement.getAttribute("data-requesttoken") : null;
@@ -9105,7 +9135,7 @@ var getInternalState$1 = InternalStateModule.get;
 var $String$1 = String;
 var defineProperty$2 = Object.defineProperty;
 var stringSlice$4 = uncurryThis$a("".slice);
-var replace$2 = uncurryThis$a("".replace);
+var replace$3 = uncurryThis$a("".replace);
 var join = uncurryThis$a([].join);
 var CONFIGURABLE_LENGTH = DESCRIPTORS$3 && !fails$9(function() {
   return defineProperty$2(function() {
@@ -9114,7 +9144,7 @@ var CONFIGURABLE_LENGTH = DESCRIPTORS$3 && !fails$9(function() {
 var TEMPLATE = String(String).split("String");
 var makeBuiltIn$1 = makeBuiltIn$2.exports = function(value, name, options) {
   if (stringSlice$4($String$1(name), 0, 7) === "Symbol(") {
-    name = "[" + replace$2($String$1(name), /^Symbol\(([^)]*)\)/, "$1") + "]";
+    name = "[" + replace$3($String$1(name), /^Symbol\(([^)]*)\)/, "$1") + "]";
   }
   if (options && options.getter)
     name = "get " + name;
@@ -9604,7 +9634,7 @@ var nativeExec = RegExp.prototype.exec;
 var patchedExec = nativeExec;
 var charAt$3 = uncurryThis$6("".charAt);
 var indexOf = uncurryThis$6("".indexOf);
-var replace$1 = uncurryThis$6("".replace);
+var replace$2 = uncurryThis$6("".replace);
 var stringSlice$3 = uncurryThis$6("".slice);
 var UPDATES_LAST_INDEX_WRONG = function() {
   var re1 = /a/;
@@ -9636,7 +9666,7 @@ if (PATCH) {
     var charsAdded = 0;
     var strCopy = str;
     if (sticky) {
-      flags = replace$1(flags, "y", "");
+      flags = replace$2(flags, "y", "");
       if (indexOf(flags, "g") === -1) {
         flags += "g";
       }
@@ -9788,7 +9818,7 @@ var uncurryThis$2 = functionUncurryThis;
 var toObject = toObject$3;
 var floor = Math.floor;
 var charAt = uncurryThis$2("".charAt);
-var replace = uncurryThis$2("".replace);
+var replace$1 = uncurryThis$2("".replace);
 var stringSlice$1 = uncurryThis$2("".slice);
 var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
 var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
@@ -9800,7 +9830,7 @@ var getSubstitution$1 = function(matched, str, position2, captures, namedCapture
     namedCaptures = toObject(namedCaptures);
     symbols = SUBSTITUTION_SYMBOLS;
   }
-  return replace(replacement2, symbols, function(match2, ch) {
+  return replace$1(replacement2, symbols, function(match2, ch) {
     var capture;
     switch (charAt(ch, 0)) {
       case "$":
@@ -14072,7 +14102,7 @@ function decode($0, $1, $2) {
   }
   return decodeNamedCharacterReference($2) || $0;
 }
-const own$6 = {}.hasOwnProperty;
+const own$7 = {}.hasOwnProperty;
 const fromMarkdown = function(value, encoding, options) {
   if (typeof encoding !== "string") {
     options = encoding;
@@ -14216,7 +14246,7 @@ function compiler(options) {
     index2 = -1;
     while (++index2 < events2.length) {
       const handler = config2[events2[index2][0]];
-      if (own$6.call(handler, events2[index2][1].type)) {
+      if (own$7.call(handler, events2[index2][1].type)) {
         handler[events2[index2][1].type].call(
           Object.assign(
             {
@@ -14748,7 +14778,7 @@ function configure(combined, extensions) {
 function extension(combined, extension2) {
   let key;
   for (key in extension2) {
-    if (own$6.call(extension2, key)) {
+    if (own$7.call(extension2, key)) {
       if (key === "canContainEols") {
         const right = extension2[key];
         if (right) {
@@ -14800,6 +14830,12 @@ function remarkParse(options) {
     );
   };
   Object.assign(this, { Parser: parser });
+}
+function escapeStringRegexp(string2) {
+  if (typeof string2 !== "string") {
+    throw new TypeError("Expected a string");
+  }
+  return string2.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
 }
 const convert$2 = function(test2) {
   if (test2 === void 0 || test2 === null) {
@@ -14918,48 +14954,135 @@ function toResult$1(value) {
   }
   return [value];
 }
-const visit$2 = function(tree, test2, visitor2, reverse) {
-  if (typeof test2 === "function" && typeof visitor2 !== "function") {
-    reverse = visitor2;
-    visitor2 = test2;
-    test2 = null;
+const own$6 = {}.hasOwnProperty;
+const findAndReplace = function(tree, find2, replace2, options) {
+  let settings;
+  let schema;
+  if (typeof find2 === "string" || find2 instanceof RegExp) {
+    schema = [[find2, replace2]];
+    settings = options;
+  } else {
+    schema = find2;
+    settings = replace2;
   }
-  visitParents$2(tree, test2, overload, reverse);
-  function overload(node2, parents) {
+  if (!settings) {
+    settings = {};
+  }
+  const ignored = convert$2(settings.ignore || []);
+  const pairs = toPairs(schema);
+  let pairIndex = -1;
+  while (++pairIndex < pairs.length) {
+    visitParents$2(tree, "text", visitor2);
+  }
+  return tree;
+  function visitor2(node2, parents) {
+    let index2 = -1;
+    let grandparent;
+    while (++index2 < parents.length) {
+      const parent = parents[index2];
+      if (ignored(
+        parent,
+        grandparent ? grandparent.children.indexOf(parent) : void 0,
+        grandparent
+      )) {
+        return;
+      }
+      grandparent = parent;
+    }
+    if (grandparent) {
+      return handler(node2, parents);
+    }
+  }
+  function handler(node2, parents) {
     const parent = parents[parents.length - 1];
-    return visitor2(
-      node2,
-      parent ? parent.children.indexOf(node2) : null,
-      parent
-    );
+    const find3 = pairs[pairIndex][0];
+    const replace3 = pairs[pairIndex][1];
+    let start = 0;
+    const index2 = parent.children.indexOf(node2);
+    let change = false;
+    let nodes = [];
+    let position2;
+    find3.lastIndex = 0;
+    let match2 = find3.exec(node2.value);
+    while (match2) {
+      position2 = match2.index;
+      const matchObject = {
+        index: match2.index,
+        input: match2.input,
+        stack: [...parents, node2]
+      };
+      let value = replace3(...match2, matchObject);
+      if (typeof value === "string") {
+        value = value.length > 0 ? { type: "text", value } : void 0;
+      }
+      if (value !== false) {
+        if (start !== position2) {
+          nodes.push({
+            type: "text",
+            value: node2.value.slice(start, position2)
+          });
+        }
+        if (Array.isArray(value)) {
+          nodes.push(...value);
+        } else if (value) {
+          nodes.push(value);
+        }
+        start = position2 + match2[0].length;
+        change = true;
+      }
+      if (!find3.global) {
+        break;
+      }
+      match2 = find3.exec(node2.value);
+    }
+    if (change) {
+      if (start < node2.value.length) {
+        nodes.push({ type: "text", value: node2.value.slice(start) });
+      }
+      parent.children.splice(index2, 1, ...nodes);
+    } else {
+      nodes = [node2];
+    }
+    return index2 + nodes.length;
   }
 };
-const find$1 = /[\t ]*(?:\r?\n|\r)/g;
+function toPairs(schema) {
+  const result = [];
+  if (typeof schema !== "object") {
+    throw new TypeError("Expected array or object as schema");
+  }
+  if (Array.isArray(schema)) {
+    let index2 = -1;
+    while (++index2 < schema.length) {
+      result.push([
+        toExpression(schema[index2][0]),
+        toFunction(schema[index2][1])
+      ]);
+    }
+  } else {
+    let key;
+    for (key in schema) {
+      if (own$6.call(schema, key)) {
+        result.push([toExpression(key), toFunction(schema[key])]);
+      }
+    }
+  }
+  return result;
+}
+function toExpression(find2) {
+  return typeof find2 === "string" ? new RegExp(escapeStringRegexp(find2), "g") : find2;
+}
+function toFunction(replace2) {
+  return typeof replace2 === "function" ? replace2 : () => replace2;
+}
+function newlineToBreak(tree) {
+  findAndReplace(tree, /\r?\n|\r/g, replace);
+}
+function replace() {
+  return { type: "break" };
+}
 function remarkBreaks() {
-  return (tree) => {
-    visit$2(tree, "text", (node2, index2, parent) => {
-      const result = [];
-      let start = 0;
-      find$1.lastIndex = 0;
-      let match2 = find$1.exec(node2.value);
-      while (match2) {
-        const position2 = match2.index;
-        if (start !== position2) {
-          result.push({ type: "text", value: node2.value.slice(start, position2) });
-        }
-        result.push({ type: "break" });
-        start = position2 + match2[0].length;
-        match2 = find$1.exec(node2.value);
-      }
-      if (result.length > 0 && parent && typeof index2 === "number") {
-        if (start < node2.value.length) {
-          result.push({ type: "text", value: node2.value.slice(start) });
-        }
-        parent.children.splice(index2, 1, ...result);
-        return index2 + result.length;
-      }
-    });
-  };
+  return newlineToBreak;
 }
 const u = function(type, props2, value) {
   const node2 = { type: String(type) };
@@ -15030,6 +15153,22 @@ function all2(h, parent) {
   }
   return values;
 }
+const visit$2 = function(tree, test2, visitor2, reverse) {
+  if (typeof test2 === "function" && typeof visitor2 !== "function") {
+    reverse = visitor2;
+    visitor2 = test2;
+    test2 = null;
+  }
+  visitParents$2(tree, test2, overload, reverse);
+  function overload(node2, parents) {
+    const parent = parents[parents.length - 1];
+    return visitor2(
+      node2,
+      parent ? parent.children.indexOf(node2) : null,
+      parent
+    );
+  }
+};
 const pointStart = point("start");
 const pointEnd = point("end");
 function point(type) {
