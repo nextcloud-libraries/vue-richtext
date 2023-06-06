@@ -14350,7 +14350,8 @@ function compiler(options) {
           listItem3 = {
             type: "listItem",
             _spread: false,
-            start: Object.assign({}, event[1].start)
+            start: Object.assign({}, event[1].start),
+            end: void 0
           };
           events2.splice(index2, 0, ["enter", listItem3, event[2]]);
           index2++;
