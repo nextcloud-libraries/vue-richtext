@@ -9388,10 +9388,10 @@ var store$2 = sharedStore;
 (shared$4.exports = function(key, value) {
   return store$2[key] || (store$2[key] = value !== void 0 ? value : {});
 })("versions", []).push({
-  version: "3.31.0",
+  version: "3.31.1",
   mode: "global",
   copyright: "\xA9 2014-2023 Denis Pushkarev (zloirock.ru)",
-  license: "https://github.com/zloirock/core-js/blob/v3.31.0/LICENSE",
+  license: "https://github.com/zloirock/core-js/blob/v3.31.1/LICENSE",
   source: "https://github.com/zloirock/core-js"
 });
 var requireObjectCoercible$2 = requireObjectCoercible$4;
@@ -15532,28 +15532,28 @@ function escapeStringRegexp(string2) {
   }
   return string2.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
 }
-const convert$2 = function(test2) {
+const convert$3 = function(test2) {
   if (test2 === void 0 || test2 === null) {
-    return ok$1;
+    return ok$2;
   }
   if (typeof test2 === "string") {
-    return typeFactory$1(test2);
+    return typeFactory$2(test2);
   }
   if (typeof test2 === "object") {
-    return Array.isArray(test2) ? anyFactory$1(test2) : propsFactory(test2);
+    return Array.isArray(test2) ? anyFactory$2(test2) : propsFactory$1(test2);
   }
   if (typeof test2 === "function") {
-    return castFactory(test2);
+    return castFactory$1(test2);
   }
   throw new Error("Expected function, string, or object as test");
 };
-function anyFactory$1(tests) {
+function anyFactory$2(tests) {
   const checks2 = [];
   let index2 = -1;
   while (++index2 < tests.length) {
-    checks2[index2] = convert$2(tests[index2]);
+    checks2[index2] = convert$3(tests[index2]);
   }
-  return castFactory(any);
+  return castFactory$1(any);
   function any(...parameters) {
     let index3 = -1;
     while (++index3 < checks2.length) {
@@ -15563,8 +15563,8 @@ function anyFactory$1(tests) {
     return false;
   }
 }
-function propsFactory(check2) {
-  return castFactory(all3);
+function propsFactory$1(check2) {
+  return castFactory$1(all3);
   function all3(node2) {
     let key;
     for (key in check2) {
@@ -15574,34 +15574,34 @@ function propsFactory(check2) {
     return true;
   }
 }
-function typeFactory$1(check2) {
-  return castFactory(type);
+function typeFactory$2(check2) {
+  return castFactory$1(type);
   function type(node2) {
     return node2 && node2.type === check2;
   }
 }
-function castFactory(check2) {
+function castFactory$1(check2) {
   return assertion;
   function assertion(...parameters) {
     return Boolean(check2.call(this, ...parameters));
   }
 }
-function ok$1() {
+function ok$2() {
   return true;
 }
-function color(d) {
+function color$1(d) {
   return d;
 }
-const CONTINUE$2 = true;
-const SKIP$2 = "skip";
-const EXIT$2 = false;
-const visitParents$2 = function(tree, test2, visitor2, reverse) {
+const CONTINUE$3 = true;
+const SKIP$3 = "skip";
+const EXIT$3 = false;
+const visitParents$3 = function(tree, test2, visitor2, reverse) {
   if (typeof test2 === "function" && typeof visitor2 !== "function") {
     reverse = visitor2;
     visitor2 = test2;
     test2 = null;
   }
-  const is = convert$2(test2);
+  const is = convert$3(test2);
   const step = reverse ? -1 : 1;
   factory2(tree, null, [])();
   function factory2(node2, index2, parents) {
@@ -15610,7 +15610,7 @@ const visitParents$2 = function(tree, test2, visitor2, reverse) {
     if (typeof value.type === "string") {
       name = typeof value.tagName === "string" ? value.tagName : typeof value.name === "string" ? value.name : void 0;
       Object.defineProperty(visit2, "name", {
-        value: "node (" + color(value.type + (name ? "<" + name + ">" : "")) + ")"
+        value: "node (" + color$1(value.type + (name ? "<" + name + ">" : "")) + ")"
       });
     }
     return visit2;
@@ -15620,17 +15620,17 @@ const visitParents$2 = function(tree, test2, visitor2, reverse) {
       let offset;
       let grandparents;
       if (!test2 || is(node2, index2, parents[parents.length - 1] || null)) {
-        result = toResult$1(visitor2(node2, parents));
-        if (result[0] === EXIT$2) {
+        result = toResult$2(visitor2(node2, parents));
+        if (result[0] === EXIT$3) {
           return result;
         }
       }
-      if (node2.children && result[0] !== SKIP$2) {
+      if (node2.children && result[0] !== SKIP$3) {
         offset = (reverse ? node2.children.length : -1) + step;
         grandparents = parents.concat(node2);
         while (offset > -1 && offset < node2.children.length) {
           subresult = factory2(node2.children[offset], offset, grandparents)();
-          if (subresult[0] === EXIT$2) {
+          if (subresult[0] === EXIT$3) {
             return subresult;
           }
           offset = typeof subresult[1] === "number" ? subresult[1] : offset + step;
@@ -15640,12 +15640,12 @@ const visitParents$2 = function(tree, test2, visitor2, reverse) {
     }
   }
 };
-function toResult$1(value) {
+function toResult$2(value) {
   if (Array.isArray(value)) {
     return value;
   }
   if (typeof value === "number") {
-    return [CONTINUE$2, value];
+    return [CONTINUE$3, value];
   }
   return [value];
 }
@@ -15663,11 +15663,11 @@ const findAndReplace = function(tree, find2, replace2, options) {
   if (!settings) {
     settings = {};
   }
-  const ignored = convert$2(settings.ignore || []);
+  const ignored = convert$3(settings.ignore || []);
   const pairs = toPairs(schema);
   let pairIndex = -1;
   while (++pairIndex < pairs.length) {
-    visitParents$2(tree, "text", visitor2);
+    visitParents$3(tree, "text", visitor2);
   }
   return tree;
   function visitor2(node2, parents) {
@@ -15848,13 +15848,13 @@ function all2(h, parent) {
   }
   return values;
 }
-const visit$2 = function(tree, test2, visitor2, reverse) {
+const visit$5 = function(tree, test2, visitor2, reverse) {
   if (typeof test2 === "function" && typeof visitor2 !== "function") {
     reverse = visitor2;
     visitor2 = test2;
     test2 = null;
   }
-  visitParents$2(tree, test2, overload, reverse);
+  visitParents$3(tree, test2, overload, reverse);
   function overload(node2, parents) {
     const parent = parents[parents.length - 1];
     return visitor2(
@@ -15880,13 +15880,29 @@ function point(type) {
 function generated(node2) {
   return !node2 || !node2.position || !node2.position.start || !node2.position.start.line || !node2.position.start.column || !node2.position.end || !node2.position.end.line || !node2.position.end.column;
 }
+const visit$4 = function(tree, test2, visitor2, reverse) {
+  if (typeof test2 === "function" && typeof visitor2 !== "function") {
+    reverse = visitor2;
+    visitor2 = test2;
+    test2 = null;
+  }
+  visitParents$3(tree, test2, overload, reverse);
+  function overload(node2, parents) {
+    const parent = parents[parents.length - 1];
+    return visitor2(
+      node2,
+      parent ? parent.children.indexOf(node2) : null,
+      parent
+    );
+  }
+};
 const own$4 = {}.hasOwnProperty;
 function definitions(node2) {
   const cache = /* @__PURE__ */ Object.create(null);
   if (!node2 || !node2.type) {
     throw new Error("mdast-util-definitions expected node");
   }
-  visit$2(node2, "definition", (definition3) => {
+  visit$4(node2, "definition", (definition3) => {
     const id2 = clean(definition3.identifier);
     if (id2 && !own$4.call(cache, id2)) {
       cache[id2] = definition3;
@@ -16480,7 +16496,7 @@ function factory(tree, options) {
   h.handlers = { ...handlers, ...settings.handlers };
   h.unknownHandler = settings.unknownHandler;
   h.passThrough = settings.passThrough;
-  visit$2(tree, "footnoteDefinition", (definition2) => {
+  visit$5(tree, "footnoteDefinition", (definition2) => {
     const id2 = String(definition2.identifier).toUpperCase();
     if (!own$3.call(footnoteById, id2)) {
       footnoteById[id2] = definition2;
@@ -17835,9 +17851,9 @@ const webNamespaces = {
 const ns = webNamespaces;
 const toReact = hastToReact;
 const own$1 = {}.hasOwnProperty;
-const root = convert$2("root");
-const element = convert$2("element");
-const text = convert$2("text");
+const root = convert$3("root");
+const element = convert$3("element");
+const text = convert$3("text");
 function toH(h, tree, options) {
   if (typeof h !== "function") {
     throw new TypeError("h is not a function");
@@ -17990,16 +18006,16 @@ function parseStyle(value, tagName2) {
   }
   return result;
 }
-var convert_1 = convert$1;
-function convert$1(test2) {
+var convert_1 = convert$2;
+function convert$2(test2) {
   if (typeof test2 === "string") {
-    return typeFactory(test2);
+    return typeFactory$1(test2);
   }
   if (test2 === null || test2 === void 0) {
-    return ok;
+    return ok$1;
   }
   if (typeof test2 === "object") {
-    return ("length" in test2 ? anyFactory : matchesFactory)(test2);
+    return ("length" in test2 ? anyFactory$1 : matchesFactory)(test2);
   }
   if (typeof test2 === "function") {
     return test2;
@@ -18011,7 +18027,7 @@ function convertAll(tests) {
   var length = tests.length;
   var index2 = -1;
   while (++index2 < length) {
-    results[index2] = convert$1(tests[index2]);
+    results[index2] = convert$2(tests[index2]);
   }
   return results;
 }
@@ -18027,7 +18043,7 @@ function matchesFactory(test2) {
     return true;
   }
 }
-function anyFactory(tests) {
+function anyFactory$1(tests) {
   var checks2 = convertAll(tests);
   var length = checks2.length;
   return matches2;
@@ -18041,44 +18057,44 @@ function anyFactory(tests) {
     return false;
   }
 }
-function typeFactory(test2) {
+function typeFactory$1(test2) {
   return type;
   function type(node2) {
     return Boolean(node2 && node2.type === test2);
   }
 }
-function ok() {
+function ok$1() {
   return true;
 }
-var unistUtilVisitParents = visitParents$1;
-var convert = convert_1;
-var CONTINUE$1 = true;
-var SKIP$1 = "skip";
-var EXIT$1 = false;
-visitParents$1.CONTINUE = CONTINUE$1;
-visitParents$1.SKIP = SKIP$1;
-visitParents$1.EXIT = EXIT$1;
-function visitParents$1(tree, test2, visitor2, reverse) {
+var unistUtilVisitParents = visitParents$2;
+var convert$1 = convert_1;
+var CONTINUE$2 = true;
+var SKIP$2 = "skip";
+var EXIT$2 = false;
+visitParents$2.CONTINUE = CONTINUE$2;
+visitParents$2.SKIP = SKIP$2;
+visitParents$2.EXIT = EXIT$2;
+function visitParents$2(tree, test2, visitor2, reverse) {
   var is;
   if (typeof test2 === "function" && typeof visitor2 !== "function") {
     reverse = visitor2;
     visitor2 = test2;
     test2 = null;
   }
-  is = convert(test2);
+  is = convert$1(test2);
   one2(tree, null, []);
   function one2(node2, index2, parents) {
     var result = [];
     var subresult;
     if (!test2 || is(node2, index2, parents[parents.length - 1] || null)) {
-      result = toResult(visitor2(node2, parents));
-      if (result[0] === EXIT$1) {
+      result = toResult$1(visitor2(node2, parents));
+      if (result[0] === EXIT$2) {
         return result;
       }
     }
-    if (node2.children && result[0] !== SKIP$1) {
-      subresult = toResult(all3(node2.children, parents.concat(node2)));
-      return subresult[0] === EXIT$1 ? subresult : result;
+    if (node2.children && result[0] !== SKIP$2) {
+      subresult = toResult$1(all3(node2.children, parents.concat(node2)));
+      return subresult[0] === EXIT$2 ? subresult : result;
     }
     return result;
   }
@@ -18089,44 +18105,44 @@ function visitParents$1(tree, test2, visitor2, reverse) {
     var result;
     while (index2 > min2 && index2 < children.length) {
       result = one2(children[index2], index2, parents);
-      if (result[0] === EXIT$1) {
+      if (result[0] === EXIT$2) {
         return result;
       }
       index2 = typeof result[1] === "number" ? result[1] : index2 + step;
     }
   }
 }
-function toResult(value) {
+function toResult$1(value) {
   if (value !== null && typeof value === "object" && "length" in value) {
     return value;
   }
   if (typeof value === "number") {
-    return [CONTINUE$1, value];
+    return [CONTINUE$2, value];
   }
   return [value];
 }
-var unistUtilVisit = visit$1;
-var visitParents = unistUtilVisitParents;
-var CONTINUE = visitParents.CONTINUE;
-var SKIP = visitParents.SKIP;
-var EXIT = visitParents.EXIT;
-visit$1.CONTINUE = CONTINUE;
-visit$1.SKIP = SKIP;
-visit$1.EXIT = EXIT;
-function visit$1(tree, test2, visitor2, reverse) {
+var unistUtilVisit = visit$3;
+var visitParents$1 = unistUtilVisitParents;
+var CONTINUE$1 = visitParents$1.CONTINUE;
+var SKIP$1 = visitParents$1.SKIP;
+var EXIT$1 = visitParents$1.EXIT;
+visit$3.CONTINUE = CONTINUE$1;
+visit$3.SKIP = SKIP$1;
+visit$3.EXIT = EXIT$1;
+function visit$3(tree, test2, visitor2, reverse) {
   if (typeof test2 === "function" && typeof visitor2 !== "function") {
     reverse = visitor2;
     visitor2 = test2;
     test2 = null;
   }
-  visitParents(tree, test2, overload, reverse);
+  visitParents$1(tree, test2, overload, reverse);
   function overload(node2, parents) {
     var parent = parents[parents.length - 1];
     var index2 = parent ? parent.children.indexOf(node2) : null;
     return visitor2(node2, index2, parent);
   }
 }
-var visit = unistUtilVisit;
+var visit$2 = unistUtilVisit;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var hastCssPropertyMap = {
   align: "text-align",
@@ -18135,7 +18151,7 @@ var hastCssPropertyMap = {
   width: "width"
 };
 var hastUtilTableCellStyle = function tableCellStyle(node2) {
-  visit(node2, "element", visitor);
+  visit$2(node2, "element", visitor);
   return node2;
 };
 function visitor(node2) {
@@ -18204,6 +18220,22 @@ function rehypeReact(options) {
     return createElement2(name, props2, children);
   }
 }
+const visit$1 = function(tree, test2, visitor2, reverse) {
+  if (typeof test2 === "function" && typeof visitor2 !== "function") {
+    reverse = visitor2;
+    visitor2 = test2;
+    test2 = null;
+  }
+  visitParents$3(tree, test2, overload, reverse);
+  function overload(node2, parents) {
+    const parent = parents[parents.length - 1];
+    return visitor2(
+      node2,
+      parent ? parent.children.indexOf(node2) : null,
+      parent
+    );
+  }
+};
 function parse(value) {
   const input = String(value || "").trim();
   return input ? input.split(/[ \t\n\r\f]+/g) : [];
@@ -18230,7 +18262,7 @@ function remarkExternalLinks(options = {}) {
   const contentProperties = options.contentProperties || {};
   return (tree) => {
     const definition2 = definitions(tree);
-    visit$2(tree, (node2) => {
+    visit$1(tree, (node2) => {
       if (node2.type === "link" || node2.type === "linkReference") {
         const ctx = node2.type === "link" ? node2 : definition2(node2.identifier);
         if (!ctx)
@@ -18261,6 +18293,161 @@ function remarkExternalLinks(options = {}) {
     });
   };
 }
+const convert = function(test2) {
+  if (test2 === null || test2 === void 0) {
+    return ok;
+  }
+  if (typeof test2 === "function") {
+    return castFactory(test2);
+  }
+  if (typeof test2 === "object") {
+    return Array.isArray(test2) ? anyFactory(test2) : propsFactory(test2);
+  }
+  if (typeof test2 === "string") {
+    return typeFactory(test2);
+  }
+  throw new Error("Expected function, string, or object as test");
+};
+function anyFactory(tests) {
+  const checks2 = [];
+  let index2 = -1;
+  while (++index2 < tests.length) {
+    checks2[index2] = convert(tests[index2]);
+  }
+  return castFactory(any);
+  function any(...parameters) {
+    let index3 = -1;
+    while (++index3 < checks2.length) {
+      if (checks2[index3].apply(this, parameters))
+        return true;
+    }
+    return false;
+  }
+}
+function propsFactory(check2) {
+  const checkAsRecord = check2;
+  return castFactory(all3);
+  function all3(node2) {
+    const nodeAsRecord = node2;
+    let key;
+    for (key in check2) {
+      if (nodeAsRecord[key] !== checkAsRecord[key])
+        return false;
+    }
+    return true;
+  }
+}
+function typeFactory(check2) {
+  return castFactory(type);
+  function type(node2) {
+    return node2 && node2.type === check2;
+  }
+}
+function castFactory(testFunction) {
+  return check2;
+  function check2(value, index2, parent) {
+    return Boolean(
+      looksLikeANode(value) && testFunction.call(
+        this,
+        value,
+        typeof index2 === "number" ? index2 : void 0,
+        parent || void 0
+      )
+    );
+  }
+}
+function ok() {
+  return true;
+}
+function looksLikeANode(value) {
+  return value !== null && typeof value === "object" && "type" in value;
+}
+function color(d) {
+  return d;
+}
+const empty = [];
+const CONTINUE = true;
+const EXIT = false;
+const SKIP = "skip";
+function visitParents(tree, test2, visitor2, reverse) {
+  let check2;
+  if (typeof test2 === "function" && typeof visitor2 !== "function") {
+    reverse = visitor2;
+    visitor2 = test2;
+  } else {
+    check2 = test2;
+  }
+  const is = convert(check2);
+  const step = reverse ? -1 : 1;
+  factory2(tree, void 0, [])();
+  function factory2(node2, index2, parents) {
+    const value = node2 && typeof node2 === "object" ? node2 : {};
+    if (typeof value.type === "string") {
+      const name = typeof value.tagName === "string" ? value.tagName : typeof value.name === "string" ? value.name : void 0;
+      Object.defineProperty(visit2, "name", {
+        value: "node (" + color(node2.type + (name ? "<" + name + ">" : "")) + ")"
+      });
+    }
+    return visit2;
+    function visit2() {
+      let result = empty;
+      let subresult;
+      let offset;
+      let grandparents;
+      if (!test2 || is(node2, index2, parents[parents.length - 1] || void 0)) {
+        result = toResult(visitor2(node2, parents));
+        if (result[0] === EXIT) {
+          return result;
+        }
+      }
+      if ("children" in node2 && node2.children) {
+        const nodeAsParent = node2;
+        if (nodeAsParent.children && result[0] !== SKIP) {
+          offset = (reverse ? nodeAsParent.children.length : -1) + step;
+          grandparents = parents.concat(nodeAsParent);
+          while (offset > -1 && offset < nodeAsParent.children.length) {
+            const child = nodeAsParent.children[offset];
+            subresult = factory2(child, offset, grandparents)();
+            if (subresult[0] === EXIT) {
+              return subresult;
+            }
+            offset = typeof subresult[1] === "number" ? subresult[1] : offset + step;
+          }
+        }
+      }
+      return result;
+    }
+  }
+}
+function toResult(value) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (typeof value === "number") {
+    return [CONTINUE, value];
+  }
+  return value === null || value === void 0 ? empty : [value];
+}
+function visit(tree, testOrVisitor, visitorOrReverse, maybeReverse) {
+  let reverse;
+  let test2;
+  let visitor2;
+  if (typeof testOrVisitor === "function" && typeof visitorOrReverse !== "function") {
+    test2 = void 0;
+    visitor2 = testOrVisitor;
+    reverse = visitorOrReverse;
+  } else {
+    test2 = testOrVisitor;
+    visitor2 = visitorOrReverse;
+    reverse = maybeReverse;
+  }
+  visitParents(tree, test2, overload, reverse);
+  function overload(node2, parents) {
+    const parent = parents[parents.length - 1];
+    const index2 = parent ? parent.children.indexOf(node2) : void 0;
+    return visitor2(node2, index2, parent);
+  }
+}
 const Link = {
   name: "Link",
   functional: true,
@@ -18286,7 +18473,7 @@ const remarkAutolink = function({ autolink: autolink2, useMarkdown }) {
     if (!useMarkdown || !autolink2) {
       return;
     }
-    visit$2(tree, (node2) => node2.type === "text", (node2, index2, parent) => {
+    visit(tree, (node2) => node2.type === "text", (node2, index2, parent) => {
       let parsed = parseUrl(node2.value);
       parsed = parsed.map((n) => {
         if (typeof n === "string") {
@@ -18297,7 +18484,7 @@ const remarkAutolink = function({ autolink: autolink2, useMarkdown }) {
         }, [u("text", n.props.href)]);
       }).filter((x) => x);
       parent.children.splice(index2, 1, ...parsed.flat());
-      return [SKIP$2, index2 + parsed.flat().length];
+      return [SKIP, index2 + parsed.flat().length];
     });
   };
 };
@@ -18336,7 +18523,7 @@ const parseUrl = (text2, linkComponent) => {
 };
 const remarkPlaceholder = function() {
   return function(ast) {
-    visit$2(ast, (node2) => node2.type === "text", visitor2);
+    visit(ast, (node2) => node2.type === "text", visitor2);
     function visitor2(node2, index2, parent) {
       const placeholders = node2.value.split(/(\{[a-z\-_.0-9]+\})/ig).map((entry, index3, list2) => {
         const matches2 = entry.match(/^\{([a-z\-_.0-9]+)\}$/i);
