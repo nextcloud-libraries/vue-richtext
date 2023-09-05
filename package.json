@@ -67,7 +67,7 @@
     "mdast-util-to-string": "^3.1.0",
     "micromark-extension-gfm-autolink-literal": "^1.0.3",
     "prettier-eslint": "^15.0.1",
-    "rehype-react": "^7.1.1",
+    "rehype-react": "^8.0.0",
     "remark-breaks": "3.0.3",
     "remark-disable-tokenizers": "^1.1.0",
     "remark-external-links": "^9.0.1",
