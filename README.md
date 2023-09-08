@@ -1,5 +1,12 @@
 # Vue component for rich content strings
 
+> **Important**
+> 
+> This package is no longer maintained. All its functions are now included in the @nextcloud/vue package since version 7.8.0.
+>
+> https://github.com/nextcloud-libraries/nextcloud-vue/pull/3841
+
+
 [![npm last version](https://img.shields.io/npm/v/@nextcloud/vue-richtext.svg?style=flat-square)](https://www.npmjs.com/package/@nextcloud/vue-richtext) [![Dependabot status](https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&style=flat-square&logo=dependabot)](https://dependabot.com)
 
 This library provides a simple vue component to render text with rich placeholder replacements.
