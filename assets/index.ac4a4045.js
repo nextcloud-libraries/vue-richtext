@@ -5528,6 +5528,11 @@ if (inBrowser) {
   }, 0);
 }
 const html$5 = `<h1>Vue component for rich content strings</h1>
+<blockquote>
+<p><strong>Important</strong></p>
+<p>This package is no longer maintained. All its functions are now included in the @nextcloud/vue package since version 7.8.0.</p>
+<p>https://github.com/nextcloud-libraries/nextcloud-vue/pull/3841</p>
+</blockquote>
 <p><a href="https://www.npmjs.com/package/@nextcloud/vue-richtext"><img src="https://img.shields.io/npm/v/@nextcloud/vue-richtext.svg?style=flat-square" alt="npm last version"></a> <a href="https://dependabot.com"><img src="https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&amp;style=flat-square&amp;logo=dependabot" alt="Dependabot status"></a></p>
 <p>This library provides a simple vue component to render text with rich placeholder replacements.
 The parameters that are replaced can either be a string or an object that allows rendering any Vue component into the text.
